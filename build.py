@@ -108,8 +108,10 @@ def film_embed(url):
 def build_home():
     tiles = []
     for j in JOBS:
+        video = (f'<video src="/static/img/{j["id"]}/preview.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>'
+                 if j.get("preview") else "")
         tiles.append(f"""<a class="tile" href="/work/{j['id']}/">
-<img src="/static/img/{j['id']}/card.jpg" alt="{e(j['client'])}, {e(j['project'])}" loading="lazy" width="900" height="1125">
+<span class="tile-media"><img src="/static/img/{j['id']}/card.jpg" alt="{e(j['client'])}, {e(j['project'])}" loading="lazy" width="900" height="1125">{video}</span>
 <span class="tile-client">{e(j['client'])}</span>
 <span class="tile-project">{e(j['project'])}</span>
 <span class="tile-meta">{e(meta_line(j))}</span>

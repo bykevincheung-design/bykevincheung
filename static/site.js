@@ -12,6 +12,25 @@
   })();
 })();
 
+// Play a short clip when hovering a work tile
+(function () {
+  if (!window.matchMedia('(hover: hover)').matches) return;
+  document.querySelectorAll('.tile').forEach(function (tile) {
+    var v = tile.querySelector('video');
+    if (!v) return;
+    tile.addEventListener('mouseenter', function () {
+      var p = v.play();
+      if (p && p.then) p.then(function () { tile.classList.add('playing'); }).catch(function () {});
+      else tile.classList.add('playing');
+    });
+    tile.addEventListener('mouseleave', function () {
+      tile.classList.remove('playing');
+      v.pause();
+      try { v.currentTime = 0; } catch (e) {}
+    });
+  });
+})();
+
 // Credits filter
 (function () {
   var pills = document.querySelectorAll('.pill');
