@@ -181,7 +181,7 @@ def build_home():
 </section>
 
 <section id="work" class="wrap section" aria-labelledby="work-h">
-<h2 id="work-h" class="h2">Selected work</h2>
+<h2 id="work-h" class="visually-hidden">Selected work</h2>
 <div class="grid">
 {chr(10).join(tiles)}
 </div>
