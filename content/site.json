@@ -245,6 +245,33 @@
       "preview": true
     },
     {
+      "id": "j-hus",
+      "year": "2023",
+      "client": "J Hus",
+      "project": "It's Crazy",
+      "director": "Taz Tron Delix",
+      "production": "Compulsory",
+      "role": "Production Manager",
+      "type": "Music",
+      "about": "",
+      "film": "https://www.youtube.com/watch?v=xnKbJwGjXAQ",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "chanel-vogue",
       "year": "2024",
       "client": "Chanel x Vogue",
@@ -353,6 +380,20 @@
       "preview": true
     },
     {
+      "id": "crystal-murray",
+      "year": "2024",
+      "client": "Crystal Murray",
+      "project": "Starmaniak",
+      "director": "Charlotte Wales",
+      "production": "Colors",
+      "role": "Production Manager",
+      "type": "Music",
+      "about": "",
+      "film": "https://www.youtube.com/watch?v=0rwa1pss1ZM",
+      "gallery": [],
+      "preview": true
+    },
+    {
       "id": "camperlab",
       "year": "2024",
       "client": "Camperlab",
@@ -431,6 +472,20 @@
           "shape": "portrait"
         }
       ],
+      "preview": true
+    },
+    {
+      "id": "eartheater",
+      "year": "2023",
+      "client": "Eartheater",
+      "project": "Pure Smile Snake Venom",
+      "director": "Daniel Sannwald",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Music",
+      "about": "",
+      "film": "https://www.youtube.com/watch?v=u4KxEma_NDQ",
+      "gallery": [],
       "preview": true
     },
     {
