@@ -103,7 +103,7 @@ def credit_pairs(j):
     pairs = []
     if j["director"]:
         pairs.append(("Director", j["director"]))
-    pairs += [("Production company", j["production"]), ("Role", j["role"])]
+    pairs.append(("Role", j["role"]))
     return '<span class="tile-credits">' + "".join(
         f'<span class="tc"><span class="tc-l">{e(l)}</span><span class="tc-v">{e(v)}</span></span>' for l, v in pairs) + "</span>"
 
