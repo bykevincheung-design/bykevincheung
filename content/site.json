@@ -515,33 +515,6 @@
       "preview": true
     },
     {
-      "id": "stormzy",
-      "year": "2023",
-      "client": "Stormzy",
-      "project": "Longevity Flow",
-      "director": "",
-      "production": "gwei.lo studios",
-      "role": "Producer",
-      "type": "Music",
-      "about": "",
-      "film": "",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
-        }
-      ],
-      "preview": true
-    },
-    {
       "id": "moncler-alicia-keys",
       "year": "2023",
       "client": "Moncler x Alicia Keys",
