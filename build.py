@@ -176,9 +176,6 @@ def build_home():
 </div>
 </section>
 
-<section class="clients" aria-label="Selected clients">
-<div class="wrap clients-in">{clients}</div>
-</section>
 
 <section id="work" class="wrap section" aria-labelledby="work-h">
 <h2 id="work-h" class="visually-hidden">Selected work</h2>
@@ -197,7 +194,7 @@ def build_home():
 </div>
 <div class="table-scroll">
 <div class="table">
-<div class="row row-head mono"><span>Client</span><span>Project</span><span>Director</span><span>Production</span><span>Role</span></div>
+<div class="row row-head mono"><span>Client</span><span>Project</span><span>Director</span><span>Production company</span><span>Role</span></div>
 {chr(10).join(rows)}
 </div>
 </div>
@@ -254,7 +251,7 @@ def build_job(i):
 <div class="mono muted">{e(j['type'])} · {e(j['year'])}</div>
 <h1 class="job-title">{e(j['client'])}</h1>
 <p class="job-sub">{e(j['project'])}</p>
-<div class="job-meta mono"><span><span class="muted">Production </span>{e(j['production'])}</span><span><span class="muted">Role </span>{e(j['role'])}</span></div>
+<div class="job-meta mono"><span><span class="muted">Production company </span>{e(j['production'])}</span><span><span class="muted">Role </span>{e(j['role'])}</span></div>
 </section>
 {('<section class="wrap">' + film_embed(j.get('film')) + '</section>') if j.get('film') else ''}
 <section class="wrap job-main">
@@ -262,7 +259,7 @@ def build_job(i):
 <div class="job-panel">
 <dl>
 <div class="dl-row first"><dt>Role</dt><dd class="b">{e(j['role'])}</dd></div>
-<div class="dl-row"><dt>Production</dt><dd class="b">{e(j['production'])}</dd></div>
+<div class="dl-row"><dt>Production company</dt><dd class="b">{e(j['production'])}</dd></div>
 {director_row}
 <div class="dl-row last"><dt>Year</dt><dd>{e(j['year'])}</dd></div>
 </dl>
