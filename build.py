@@ -65,11 +65,10 @@ def header(on_home):
     contact = "#contact" if on_home else "/#contact"
     return f"""<header class="top">
 <div class="wrap top-in">
-<a class="logo" href="/">{e(S['name'])}</a>
+<a class="logo" href="/">{e(S['name'])}<span class="logo-role"> | Production Manager · Producer</span></a>
 <nav aria-label="Main">
 <a href="{work}">Work</a>
 <a href="{credits}">Credits</a>
-<a href="{about}">About</a>
 <a href="{e(S['cv'])}" target="_blank" rel="noopener">CV ↗</a>
 <a class="btn" href="{contact}">Contact</a>
 </nav>
@@ -100,6 +99,15 @@ def meta_line(j):
     return " · ".join(parts)
 
 
+def credit_pairs(j):
+    pairs = []
+    if j["director"]:
+        pairs.append(("Director", j["director"]))
+    pairs += [("Production company", j["production"]), ("Role", j["role"])]
+    return '<span class="tile-credits">' + "".join(
+        f'<span class="tc"><span class="tc-l">{e(l)}</span><span class="tc-v">{e(v)}</span></span>' for l, v in pairs) + "</span>"
+
+
 def film_embed(url):
     if not url:
         return ""
@@ -124,7 +132,7 @@ def build_home():
 <span class="tile-media"><img src="/static/img/{j['id']}/card.jpg" alt="{e(j['client'])}, {e(j['project'])}" loading="lazy" width="900" height="1125">{video}</span>
 <span class="tile-client">{e(j['client'])}</span>
 <span class="tile-project">{e(j['project'])}</span>
-<span class="tile-meta">{e(meta_line(j))}</span>
+{credit_pairs(j)}
 </a>""")
 
     credits = []
@@ -165,15 +173,7 @@ def build_home():
                 "/static/img/adidas-predator/hero.jpg", "/")
     html += header(True)
     html += f"""<main id="top">
-<section class="wrap intro" aria-label="Introduction">
-<div class="intro-side">
-<h1 class="intro-role"><span class="visually-hidden">{e(S['name'])}, </span>{' '.join('<span class="role">' + e(r) + (' ·' if i < len(S['intro'].split(' · ')) - 1 else '') + '</span>' for i, r in enumerate(S['intro'].split(' · ')))}</h1>
-<div class="intro-meta mono">
-<span class="dotline"><span class="dot"></span>Represented by <a href="mailto:{e(agent['email'])}">{e(agent['name'])}</a></span>
-<span>London · Working worldwide</span>
-</div>
-</div>
-</section>
+<h1 class="visually-hidden">{e(S['name'])}, Production Manager and Producer, London</h1>
 
 
 <section id="work" class="wrap section" aria-labelledby="work-h">
@@ -199,30 +199,28 @@ def build_home():
 </div>
 </section>
 
-<section id="about" class="about" aria-labelledby="about-h">
+<section id="contact" class="about" aria-labelledby="about-h">
 <div class="wrap about-in">
 <div class="about-text">
-<h2 id="about-h" class="mono about-label">About</h2>
+<h2 id="about-h" class="mono about-label">About &amp; contact</h2>
 {photo}
 <p class="about-lead">{e(about_lead)}</p>
 {''.join(f'<p class="about-body">{e(p)}</p>' for p in about_rest)}
 </div>
 <div class="services">{services}</div>
 </div>
-</section>
-
-<section id="contact" class="wrap section contact" aria-labelledby="contact-h">
-<h2 id="contact-h" class="big">Let’s make<br>something</h2>
+<div class="wrap">
 <div class="contact-cols">
-<div><span class="mono muted label">Work enquiries</span>
+<div><span class="mono label">Representation</span>
 <strong>{e(agent['name'])}</strong>
 <a class="u" href="mailto:{e(agent['email'])}">{e(agent['email'])}</a>
 <a href="tel:{e(agent['phone'].replace(' ', ''))}">{e(agent['phone'])}</a></div>
-<div><span class="mono muted label">Direct</span>
+<div><span class="mono label">Direct</span>
 <a class="u" href="mailto:{e(S['email'])}">{e(S['email'])}</a>
 <a href="{e(S['instagram'])}" target="_blank" rel="noopener">Instagram ↗</a></div>
-<div><span class="mono muted label">Studio</span>
+<div><span class="mono label">Studio</span>
 <span>{'<br>'.join(e(l) for l in S['studio'])}</span></div>
+</div>
 </div>
 </section>
 </main>
