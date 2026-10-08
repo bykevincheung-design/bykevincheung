@@ -162,3 +162,8 @@ a.row:hover { background: var(--tint); color: var(--ink); }
 .service:first-child .service-t { font-size: 28px; font-variation-settings: 'wdth' 112; }
 .service:first-child .service-d { font-size: 17px; color: #D4D4CF; }
 .service:first-child .service-t::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); margin-right: 12px; vertical-align: middle; }
+
+.intro { align-items: flex-start; }
+.intro-side { max-width: none; flex: 1 1 100%; }
+.intro-role { margin: 0; font-size: clamp(24px, 3.4vw, 44px); line-height: 1.05; font-weight: 800; letter-spacing: -0.02em; text-transform: uppercase; font-variation-settings: 'wdth' 125; text-wrap: balance; }
+.intro-role .role { white-space: nowrap; }

@@ -166,9 +166,8 @@ def build_home():
     html += header(True)
     html += f"""<main id="top">
 <section class="wrap intro" aria-label="Introduction">
-<h1>{e(S['name'])}</h1>
 <div class="intro-side">
-<p>{e(S['intro'])}</p>
+<h1 class="intro-role"><span class="visually-hidden">{e(S['name'])}, </span>{' '.join('<span class="role">' + e(r) + (' ·' if i < len(S['intro'].split(' · ')) - 1 else '') + '</span>' for i, r in enumerate(S['intro'].split(' · ')))}</h1>
 <div class="intro-meta mono">
 <span class="dotline"><span class="dot"></span>Represented by <a href="mailto:{e(agent['email'])}">{e(agent['name'])}</a></span>
 <span>London · Working worldwide</span>
