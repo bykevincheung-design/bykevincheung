@@ -19,6 +19,16 @@ with open(os.path.join(ROOT, "content", "site.json"), encoding="utf-8") as f:
     S = json.load(f)
 
 JOBS = S["jobs"]
+
+
+def _version(path):
+    import hashlib
+    with open(os.path.join(ROOT, path), "rb") as fh:
+        return hashlib.md5(fh.read()).hexdigest()[:8]
+
+
+CSS_V = _version("static/site.css")
+JS_V = _version("static/site.js")
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
          '<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800'
@@ -41,7 +51,7 @@ def head(title, desc, image, path):
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 {FONTS}
-<link rel="stylesheet" href="/static/site.css">
+<link rel="stylesheet" href="/static/site.css?v={CSS_V}">
 </head>
 <body>
 <div class="glow" aria-hidden="true"></div>
@@ -76,7 +86,7 @@ def footer():
 <a href="#top">Back to top ↑</a>
 </div>
 </footer>
-<script src="/static/site.js"></script>
+<script src="/static/site.js?v={JS_V}"></script>
 </body>
 </html>
 """

@@ -5,4 +5,4 @@
 [[headers]]
   for = "/static/*"
   [headers.values]
-    Cache-Control = "public, max-age=604800"
+    Cache-Control = "public, max-age=0, must-revalidate"
