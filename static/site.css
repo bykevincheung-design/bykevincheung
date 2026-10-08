@@ -182,3 +182,4 @@ a.row:hover { background: var(--tint); color: var(--ink); }
 .about .about-in { padding-bottom: 48px; }
 .about .services { border-bottom: 0; }
 @media (max-width: 700px) { .about .about-in { padding-bottom: 36px; } .about .contact-cols { margin-bottom: 56px; } }
+.tile-prod { display: block; margin-top: 4px; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }

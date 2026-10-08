@@ -132,6 +132,7 @@ def build_home():
 <span class="tile-media"><img src="/static/img/{j['id']}/card.jpg" alt="{e(j['client'])}, {e(j['project'])}" loading="lazy" width="900" height="1125">{video}</span>
 <span class="tile-client">{e(j['client'])}</span>
 <span class="tile-project">{e(j['project'])}</span>
+<span class="tile-prod">{e(j['production'])}</span>
 {credit_pairs(j)}
 </a>""")
 
