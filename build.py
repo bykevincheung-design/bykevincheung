@@ -116,6 +116,9 @@ def short_role(v):
 def film_embed(url):
     if not url:
         return ""
+    if url.endswith(".mp4"):
+        return (f'<div class="film film-file"><video src="{e(url)}" controls playsinline preload="metadata" '
+                f'poster="{e(url.rsplit("/", 1)[0])}/hero.jpg"></video></div>')
     m = re.search(r"vimeo\.com/(?:video/)?(\d+)(?:/(\w+))?", url)
     if m:
         src = f"https://player.vimeo.com/video/{m.group(1)}" + (f"?h={m.group(2)}" if m.group(2) else "")

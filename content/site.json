@@ -272,6 +272,33 @@
       "preview": true
     },
     {
+      "id": "fred-again-rumble",
+      "year": "2023",
+      "client": "Skrillex, Fred again.. & Flowdan",
+      "project": "Rumble",
+      "director": "Manu Cossu",
+      "production": "Iconoclast",
+      "role": "Production Manager",
+      "type": "Music",
+      "about": "",
+      "film": "https://www.youtube.com/watch?v=i8Vgo5S-_NM",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "chanel-vogue",
       "year": "2024",
       "client": "Chanel x Vogue",
@@ -294,6 +321,33 @@
         {
           "src": "3.jpg",
           "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
+      "id": "nike-styleby",
+      "year": "2024",
+      "client": "Nike",
+      "project": "StyleBy",
+      "director": "Leo & Suzie",
+      "production": "MOX London",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "https://vimeo.com/1048573758",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
         }
       ],
       "preview": true
@@ -326,6 +380,33 @@
       "preview": true
     },
     {
+      "id": "adidas-korea",
+      "year": "2024",
+      "client": "adidas Korea",
+      "project": "Under Pressure",
+      "director": "",
+      "production": "Piano Lane",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "https://vimeo.com/1221094469",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "axel-arigato",
       "year": "2025",
       "client": "Axel Arigato",
@@ -350,6 +431,20 @@
           "shape": "landscape"
         }
       ],
+      "preview": true
+    },
+    {
+      "id": "bvlgari-yung",
+      "year": "2024",
+      "client": "Yung x Bvlgari",
+      "project": "New Gen",
+      "director": "Candice Lo",
+      "production": "Academy Films",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "https://vimeo.com/980502891",
+      "gallery": [],
       "preview": true
     },
     {
@@ -380,6 +475,33 @@
       "preview": true
     },
     {
+      "id": "narma",
+      "year": "2024",
+      "client": "Narma",
+      "project": "SS25 Fashion Show",
+      "director": "",
+      "production": "gwei.lo studios",
+      "role": "Producer",
+      "type": "Live",
+      "about": "",
+      "film": "https://www.youtube.com/watch?v=__CoqfmApjs",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "crystal-murray",
       "year": "2024",
       "client": "Crystal Murray",
@@ -390,7 +512,20 @@
       "type": "Music",
       "about": "",
       "film": "https://www.youtube.com/watch?v=0rwa1pss1ZM",
-      "gallery": [],
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
       "preview": true
     },
     {
@@ -416,6 +551,33 @@
         {
           "src": "3.jpg",
           "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
+      "id": "alexa-chung",
+      "year": "2024",
+      "client": "Alexa Chung",
+      "project": "Interview Magazine, Winter 24",
+      "director": "",
+      "production": "Interview Magazine",
+      "role": "Production Manager",
+      "type": "Editorial",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
         }
       ],
       "preview": true
@@ -489,6 +651,33 @@
       "preview": true
     },
     {
+      "id": "ottolinger-puma",
+      "year": "2023",
+      "client": "Ottolinger x Puma",
+      "project": "Campaign",
+      "director": "",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "/static/img/ottolinger-puma/film.mp4",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "jungle-gap",
       "year": "2023",
       "client": "Jungle x Gap",
@@ -538,6 +727,33 @@
         {
           "src": "3.jpg",
           "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
+      "id": "fred-again-tour",
+      "year": "2023",
+      "client": "Fred again..",
+      "project": "Tour Again...",
+      "director": "Ethan and Tom",
+      "production": "Loose It",
+      "role": "Producer",
+      "type": "Live",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
         }
       ],
       "preview": true
@@ -607,6 +823,33 @@
       "type": "Music",
       "about": "",
       "film": "https://www.youtube.com/watch?v=kaDgT7w4dEg",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ],
+      "preview": true
+    },
+    {
+      "id": "cp-company-kano",
+      "year": "2023",
+      "client": "C.P. Company x Kano",
+      "project": "Metropolis",
+      "director": "Raw Tape",
+      "production": "Bullion Productions",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "/static/img/cp-company-kano/film.mp4",
       "gallery": [
         {
           "src": "1.jpg",
@@ -739,15 +982,6 @@
       "project": "Music promo",
       "director": "",
       "production": "Somesuch",
-      "role": "Production Manager",
-      "type": "Music"
-    },
-    {
-      "year": "2023",
-      "client": "Fred again.. x Skrillex",
-      "project": "Rumble",
-      "director": "Manu Cossu",
-      "production": "Iconoclast",
       "role": "Production Manager",
       "type": "Music"
     },
