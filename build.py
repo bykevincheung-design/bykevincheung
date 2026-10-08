@@ -105,7 +105,12 @@ def credit_pairs(j):
         pairs.append(("Director", j["director"]))
     pairs.append(("Role", j["role"]))
     return '<span class="tile-credits">' + "".join(
-        f'<span class="tc"><span class="tc-l">{e(l)}</span><span class="tc-v">{e(v)}</span></span>' for l, v in pairs) + "</span>"
+        f'<span class="tc"><span class="tc-l">{e(l)}</span><span class="tc-v">{short_role(v) if l == "Role" else e(v)}</span></span>' for l, v in pairs) + "</span>"
+
+
+def short_role(v):
+    # "Production Manager" becomes "Prod Manager" on phones
+    return e(v).replace("Production Manager", 'Prod<span class="long">uction</span> Manager')
 
 
 def film_embed(url):
