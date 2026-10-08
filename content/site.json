@@ -1,0 +1,713 @@
+{
+  "name": "Kevin Cheung",
+  "intro": "I’m Kevin, a Production Manager, Producer and Fixer from London. I came up as a runner in 2018 and I still get a kick out of a good shoot day.",
+  "clients": [
+    "Apple",
+    "Nike",
+    "Chanel",
+    "Burberry",
+    "adidas",
+    "Moncler",
+    "Jaeger‑LeCoultre",
+    "Coldplay"
+  ],
+  "about": [
+    "I started as a runner in 2018. Around 200 productions later I run shoots for Nike, Apple, Chanel, adidas and Jaeger‑LeCoultre, with talent from Robert Pattinson and David Beckham to Erling Haaland and Tate McRae.",
+    "Calm on set, precise on paper, and big on making sure the whole crew has a good day. I care about inclusive sets and greater representation in the creative industries, particularly for the British East and Southeast Asian (BESEA) community."
+  ],
+  "about_photo": "",
+  "services": [
+    {
+      "title": "Service & fixing",
+      "text": "London and UK service production for visiting teams, through gwei.lo studios."
+    },
+    {
+      "title": "Live & experiential",
+      "text": "Pop‑ups, shows and live sessions, from OUAI at Battersea Power Station to Fred again.. on a rooftop."
+    }
+  ],
+  "cv": "https://www.dropbox.com/scl/fi/yzawoxtj004j4xp6yu8b8/Kevin-Cheung-CV-Oct-26.pdf?rlkey=0znie8s91dsjb6n1wt9xogq02&dl=0",
+  "instagram": "https://www.instagram.com/bykevincheung/",
+  "agent": {
+    "name": "Chapters People",
+    "email": "camille@chapterspeople.co.uk",
+    "phone": "+44 20 8747 1203"
+  },
+  "email": "bykevincheung@gmail.com",
+  "studio": [
+    "Netil Corner, Studio 129",
+    "2 Bocking Street",
+    "London E8 3ZD"
+  ],
+  "jobs": [
+    {
+      "id": "adidas-predator",
+      "year": "2026",
+      "client": "adidas",
+      "project": "Predator ft. David Beckham",
+      "director": "Thomas Van Kristen",
+      "production": "Jook Studio",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "jaeger-lecoultre",
+      "year": "2026",
+      "client": "Jaeger‑LeCoultre",
+      "project": "Master of Precision ft. Robert Pattinson",
+      "director": "Quentin Deronzier",
+      "production": "LaPac",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "adidas-originals-sport",
+      "year": "2026",
+      "client": "adidas Originals",
+      "project": "Work It ft. Tate McRae",
+      "director": "Alana O’Herlihy",
+      "production": "GentleForces",
+      "role": "Producer",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        }
+      ]
+    },
+    {
+      "id": "burberry-blush",
+      "year": "2025",
+      "client": "Burberry",
+      "project": "What Makes You Blush?",
+      "director": "Jackson Forsythe",
+      "production": "Jook Studio",
+      "role": "Producer",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        }
+      ]
+    },
+    {
+      "id": "corteiz-new-era",
+      "year": "2026",
+      "client": "Corteiz x New Era",
+      "project": "Campaign",
+      "director": "Gabriel Moses",
+      "production": "gwei.lo studios",
+      "role": "EP, Service",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "primark",
+      "year": "2026",
+      "client": "Primark",
+      "project": "Shockingly Chic",
+      "director": "Folkert Verdoorn",
+      "production": "Magna Studios",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "gentle-monster",
+      "year": "2025",
+      "client": "Gentle Monster",
+      "project": "Bouquet Collection ft. FKA twigs",
+      "director": "Jordan Hemingway",
+      "production": "Object & Animal",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ]
+    },
+    {
+      "id": "fka-twigs",
+      "year": "2025",
+      "client": "FKA twigs",
+      "project": "Eusexua",
+      "director": "",
+      "production": "gwei.lo studios",
+      "role": "Producer",
+      "type": "Music",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ]
+    },
+    {
+      "id": "chanel-vogue",
+      "year": "2024",
+      "client": "Chanel x Vogue",
+      "project": "No.5 Drops",
+      "director": "Ebeneza Blanche",
+      "production": "Smuggler",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "nike-tech",
+      "year": "2024",
+      "client": "Nike",
+      "project": "Tech",
+      "director": "Uncanny",
+      "production": "MOX",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ]
+    },
+    {
+      "id": "axel-arigato",
+      "year": "2025",
+      "client": "Axel Arigato",
+      "project": "Eris",
+      "director": "Julia Wein",
+      "production": "Jook Studio",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "mowalola",
+      "year": "2024",
+      "client": "Mowalola",
+      "project": "Dirty Pop SS25",
+      "director": "Noah Dillon",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "camperlab",
+      "year": "2024",
+      "client": "Camperlab",
+      "project": "AW24",
+      "director": "Jordan Hemingway",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "levis-mclaren",
+      "year": "2024",
+      "client": "Levi’s x McLaren Racing",
+      "project": "Campaign",
+      "director": "Liam Clarke",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "glendronach",
+      "year": "2024",
+      "client": "GlenDronach",
+      "project": "Raise Expectations",
+      "director": "Rankin",
+      "production": "Rankin",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ]
+    },
+    {
+      "id": "jungle-gap",
+      "year": "2023",
+      "client": "Jungle x Gap",
+      "project": "Linen Moves",
+      "director": "Charlie Di Placido",
+      "production": "Contentious Maximus",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "fred-again",
+      "year": "2023",
+      "client": "Fred again..",
+      "project": "Rooftop Live, London",
+      "director": "Loose",
+      "production": "Concoct",
+      "role": "Producer",
+      "type": "Live",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "moncler-adidas",
+      "year": "2023",
+      "client": "Moncler x adidas Originals",
+      "project": "The Art of Explorers",
+      "director": "",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "stormzy",
+      "year": "2023",
+      "client": "Stormzy",
+      "project": "Longevity Flow",
+      "director": "",
+      "production": "gwei.lo studios",
+      "role": "Producer",
+      "type": "Music",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "moncler-alicia-keys",
+      "year": "2023",
+      "client": "Moncler x Alicia Keys",
+      "project": "The Art of Genius",
+      "director": "",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "loyle-carner",
+      "year": "2022",
+      "client": "Loyle Carner",
+      "project": "Nobody Knows (Ladas Road)",
+      "director": "Uncanny",
+      "production": "Bullion Productions",
+      "role": "Production Manager",
+      "type": "Music",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ]
+    },
+    {
+      "id": "aston-martin",
+      "year": "2022",
+      "client": "Aston Martin",
+      "project": "Valkyrie, Impossible Driven",
+      "director": "",
+      "production": "Kode Media",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    },
+    {
+      "id": "dave-stormzy",
+      "year": "2021",
+      "client": "Dave ft. Stormzy",
+      "project": "Clash",
+      "director": "",
+      "production": "Lowkey Films",
+      "role": "Producer",
+      "type": "Music",
+      "about": "",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ]
+    }
+  ],
+  "other_credits": [
+    {
+      "year": "2026",
+      "client": "Nike",
+      "project": "SP27 ft. Alcaraz, Haaland, Putellas",
+      "director": "Vivian Kimm, Collier Schorr",
+      "production": "Farago Projects",
+      "role": "Production Manager",
+      "type": "Commercial"
+    },
+    {
+      "year": "2026",
+      "client": "Ocado",
+      "project": "You Deserve Everything",
+      "director": "Daniel Liakh",
+      "production": "Uncommon Studio",
+      "role": "Production Manager",
+      "type": "Commercial"
+    },
+    {
+      "year": "2026",
+      "client": "Atlassian x Williams F1",
+      "project": "Campaign",
+      "director": "StillKidz",
+      "production": "Strike Anywhere",
+      "role": "Production Manager",
+      "type": "Commercial"
+    },
+    {
+      "year": "2026",
+      "client": "Lucozade",
+      "project": "Anthony Joshua",
+      "director": "Shamil Tanna",
+      "production": "Sticker Studios",
+      "role": "Production Manager",
+      "type": "Commercial"
+    },
+    {
+      "year": "2026",
+      "client": "OUAI",
+      "project": "Battersea Power Station Pop‑Up",
+      "director": "",
+      "production": "gwei.lo studios",
+      "role": "Executive Producer",
+      "type": "Live"
+    },
+    {
+      "year": "2025",
+      "client": "Arsenal",
+      "project": "The Pulse Within Our Club",
+      "director": "Savannah Setten",
+      "production": "Iconoclast",
+      "role": "Production Manager",
+      "type": "Commercial"
+    },
+    {
+      "year": "2024",
+      "client": "Coldplay",
+      "project": "Music promo",
+      "director": "",
+      "production": "Somesuch",
+      "role": "Production Manager",
+      "type": "Music"
+    },
+    {
+      "year": "2023",
+      "client": "Fred again.. x Skrillex",
+      "project": "Rumble",
+      "director": "Manu Cossu",
+      "production": "Iconoclast",
+      "role": "Production Manager",
+      "type": "Music"
+    },
+    {
+      "year": "2022",
+      "client": "Apple",
+      "project": "Commercial",
+      "director": "",
+      "production": "Somesuch",
+      "role": "Production Manager",
+      "type": "Commercial"
+    }
+  ]
+}
