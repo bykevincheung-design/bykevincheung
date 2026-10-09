@@ -269,9 +269,7 @@ def build_job(i):
 {director_row}
 <div class="dl-row last"><dt>Year</dt><dd>{e(j['year'])}</dd></div>
 </dl>
-<p class="note">{e(note)}</p>
-<p class="note">Role: {e(j['role'])}</p>
-{about}
+{about or f'<p class="note">{e(note)}</p>'}
 </div>
 </section>
 <section class="wrap gallery" aria-label="Gallery">{gallery}</section>
