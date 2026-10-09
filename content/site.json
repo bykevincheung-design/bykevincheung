@@ -637,25 +637,11 @@
       "preview": true
     },
     {
-      "id": "eartheater",
-      "year": "2023",
-      "client": "Eartheater",
-      "project": "Pure Smile Snake Venom",
-      "director": "Daniel Sannwald",
-      "production": "Lafour Studios",
-      "role": "Production Manager",
-      "type": "Music",
-      "about": "",
-      "film": "https://www.youtube.com/watch?v=u4KxEma_NDQ",
-      "gallery": [],
-      "preview": true
-    },
-    {
       "id": "ottolinger-puma",
       "year": "2023",
       "client": "Ottolinger x Puma",
       "project": "Campaign",
-      "director": "",
+      "director": "Daniel Sannwald",
       "production": "Lafour Studios",
       "role": "Production Manager",
       "type": "Fashion",
@@ -993,6 +979,15 @@
       "production": "Somesuch",
       "role": "Production Manager",
       "type": "Commercial"
+    },
+    {
+      "year": "2023",
+      "client": "Eartheater",
+      "project": "Pure Smile Snake Venom",
+      "director": "Daniel Sannwald",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Music"
     }
   ]
 }
