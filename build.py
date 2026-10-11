@@ -145,7 +145,7 @@ def film_cinema(j, src):
            if loop else "")
     return (f'<div class="film film-cinema" data-play="{e(play)}">'
             f'<button class="cine-cover" type="button" aria-label="Play film: {e(j["client"])}, {e(j["project"])}">'
-            f'<img src="/static/img/{jid}/hero.jpg" alt="" loading="eager">{vid}'
+            f'{picture(jid, "hero", "(max-width: 900px) 100vw, 1280px", "", lazy=False)}{vid}'
             f'<span class="cine-play"><span class="cine-dot" aria-hidden="true"></span>Play film</span>'
             f'</button></div>')
 
@@ -365,6 +365,8 @@ def main():
         urls = [SITE_URL + "/"] + [f"{SITE_URL}/work/{j['id']}/" for j in JOBS]
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
                 + "".join(f"<url><loc>{u}</loc></url>\n" for u in urls) + "</urlset>\n")
+    with open(os.path.join(DIST, "robots.txt"), "w", encoding="utf-8") as f:
+        f.write(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
     print(f"Built {len(JOBS)} campaign pages into dist/")
 
 
