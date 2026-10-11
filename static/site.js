@@ -114,3 +114,71 @@
   function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
   requestAnimationFrame(raf);
 })();
+
+// Cinema film: the cover grows to fill the screen, then the film plays. Esc, X or a scroll closes it.
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.film-cinema').forEach(function (box) {
+    var cover = box.querySelector('.cine-cover');
+    cover.addEventListener('click', function () { open(box); });
+  });
+  function fit() {
+    var vw = innerWidth, vh = innerHeight, w = vw, h = vw * 9 / 16;
+    if (h > vh) { h = vh; w = vh * 16 / 9; }
+    return { x: (vw - w) / 2, y: (vh - h) / 2, w: w, h: h };
+  }
+  function open(box) {
+    var r = box.getBoundingClientRect(), f = fit();
+    var layer = document.createElement('div');
+    layer.className = 'cine-layer';
+    layer.setAttribute('role', 'dialog'); layer.setAttribute('aria-modal', 'true'); layer.setAttribute('aria-label', 'Film');
+    var stage = document.createElement('div');
+    stage.className = 'cine-stage';
+    stage.style.cssText = 'left:' + f.x + 'px;top:' + f.y + 'px;width:' + f.w + 'px;height:' + f.h + 'px';
+    var img = box.querySelector('.cine-cover img').cloneNode();
+    stage.appendChild(img);
+    var close = document.createElement('button');
+    close.className = 'cine-close'; close.type = 'button'; close.setAttribute('aria-label', 'Close film'); close.textContent = '×';
+    var hint = document.createElement('div'); hint.className = 'cine-hint'; hint.textContent = 'Esc to close';
+    layer.appendChild(stage); layer.appendChild(close); layer.appendChild(hint);
+    document.body.appendChild(layer);
+    if (window.lenis) window.lenis.stop();
+    document.documentElement.style.overflow = 'hidden';
+    var loop = box.querySelector('.cine-loop'); if (loop) loop.pause();
+    var from = 'translate(' + (r.left - f.x) + 'px,' + (r.top - f.y) + 'px) scale(' + (r.width / f.w) + ',' + (r.height / f.h) + ')';
+    var dur = reduce ? 1 : 750, ease = 'cubic-bezier(.7,0,.2,1)';
+    requestAnimationFrame(function () { layer.classList.add('on'); });
+    stage.animate([{ transform: from }, { transform: 'none' }], { duration: dur, easing: ease, fill: 'both' }).finished.then(function () {
+      var ifr = document.createElement('iframe');
+      ifr.src = box.dataset.play; ifr.title = 'Film';
+      ifr.allow = 'autoplay; fullscreen; picture-in-picture'; ifr.setAttribute('allowfullscreen', '');
+      ifr.addEventListener('load', function () { stage.classList.add('ready'); });
+      stage.appendChild(ifr);
+      close.focus();
+    });
+    var closing = false;
+    function shut() {
+      if (closing) return; closing = true;
+      var r2 = box.getBoundingClientRect(), f2 = fit();
+      var to = 'translate(' + (r2.left - f2.x) + 'px,' + (r2.top - f2.y) + 'px) scale(' + (r2.width / f2.w) + ',' + (r2.height / f2.h) + ')';
+      stage.classList.remove('ready');
+      var ifr = stage.querySelector('iframe'); if (ifr) ifr.remove();
+      layer.classList.remove('on');
+      stage.animate([{ transform: 'none' }, { transform: to }], { duration: reduce ? 1 : 650, easing: ease, fill: 'both' }).finished.then(function () {
+        layer.remove();
+        document.documentElement.style.overflow = '';
+        if (window.lenis) window.lenis.start();
+        if (loop) loop.play().catch(function () {});
+        box.querySelector('.cine-cover').focus({ preventScroll: true });
+      });
+      removeEventListener('keydown', onKey); layer.removeEventListener('wheel', onWheel);
+    }
+    function onKey(ev) { if (ev.key === 'Escape') shut(); }
+    var wheelAcc = 0;
+    function onWheel(ev) { wheelAcc += Math.abs(ev.deltaY); if (wheelAcc > 60) shut(); }
+    close.addEventListener('click', shut);
+    layer.addEventListener('click', function (ev) { if (ev.target === layer) shut(); });
+    addEventListener('keydown', onKey);
+    layer.addEventListener('wheel', onWheel, { passive: true });
+  }
+})();

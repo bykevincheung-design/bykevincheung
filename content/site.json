@@ -67,7 +67,8 @@
       ],
       "preview": false,
       "feature": true,
-      "feature_y": 0.4
+      "feature_y": 0.4,
+      "cinema": true
     },
     {
       "id": "jaeger-lecoultre",

@@ -134,7 +134,23 @@ def short_role(v):
     return e(v).replace("Production Manager", 'Prod<span class="long">uction</span> Manager')
 
 
-def film_embed(url):
+def film_cinema(j, src):
+    """A cover that opens the film full screen. Plays a silent loop until clicked."""
+    jid = j["id"]
+    loop = next((c for c in ("preview-wide.mp4", "preview.mp4")
+                 if os.path.exists(os.path.join(ROOT, "static", "img", jid, c))), None)
+    sep = "&" if "?" in src else "?"
+    play = src + sep + "autoplay=1&title=0&byline=0&portrait=0&dnt=1"
+    vid = (f'<video class="cine-loop" src="/static/img/{jid}/{loop}" muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>'
+           if loop else "")
+    return (f'<div class="film film-cinema" data-play="{e(play)}">'
+            f'<button class="cine-cover" type="button" aria-label="Play film: {e(j["client"])}, {e(j["project"])}">'
+            f'<img src="/static/img/{jid}/hero.jpg" alt="" loading="eager">{vid}'
+            f'<span class="cine-play"><span class="cine-dot" aria-hidden="true"></span>Play film</span>'
+            f'</button></div>')
+
+
+def film_embed(url, j=None):
     if not url:
         return ""
     if url.endswith(".mp4"):
@@ -143,6 +159,8 @@ def film_embed(url):
     m = re.search(r"vimeo\.com/(?:video/)?(\d+)(?:/(\w+))?", url)
     if m:
         src = f"https://player.vimeo.com/video/{m.group(1)}" + (f"?h={m.group(2)}" if m.group(2) else "")
+        if j and j.get("cinema"):
+            return film_cinema(j, src)
     else:
         m = re.search(r"(?:youtu\.be/|v=|embed/)([\w-]{11})", url)
         if not m:
@@ -297,7 +315,7 @@ def build_job(i):
 <p class="job-sub">{e(j['project'])}</p>
 <div class="job-meta mono"><span><span class="muted">Production company </span>{e(j['production'])}</span><span><span class="muted">Role </span>{e(j['role'])}</span></div>
 </section>
-{('<section class="wrap">' + film_embed(j.get('film')) + '</section>') if j.get('film') else ''}
+{('<section class="wrap">' + film_embed(j.get('film'), j) + '</section>') if j.get('film') else ''}
 <section class="wrap job-main">
 {picture(j['id'], 'hero', '(max-width: 900px) 100vw, 66vw', j['client'] + ', ' + j['project'], cls='job-hero' + ('' if j.get('film') else ' first-media'), lazy=bool(j.get('film')), fetch=True)}
 <div class="job-panel">
