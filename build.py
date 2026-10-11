@@ -252,7 +252,7 @@ def build_job(i):
                 f"{note} {S['name']}: {j['role']}.",
                 f"/static/img/{j['id']}/hero.jpg", f"/work/{j['id']}/")
     html += header(False)
-    html += f"""<main id="top">
+    html += f"""<main id="top" class="job-page">
 <section class="wrap job-head">
 <div class="mono muted">{e(j['type'])} · {e(j['year'])}</div>
 <h1 class="job-title">{e(j['client'])}</h1>
@@ -261,7 +261,7 @@ def build_job(i):
 </section>
 {('<section class="wrap">' + film_embed(j.get('film')) + '</section>') if j.get('film') else ''}
 <section class="wrap job-main">
-<img class="job-hero" src="/static/img/{j['id']}/hero.jpg" alt="{e(j['client'])}, {e(j['project'])}">
+<img class="job-hero{'' if j.get('film') else ' first-media'}" src="/static/img/{j['id']}/hero.jpg" alt="{e(j['client'])}, {e(j['project'])}">
 <div class="job-panel">
 <dl>
 <div class="dl-row first"><dt>Role</dt><dd class="b">{e(j['role'])}</dd></div>
