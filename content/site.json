@@ -65,7 +65,9 @@
           "shape": "landscape"
         }
       ],
-      "preview": false
+      "preview": false,
+      "feature": true,
+      "feature_y": 0.4
     },
     {
       "id": "jaeger-lecoultre",
@@ -188,7 +190,9 @@
           "shape": "landscape"
         }
       ],
-      "preview": true
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.45
     },
     {
       "id": "gentle-monster",
@@ -350,7 +354,9 @@
           "shape": "portrait"
         }
       ],
-      "preview": true
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.5
     },
     {
       "id": "nike-tech",
@@ -499,7 +505,9 @@
           "shape": "portrait"
         }
       ],
-      "preview": true
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.4
     },
     {
       "id": "crystal-murray",
@@ -715,7 +723,9 @@
           "shape": "landscape"
         }
       ],
-      "preview": true
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.5
     },
     {
       "id": "fred-again-tour",
@@ -796,7 +806,9 @@
           "shape": "landscape"
         }
       ],
-      "preview": true
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.45
     },
     {
       "id": "loyle-carner",

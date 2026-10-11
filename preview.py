@@ -31,7 +31,10 @@ for dirpath, _, files in os.walk(OUT):
             depth = os.path.relpath(full, OUT).count(os.sep)
             prefix = "../" * depth or "./"
             s = open(full, encoding="utf-8").read()
-            s = re.sub(r'(href|src)="(/[^"]*)"', lambda m: f'{m.group(1)}="{fix_url(m.group(2), prefix)}"', s)
+            s = re.sub(r'(href|src|poster)="(/[^"]*)"', lambda m: f'{m.group(1)}="{fix_url(m.group(2), prefix)}"', s)
+            s = re.sub(r'srcset="([^"]*)"', lambda m: 'srcset="' + ", ".join(
+                (fix_url(part.strip().split(" ")[0], prefix) + " " + " ".join(part.strip().split(" ")[1:])).strip()
+                for part in m.group(1).split(",")) + '"', s)
             open(full, "w", encoding="utf-8").write(s)
         elif name.endswith(".css"):
             s = open(full, encoding="utf-8").read()

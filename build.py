@@ -29,10 +29,26 @@ def _version(path):
 
 CSS_V = _version("static/site.css")
 JS_V = _version("static/site.js")
-FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
-         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-         '<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800'
-         '&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">')
+FONTS = ('<link rel="preload" href="/static/fonts/archivo-wdth.woff2" as="font" type="font/woff2" crossorigin>'
+         '<link rel="preload" href="/static/fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>')
+
+
+def picture(folder, name, sizes, alt, cls="", lazy=True, fallback=None, w=None, h=None, fetch=None):
+    """<picture> with AVIF and WebP at every width optimise.py made, JPG fallback."""
+    import glob
+    d = os.path.join(ROOT, "static", "img", folder)
+    widths = sorted({int(m.group(1)) for f in glob.glob(os.path.join(d, f"{name}-*.avif"))
+                     for m in [re.search(r"-(\d+)\.avif$", f)] if m})
+    fb = fallback or f"{name}.jpg"
+    srcs = ""
+    for ext, typ in (("avif", "image/avif"), ("webp", "image/webp")):
+        if widths:
+            ss = ", ".join(f"/static/img/{folder}/{name}-{w_}.{ext} {w_}w" for w_ in widths)
+            srcs += f'<source type="{typ}" srcset="{ss}" sizes="{sizes}">'
+    dims = f' width="{w}" height="{h}"' if w and h else ""
+    attrs = (' loading="lazy" decoding="async"' if lazy else ' fetchpriority="high"' if fetch else "")
+    c = f' class="{cls}"' if cls else ""
+    return f'<picture>{srcs}<img{c} src="/static/img/{folder}/{fb}" alt="{e(alt)}"{dims}{attrs}></picture>'
 
 
 def head(title, desc, image, path):
@@ -78,14 +94,18 @@ def header(on_home):
 
 
 def footer():
-    return """<footer class="foot">
+    return FOOT.replace("JSV", JS_V)
+
+
+FOOT = """<footer class="foot">
+<div class="wrap"><a class="wordmark" href="/#top" aria-label="Kevin Cheung, back to the top">Kevin Cheung</a></div>
 <div class="wrap foot-in">
 <span>© 2026 Gweilo Prod Ltd</span>
 <span>gwei.lo studios 鬼佬工作室</span>
 <a href="#top">Back to top ↑</a>
 </div>
 </footer>
-<script src="/static/site.js?v={JS_V}"></script>
+<script src="/static/site.js?v=JSV"></script>
 </body>
 </html>
 """
@@ -133,11 +153,19 @@ def film_embed(url):
 
 def build_home():
     tiles = []
-    for j in JOBS:
-        video = (f'<video src="/static/img/{j["id"]}/preview.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>'
-                 if j.get("preview") else "")
-        tiles.append(f"""<a class="tile" href="/work/{j['id']}/">
-<span class="tile-media"><img src="/static/img/{j['id']}/card.jpg" alt="{e(j['client'])}, {e(j['project'])}" loading="lazy" width="900" height="1125">{video}</span>
+    for n, j in enumerate(JOBS):
+        feat = bool(j.get("feature"))
+        clip = "preview-wide.mp4" if feat else "preview.mp4"
+        has_clip = os.path.exists(os.path.join(ROOT, "static", "img", j["id"], clip))
+        video = (f'<video src="/static/img/{j["id"]}/{clip}" muted loop playsinline preload="none" aria-hidden="true"></video>'
+                 if has_clip else "")
+        alt = f"{j['client']}, {j['project']}"
+        if feat:
+            img = picture(j["id"], "feat", "(max-width: 900px) 100vw, 50vw", alt, lazy=n > 3, fallback="feat-800.jpg", w=1600, h=1000)
+        else:
+            img = picture(j["id"], "card", "(max-width: 600px) 50vw, (max-width: 900px) 50vw, 25vw", alt, lazy=n > 3, w=900, h=1125)
+        tiles.append(f"""<a class="tile{' feature' if feat else ''}" href="/work/{j['id']}/">
+<span class="tile-media">{img}{video}</span>
 <span class="tile-client">{e(j['client'])}</span>
 <span class="tile-project">{e(j['project'])}</span>
 <span class="tile-prod">{e(j['production'])}</span>
@@ -183,6 +211,14 @@ def build_home():
     html += header(True)
     html += f"""<main id="top">
 <h1 class="visually-hidden">{e(S['name'])}, Production Manager and Producer, London</h1>
+<section class="reel" aria-label="Showreel">
+<video class="reel-v" autoplay muted loop playsinline preload="auto" poster="/static/reel/poster.jpg" aria-hidden="true">
+<source src="/static/reel/reel-600x750.mp4" type="video/mp4" media="(max-width: 700px)">
+<source src="/static/reel/reel-1280.mp4" type="video/mp4">
+</video>
+<div class="reel-cap wrap"><span class="reel-name">Kevin Cheung</span><span class="reel-role">Production Manager <em>&amp;</em> Producer, London</span></div>
+<a class="reel-down mono" href="#work">Selected work ↓</a>
+</section>
 
 
 <section id="work" class="wrap section" aria-labelledby="work-h">
@@ -244,7 +280,8 @@ def build_job(i):
     note = f"{j['client']}, {j['project']}. " + (
         f"Directed by {j['director']} with {j['production']}." if j["director"] else f"With {j['production']}.")
     gallery = "".join(
-        f'<img class="g-{g["shape"]}" src="/static/img/{j["id"]}/{g["src"]}" alt="{e(j["client"])}, {e(j["project"])}" loading="lazy">'
+        picture(j["id"], os.path.splitext(g["src"])[0], "(max-width: 900px) 100vw, " + ("66vw" if g["shape"] == "landscape" else "33vw"),
+                f"{j['client']}, {j['project']}", cls=f"g-{g['shape']}", fallback=g["src"])
         for g in j["gallery"])
     about = f'<p class="note">{e(j["about"])}</p>' if j.get("about") else ""
     director_row = (f'<div class="dl-row"><dt>Director</dt><dd>{e(j["director"])}</dd></div>' if j["director"] else "")
@@ -261,7 +298,7 @@ def build_job(i):
 </section>
 {('<section class="wrap">' + film_embed(j.get('film')) + '</section>') if j.get('film') else ''}
 <section class="wrap job-main">
-<img class="job-hero{'' if j.get('film') else ' first-media'}" src="/static/img/{j['id']}/hero.jpg" alt="{e(j['client'])}, {e(j['project'])}">
+{picture(j['id'], 'hero', '(max-width: 900px) 100vw, 66vw', j['client'] + ', ' + j['project'], cls='job-hero' + ('' if j.get('film') else ' first-media'), lazy=bool(j.get('film')), fetch=True)}
 <div class="job-panel">
 <dl>
 <div class="dl-row first"><dt>Role</dt><dd class="b">{e(j['role'])}</dd></div>
