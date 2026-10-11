@@ -273,9 +273,7 @@
           "shape": "landscape"
         }
       ],
-      "preview": true,
-      "feature": true,
-      "feature_y": 0.45
+      "preview": true
     },
     {
       "id": "gentle-monster",
@@ -292,6 +290,33 @@
         {
           "src": "1.jpg",
           "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ],
+      "preview": true
+    },
+    {
+      "id": "nike-styleby",
+      "year": "2024",
+      "client": "Nike",
+      "project": "StyleBy",
+      "director": "Leo & Suzie",
+      "production": "MOX London",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "Holiday 24 for EMEA. Six talents styling Shox TL and Vomero 5 across a stadium, a track and the street.",
+      "film": "https://vimeo.com/1048573758",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
         },
         {
           "src": "2.jpg",
@@ -332,60 +357,6 @@
       "preview": true
     },
     {
-      "id": "fred-again-rumble",
-      "year": "2023",
-      "client": "Skrillex, Fred again.. & Flowdan",
-      "project": "Rumble",
-      "director": "Manu Cossu",
-      "production": "Iconoclast",
-      "role": "Production Manager",
-      "type": "Music",
-      "about": "Skrillex, Fred again.. and Flowdan, shot in real crowds at their live shows.",
-      "film": "https://www.youtube.com/watch?v=i8Vgo5S-_NM",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
-        }
-      ],
-      "preview": true
-    },
-    {
-      "id": "nike-styleby",
-      "year": "2024",
-      "client": "Nike",
-      "project": "StyleBy",
-      "director": "Leo & Suzie",
-      "production": "MOX London",
-      "role": "Production Manager",
-      "type": "Commercial",
-      "about": "Holiday 24 for EMEA. Six talents styling Shox TL and Vomero 5 across a stadium, a track and the street.",
-      "film": "https://vimeo.com/1048573758",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "portrait"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "portrait"
-        }
-      ],
-      "preview": true
-    },
-    {
       "id": "nike-tech",
       "year": "2024",
       "client": "Nike",
@@ -410,7 +381,9 @@
           "shape": "portrait"
         }
       ],
-      "preview": true
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.5
     },
     {
       "id": "adidas-korea",
@@ -532,9 +505,7 @@
           "shape": "portrait"
         }
       ],
-      "preview": true,
-      "feature": true,
-      "feature_y": 0.4
+      "preview": true
     },
     {
       "id": "crystal-murray",
@@ -618,6 +589,35 @@
       "preview": true
     },
     {
+      "id": "jungle-gap",
+      "year": "2023",
+      "client": "Jungle x Gap",
+      "project": "Linen Moves",
+      "director": "Charlie Di Placido",
+      "production": "Contentious Maximus",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "Gap's spring linen campaign, built on Jungle's viral \"Back on 74\" video. Tyla leads a troupe through one‑take routines choreographed by Shay Latukolan.",
+      "film": "https://www.youtube.com/watch?v=8unVMB-LoT8",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.5
+    },
+    {
       "id": "glendronach",
       "year": "2024",
       "client": "GlenDronach",
@@ -672,35 +672,6 @@
       "preview": true
     },
     {
-      "id": "jungle-gap",
-      "year": "2023",
-      "client": "Jungle x Gap",
-      "project": "Linen Moves",
-      "director": "Charlie Di Placido",
-      "production": "Contentious Maximus",
-      "role": "Production Manager",
-      "type": "Commercial",
-      "about": "Gap's spring linen campaign, built on Jungle's viral \"Back on 74\" video. Tyla leads a troupe through one‑take routines choreographed by Shay Latukolan.",
-      "film": "https://www.youtube.com/watch?v=8unVMB-LoT8",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
-        }
-      ],
-      "preview": true,
-      "feature": true,
-      "feature_y": 0.5
-    },
-    {
       "id": "moncler-adidas",
       "year": "2023",
       "client": "Moncler x adidas Originals",
@@ -711,33 +682,6 @@
       "type": "Fashion",
       "about": "AI‑generated explorers turned into one‑off sculptures by artists, then photographed by Hanna Moon.",
       "film": "https://www.youtube.com/watch?v=7nDpzOp_CiE",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
-        }
-      ],
-      "preview": true
-    },
-    {
-      "id": "fred-again",
-      "year": "2023",
-      "client": "Fred again..",
-      "project": "Rooftop Live, London",
-      "director": "Loose",
-      "production": "Concoct",
-      "role": "Producer",
-      "type": "Live",
-      "about": "A sunset set for friends on the roof of Arun, who helps put Fred's shows together, full of unreleased IDs.",
-      "film": "https://vimeo.com/995342534",
       "gallery": [
         {
           "src": "1.jpg",
@@ -782,6 +726,35 @@
       "preview": true
     },
     {
+      "id": "fred-again-rumble",
+      "year": "2023",
+      "client": "Skrillex, Fred again.. & Flowdan",
+      "project": "Rumble",
+      "director": "Manu Cossu",
+      "production": "Iconoclast",
+      "role": "Production Manager",
+      "type": "Music",
+      "about": "Skrillex, Fred again.. and Flowdan, shot in real crowds at their live shows.",
+      "film": "https://www.youtube.com/watch?v=i8Vgo5S-_NM",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.5
+    },
+    {
       "id": "moncler-alicia-keys",
       "year": "2023",
       "client": "Moncler x Alicia Keys",
@@ -806,9 +779,34 @@
           "shape": "landscape"
         }
       ],
-      "preview": true,
-      "feature": true,
-      "feature_y": 0.45
+      "preview": true
+    },
+    {
+      "id": "fred-again",
+      "year": "2023",
+      "client": "Fred again..",
+      "project": "Rooftop Live, London",
+      "director": "Loose",
+      "production": "Concoct",
+      "role": "Producer",
+      "type": "Live",
+      "about": "A sunset set for friends on the roof of Arun, who helps put Fred's shows together, full of unreleased IDs.",
+      "film": "https://vimeo.com/995342534",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
     },
     {
       "id": "cp-company-kano",

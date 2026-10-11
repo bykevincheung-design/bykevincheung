@@ -61,7 +61,9 @@ for j in S["jobs"]:
         im = Image.open(hero).convert("RGB")
         save_set(im, d, "hero", WIDTHS["hero"], hero)
         if j.get("feature"):
-            save_set(feature_crop(im, j.get("feature_y", 0.45)), d, "feat", WIDTHS["feat"], hero, jpg=True)
+            fsrc = os.path.join(d, "feat-src.jpg")  # optional landscape source just for the big tile
+            src = fsrc if os.path.exists(fsrc) else hero
+            save_set(feature_crop(Image.open(src).convert("RGB"), j.get("feature_y", 0.45)), d, "feat", WIDTHS["feat"], src, jpg=True)
     for g in j.get("gallery", []):
         p = os.path.join(d, g["src"])
         if os.path.exists(p):
