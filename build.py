@@ -140,7 +140,7 @@ def film_cinema(j, src):
     loop = next((c for c in ("preview-wide.mp4", "preview.mp4")
                  if os.path.exists(os.path.join(ROOT, "static", "img", jid, c))), None)
     sep = "&" if "?" in src else "?"
-    play = src + sep + "autoplay=1&title=0&byline=0&portrait=0&dnt=1"
+    play = src + sep + ("autoplay=1&title=0&byline=0&portrait=0&dnt=1" if "vimeo" in src else "autoplay=1")
     vid = (f'<video class="cine-loop" src="/static/img/{jid}/{loop}" muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>'
            if loop else "")
     return (f'<div class="film film-cinema" data-play="{e(play)}">'
@@ -159,13 +159,15 @@ def film_embed(url, j=None):
     m = re.search(r"vimeo\.com/(?:video/)?(\d+)(?:/(\w+))?", url)
     if m:
         src = f"https://player.vimeo.com/video/{m.group(1)}" + (f"?h={m.group(2)}" if m.group(2) else "")
-        if j and j.get("cinema"):
+        if j:
             return film_cinema(j, src)
     else:
         m = re.search(r"(?:youtu\.be/|v=|embed/)([\w-]{11})", url)
         if not m:
             return ""
         src = f"https://www.youtube-nocookie.com/embed/{m.group(1)}"
+        if j:
+            return film_cinema(j, src + "?enablejsapi=1&rel=0")
     return (f'<div class="film"><iframe src="{e(src)}" title="Film" loading="lazy" '
             'allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>')
 

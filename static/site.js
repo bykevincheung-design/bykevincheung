@@ -96,7 +96,7 @@
     var y = window.scrollY, p = Math.min(1, y / 320);
     head.style.transform = 'translate3d(0,' + (y * 0.22).toFixed(1) + 'px,0)';
     head.style.opacity = Math.max(0.15, 1 - y / 520).toFixed(3);
-    if (film) {
+    if (film && !document.body.classList.contains('theatre')) {
       film.style.transform = 'scale(' + (0.9 + 0.1 * p).toFixed(4) + ')';
       film.style.borderRadius = (18 * (1 - p)).toFixed(1) + 'px';
     }
@@ -115,70 +115,67 @@
   requestAnimationFrame(raf);
 })();
 
-// Cinema film: the cover grows to fill the screen, then the film plays. Esc, X or a scroll closes it.
+// Theatre mode: click the film cover, the page dims, the film grows a little and plays.
+// Scroll away, press Esc or click the dark area to bring the page back (the film pauses).
 (function () {
+  var box = document.querySelector('.film-cinema');
+  if (!box) return;
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.querySelectorAll('.film-cinema').forEach(function (box) {
-    var cover = box.querySelector('.cine-cover');
-    cover.addEventListener('click', function () { open(box); });
-  });
-  function fit() {
-    var vw = innerWidth, vh = innerHeight, w = vw, h = vw * 9 / 16;
-    if (h > vh) { h = vh; w = vh * 16 / 9; }
-    return { x: (vw - w) / 2, y: (vh - h) / 2, w: w, h: h };
+  var cover = box.querySelector('.cine-cover');
+  var head = document.querySelector('.job-head');
+  var scrim = document.createElement('div');
+  scrim.className = 'theatre-scrim';
+  document.body.appendChild(scrim);
+  var ifr = null, on = false, y0 = null, isVimeo = /vimeo/.test(box.dataset.play);
+
+  function send(msg) { if (ifr && ifr.contentWindow) ifr.contentWindow.postMessage(JSON.stringify(msg), '*'); }
+  function pause() { if (isVimeo) send({ method: 'pause' }); else send({ event: 'command', func: 'pauseVideo', args: [] }); }
+
+  function size() {
+    box.style.transform = 'none';
+    var r = box.getBoundingClientRect();
+    var s = Math.min((innerWidth - 48) / r.width, (innerHeight - 96) / r.height);
+    return { s: Math.max(1, s), h: r.height };
   }
-  function open(box) {
-    var r = box.getBoundingClientRect(), f = fit();
-    var layer = document.createElement('div');
-    layer.className = 'cine-layer';
-    layer.setAttribute('role', 'dialog'); layer.setAttribute('aria-modal', 'true'); layer.setAttribute('aria-label', 'Film');
-    var stage = document.createElement('div');
-    stage.className = 'cine-stage';
-    stage.style.cssText = 'left:' + f.x + 'px;top:' + f.y + 'px;width:' + f.w + 'px;height:' + f.h + 'px';
-    var img = box.querySelector('.cine-cover img').cloneNode();
-    stage.appendChild(img);
-    var close = document.createElement('button');
-    close.className = 'cine-close'; close.type = 'button'; close.setAttribute('aria-label', 'Close film'); close.textContent = '×';
-    var hint = document.createElement('div'); hint.className = 'cine-hint'; hint.textContent = 'Esc to close';
-    layer.appendChild(stage); layer.appendChild(close); layer.appendChild(hint);
-    document.body.appendChild(layer);
-    if (window.lenis) window.lenis.stop();
-    document.documentElement.style.overflow = 'hidden';
-    var loop = box.querySelector('.cine-loop'); if (loop) loop.pause();
-    var from = 'translate(' + (r.left - f.x) + 'px,' + (r.top - f.y) + 'px) scale(' + (r.width / f.w) + ',' + (r.height / f.h) + ')';
-    var dur = reduce ? 1 : 750, ease = 'cubic-bezier(.7,0,.2,1)';
-    requestAnimationFrame(function () { layer.classList.add('on'); });
-    stage.animate([{ transform: from }, { transform: 'none' }], { duration: dur, easing: ease, fill: 'both' }).finished.then(function () {
-      var ifr = document.createElement('iframe');
-      ifr.src = box.dataset.play; ifr.title = 'Film';
-      ifr.allow = 'autoplay; fullscreen; picture-in-picture'; ifr.setAttribute('allowfullscreen', '');
-      ifr.addEventListener('load', function () { stage.classList.add('ready'); });
-      stage.appendChild(ifr);
-      close.focus();
+  function enter() {
+    if (on) return; on = true; y0 = null;
+    var m = size();
+    document.body.classList.add('theatre');
+    box.classList.add('theatre-anim');
+    box.style.borderRadius = '0px';
+    box.style.transform = 'scale(' + m.s.toFixed(4) + ')';
+    var top = box.getBoundingClientRect().top + scrollY;
+    var target = top - Math.max(0, (innerHeight - m.h * m.s) / 2);
+    if (window.lenis) window.lenis.scrollTo(target, { duration: reduce ? 0 : 1.1, onComplete: settle });
+    else { scrollTo({ top: target, behavior: reduce ? 'auto' : 'smooth' }); setTimeout(settle, reduce ? 0 : 900); }
+    function settle() { y0 = scrollY; }
+  }
+  function leave() {
+    if (!on) return; on = false; y0 = null;
+    pause();
+    document.body.classList.remove('theatre');
+    box.style.transform = ''; box.style.borderRadius = '';
+    window.dispatchEvent(new Event('scroll'));
+    setTimeout(function () { if (!on) box.classList.remove('theatre-anim'); }, 900);
+  }
+  cover.addEventListener('click', function () {
+    ifr = document.createElement('iframe');
+    ifr.src = box.dataset.play; ifr.title = 'Film';
+    ifr.allow = 'autoplay; fullscreen; picture-in-picture'; ifr.setAttribute('allowfullscreen', '');
+    ifr.addEventListener('load', function () {
+      box.classList.add('playing');
+      if (isVimeo) send({ method: 'addEventListener', value: 'play' });
     });
-    var closing = false;
-    function shut() {
-      if (closing) return; closing = true;
-      var r2 = box.getBoundingClientRect(), f2 = fit();
-      var to = 'translate(' + (r2.left - f2.x) + 'px,' + (r2.top - f2.y) + 'px) scale(' + (r2.width / f2.w) + ',' + (r2.height / f2.h) + ')';
-      stage.classList.remove('ready');
-      var ifr = stage.querySelector('iframe'); if (ifr) ifr.remove();
-      layer.classList.remove('on');
-      stage.animate([{ transform: 'none' }, { transform: to }], { duration: reduce ? 1 : 650, easing: ease, fill: 'both' }).finished.then(function () {
-        layer.remove();
-        document.documentElement.style.overflow = '';
-        if (window.lenis) window.lenis.start();
-        if (loop) loop.play().catch(function () {});
-        box.querySelector('.cine-cover').focus({ preventScroll: true });
-      });
-      removeEventListener('keydown', onKey); layer.removeEventListener('wheel', onWheel);
-    }
-    function onKey(ev) { if (ev.key === 'Escape') shut(); }
-    var wheelAcc = 0;
-    function onWheel(ev) { wheelAcc += Math.abs(ev.deltaY); if (wheelAcc > 60) shut(); }
-    close.addEventListener('click', shut);
-    layer.addEventListener('click', function (ev) { if (ev.target === layer) shut(); });
-    addEventListener('keydown', onKey);
-    layer.addEventListener('wheel', onWheel, { passive: true });
-  }
+    box.appendChild(ifr);
+    enter();
+  });
+  // Pressing play again in the Vimeo player brings theatre mode back
+  addEventListener('message', function (ev) {
+    if (!ifr || ev.source !== ifr.contentWindow) return;
+    try { var d = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data; if (d && d.event === 'play') enter(); } catch (x) {}
+  });
+  addEventListener('scroll', function () { if (on && y0 !== null && Math.abs(scrollY - y0) > 140) leave(); }, { passive: true });
+  addEventListener('keydown', function (ev) { if (ev.key === 'Escape') leave(); });
+  scrim.addEventListener('click', leave);
+  addEventListener('resize', function () { if (on) { var m = size(); box.style.transform = 'scale(' + m.s.toFixed(4) + ')'; } });
 })();
