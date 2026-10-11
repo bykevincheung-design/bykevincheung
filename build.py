@@ -105,6 +105,7 @@ FOOT = """<footer class="foot">
 <a href="#top">Back to top ↑</a>
 </div>
 </footer>
+<script src="/static/vendor/lenis.min.js?v=1.1.20"></script>
 <script src="/static/site.js?v=JSV"></script>
 </body>
 </html>

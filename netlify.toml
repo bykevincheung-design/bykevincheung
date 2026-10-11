@@ -15,6 +15,11 @@
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
+  for = "/static/vendor/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
   for = "/static/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"

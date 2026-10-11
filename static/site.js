@@ -104,3 +104,13 @@
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   update();
 })();
+
+// Smooth, weighted scrolling on desktop (mouse/trackpad only, never on touch, off for reduced motion)
+(function () {
+  if (!window.Lenis) return;
+  if (!matchMedia('(pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1, smoothWheel: true, anchors: { offset: -72 } });
+  window.lenis = lenis;
+  function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+})();
