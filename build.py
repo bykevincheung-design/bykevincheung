@@ -81,7 +81,7 @@ def header(on_home):
     contact = "#about" if on_home else "/#about"
     return f"""<header class="top">
 <div class="wrap top-in">
-<a class="logo" href="/">{e(S['name'])}<span class="logo-role"> | Production Manager · Producer</span></a>
+<a class="logo" href="/">{e(S['name'])}<span class="logo-role"> | Production Manager · Producer · Fixer</span></a>
 <nav aria-label="Main">
 <a href="{work}">Work</a>
 <a href="{credits}">Credits</a>
@@ -231,13 +231,13 @@ def build_home():
                 "/static/img/adidas-predator/hero.jpg", "/")
     html += header(True)
     html += f"""<main id="top">
-<h1 class="visually-hidden">{e(S['name'])}, Production Manager and Producer, London</h1>
+<h1 class="visually-hidden">{e(S['name'])}, Production Manager, Producer and Fixer, London</h1>
 <section class="reel" aria-label="Showreel">
 <video class="reel-v" autoplay muted loop playsinline preload="auto" poster="/static/reel/poster.jpg" aria-hidden="true">
 <source src="/static/reel/reel-600x750.mp4" type="video/mp4" media="(max-width: 700px)">
 <source src="/static/reel/reel-1280.mp4" type="video/mp4">
 </video>
-<div class="reel-cap wrap"><span class="reel-name">Kevin Cheung</span><span class="reel-role">Production Manager <em>&amp;</em> Producer, London</span></div>
+<div class="reel-cap wrap"><span class="reel-name">Kevin Cheung</span><span class="reel-role">Production Manager, Producer <em>&amp;</em> Fixer, London</span></div>
 <a class="reel-down mono" href="#work">Selected work ↓</a>
 </section>
 
