@@ -120,6 +120,89 @@
       "preview": true
     },
     {
+      "id": "chanel-vogue",
+      "year": "2024",
+      "client": "Chanel x Vogue",
+      "project": "No.5 Drops",
+      "director": "Ebeneza Blanche",
+      "production": "Smuggler",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "",
+      "film": "https://vimeo.com/993167846",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
+      "id": "levis-mclaren",
+      "year": "2024",
+      "client": "Levi’s x McLaren Racing",
+      "project": "Campaign Stills",
+      "director": "Liam Clarke",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "A collection inspired by 1980s McLaren cars, launched for the British Grand Prix at Silverstone.",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true,
+      "film": ""
+    },
+    {
+      "id": "levis-mclaren-film",
+      "year": "2024",
+      "client": "Levi’s x McLaren Racing",
+      "project": "Pit Stop",
+      "director": "Liam Clarke",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Commercial",
+      "about": "A pit stop crew in head-to-toe Levi’s denim, shot overhead and up close for the Levi’s x McLaren Racing launch.",
+      "film": "https://vimeo.com/979999825/7395f63d93",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ],
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.5
+    },
+    {
       "id": "burberry-blush",
       "year": "2025",
       "client": "Burberry",
@@ -249,33 +332,6 @@
       "preview": true
     },
     {
-      "id": "j-hus",
-      "year": "2023",
-      "client": "J Hus",
-      "project": "It's Crazy",
-      "director": "Taz Tron Delix",
-      "production": "Compulsory",
-      "role": "Production Manager",
-      "type": "Music",
-      "about": "J Hus's comeback single. Car park crowds, riot police, smoke and a wrecked car.",
-      "film": "https://www.youtube.com/watch?v=xnKbJwGjXAQ",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
-        }
-      ],
-      "preview": true
-    },
-    {
       "id": "fred-again-rumble",
       "year": "2023",
       "client": "Skrillex, Fred again.. & Flowdan",
@@ -286,33 +342,6 @@
       "type": "Music",
       "about": "Skrillex, Fred again.. and Flowdan, shot in real crowds at their live shows.",
       "film": "https://www.youtube.com/watch?v=i8Vgo5S-_NM",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
-        }
-      ],
-      "preview": true
-    },
-    {
-      "id": "chanel-vogue",
-      "year": "2024",
-      "client": "Chanel x Vogue",
-      "project": "No.5 Drops",
-      "director": "Ebeneza Blanche",
-      "production": "Smuggler",
-      "role": "Production Manager",
-      "type": "Fashion",
-      "about": "",
-      "film": "https://vimeo.com/993167846",
       "gallery": [
         {
           "src": "1.jpg",
@@ -354,9 +383,7 @@
           "shape": "portrait"
         }
       ],
-      "preview": true,
-      "feature": true,
-      "feature_y": 0.5
+      "preview": true
     },
     {
       "id": "nike-tech",
@@ -591,33 +618,6 @@
       "preview": true
     },
     {
-      "id": "levis-mclaren",
-      "year": "2024",
-      "client": "Levi’s x McLaren Racing",
-      "project": "Campaign",
-      "director": "Liam Clarke",
-      "production": "Lafour Studios",
-      "role": "Production Manager",
-      "type": "Fashion",
-      "about": "A collection inspired by 1980s McLaren cars, launched for the British Grand Prix at Silverstone.",
-      "film": "https://vimeo.com/979999825/7395f63d93",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "portrait"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "portrait"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
-        }
-      ],
-      "preview": true
-    },
-    {
       "id": "glendronach",
       "year": "2024",
       "client": "GlenDronach",
@@ -696,6 +696,35 @@
           "shape": "landscape"
         }
       ],
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.5
+    },
+    {
+      "id": "moncler-adidas",
+      "year": "2023",
+      "client": "Moncler x adidas Originals",
+      "project": "The Art of Explorers",
+      "director": "",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "AI‑generated explorers turned into one‑off sculptures by artists, then photographed by Hanna Moon.",
+      "film": "https://www.youtube.com/watch?v=7nDpzOp_CiE",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
       "preview": true
     },
     {
@@ -723,60 +752,31 @@
           "shape": "landscape"
         }
       ],
-      "preview": true,
-      "feature": true,
-      "feature_y": 0.5
+      "preview": true
     },
     {
-      "id": "fred-again-tour",
-      "year": "2023",
-      "client": "Fred again..",
-      "project": "Tour Again...",
-      "director": "Ethan and Tom",
-      "production": "Loose It",
-      "role": "Producer",
-      "type": "Live",
-      "about": "Visuals for the autumn 2023 headline run, including four nights at Alexandra Palace and two at the Zénith in Paris.",
-      "film": "",
+      "id": "loyle-carner",
+      "year": "2022",
+      "client": "Loyle Carner",
+      "project": "Nobody Knows (Ladas Road)",
+      "director": "Uncanny",
+      "production": "Bullion Productions",
+      "role": "Production Manager",
+      "type": "Music",
+      "about": "A single take with no cuts, shot on infrared, about identity and growing up mixed race.",
+      "film": "https://www.youtube.com/watch?v=kaDgT7w4dEg",
       "gallery": [
         {
           "src": "1.jpg",
-          "shape": "landscape"
+          "shape": "portrait"
         },
         {
           "src": "2.jpg",
-          "shape": "landscape"
+          "shape": "portrait"
         },
         {
           "src": "3.jpg",
           "shape": "portrait"
-        }
-      ],
-      "preview": true
-    },
-    {
-      "id": "moncler-adidas",
-      "year": "2023",
-      "client": "Moncler x adidas Originals",
-      "project": "The Art of Explorers",
-      "director": "",
-      "production": "Lafour Studios",
-      "role": "Production Manager",
-      "type": "Fashion",
-      "about": "AI‑generated explorers turned into one‑off sculptures by artists, then photographed by Hanna Moon.",
-      "film": "https://www.youtube.com/watch?v=7nDpzOp_CiE",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
         }
       ],
       "preview": true
@@ -809,33 +809,6 @@
       "preview": true,
       "feature": true,
       "feature_y": 0.45
-    },
-    {
-      "id": "loyle-carner",
-      "year": "2022",
-      "client": "Loyle Carner",
-      "project": "Nobody Knows (Ladas Road)",
-      "director": "Uncanny",
-      "production": "Bullion Productions",
-      "role": "Production Manager",
-      "type": "Music",
-      "about": "A single take with no cuts, shot on infrared, about identity and growing up mixed race.",
-      "film": "https://www.youtube.com/watch?v=kaDgT7w4dEg",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "portrait"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "portrait"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "portrait"
-        }
-      ],
-      "preview": true
     },
     {
       "id": "cp-company-kano",
@@ -892,6 +865,33 @@
       "preview": true
     },
     {
+      "id": "fred-again-tour",
+      "year": "2023",
+      "client": "Fred again..",
+      "project": "Tour Again...",
+      "director": "Ethan and Tom",
+      "production": "Loose It",
+      "role": "Producer",
+      "type": "Live",
+      "about": "Visuals for the autumn 2023 headline run, including four nights at Alexandra Palace and two at the Zénith in Paris.",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "dave-stormzy",
       "year": "2021",
       "client": "Dave ft. Stormzy",
@@ -902,6 +902,33 @@
       "type": "Music",
       "about": "Shot at Aston Martin's factory and Silverstone Circuit, for a track that reached No. 2 in the UK.",
       "film": "https://www.youtube.com/watch?v=oFqVvjq6BGM",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
+      "id": "j-hus",
+      "year": "2023",
+      "client": "J Hus",
+      "project": "It's Crazy",
+      "director": "Taz Tron Delix",
+      "production": "Compulsory",
+      "role": "Production Manager",
+      "type": "Music",
+      "about": "J Hus's comeback single. Car park crowds, riot police, smoke and a wrecked car.",
+      "film": "https://www.youtube.com/watch?v=xnKbJwGjXAQ",
       "gallery": [
         {
           "src": "1.jpg",
