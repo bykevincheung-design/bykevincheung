@@ -78,7 +78,7 @@ def header(on_home):
     work = "#work" if on_home else "/#work"
     credits = "#credits" if on_home else "/#credits"
     about = "#about" if on_home else "/#about"
-    contact = "#contact" if on_home else "/#contact"
+    contact = "#about" if on_home else "/#about"
     return f"""<header class="top">
 <div class="wrap top-in">
 <a class="logo" href="/">{e(S['name'])}<span class="logo-role"> | Production Manager · Producer</span></a>
@@ -86,7 +86,7 @@ def header(on_home):
 <a href="{work}">Work</a>
 <a href="{credits}">Credits</a>
 <a href="{e(S['cv'])}" target="_blank" rel="noopener">CV ↗</a>
-<a class="btn" href="{contact}">Contact</a>
+<a href="{contact}">About</a>
 </nav>
 </div>
 </header>
@@ -265,7 +265,7 @@ def build_home():
 </div>
 </section>
 
-<section id="contact" class="about" aria-labelledby="about-h">
+<section id="about" class="about" aria-labelledby="about-h">
 <div class="wrap about-in">
 <div class="about-text">
 <h2 id="about-h" class="mono about-label">About &amp; contact</h2>
