@@ -172,6 +172,15 @@ def film_embed(url, j=None):
             'allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>')
 
 
+def work_filters():
+    from collections import Counter
+    c = Counter("Fashion" if j["type"] == "Editorial" else j["type"] for j in JOBS)
+    cats = [("All", len(JOBS))] + [(k, c[k]) for k in ("Commercial", "Fashion", "Music", "Live") if c[k]]
+    btns = "".join(f'<button type="button" class="wf" data-cat="{k}" aria-pressed="{"true" if k == "All" else "false"}">'
+                   f'{k}<sup>{n}</sup></button>' for k, n in cats)
+    return f'<div class="work-filters mono" role="group" aria-label="Show work by category">{btns}<span class="wf-bar" aria-hidden="true"></span></div>'
+
+
 def build_home():
     tiles = []
     for n, j in enumerate(JOBS):
@@ -185,7 +194,8 @@ def build_home():
             img = picture(j["id"], "feat", "(max-width: 900px) 100vw, 50vw", alt, lazy=n > 3, fallback="feat-800.jpg", w=1600, h=1000)
         else:
             img = picture(j["id"], "card", "(max-width: 600px) 50vw, (max-width: 900px) 50vw, 25vw", alt, lazy=n > 3, w=900, h=1125)
-        tiles.append(f"""<a class="tile{' feature' if feat else ''}" href="/work/{j['id']}/">
+        cat = "Fashion" if j["type"] == "Editorial" else j["type"]
+        tiles.append(f"""<a class="tile{' feature' if feat else ''}" href="/work/{j['id']}/" data-cat="{e(cat)}">
 <span class="tile-media">{img}{video}</span>
 <span class="tile-client">{e(j['client'])}</span>
 <span class="tile-project">{e(j['project'])}</span>
@@ -244,6 +254,7 @@ def build_home():
 
 <section id="work" class="wrap section" aria-labelledby="work-h">
 <h2 id="work-h" class="visually-hidden">Selected work</h2>
+{work_filters()}
 <div class="grid">
 {chr(10).join(tiles)}
 </div>

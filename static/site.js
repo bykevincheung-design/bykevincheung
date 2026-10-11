@@ -179,3 +179,83 @@
   scrim.addEventListener('click', leave);
   addEventListener('resize', function () { if (on) { var m = size(); box.style.transform = 'scale(' + m.s.toFixed(4) + ')'; } });
 })();
+
+// Work categories: tiles leaving fade out, the rest glide to their new spots, new ones fade up
+(function () {
+  var bar = document.querySelector('.work-filters');
+  var grid = document.querySelector('.grid');
+  if (!bar || !grid) return;
+  var btns = [].slice.call(bar.querySelectorAll('.wf'));
+  var line = bar.querySelector('.wf-bar');
+  var tiles = [].slice.call(grid.querySelectorAll('.tile'));
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ease = 'cubic-bezier(.65,0,.2,1)', busy = false, current = 'All';
+
+  function moveLine(b, instant) {
+    var r = b.getBoundingClientRect(), p = bar.getBoundingClientRect();
+    if (instant) line.style.transition = 'none';
+    line.style.width = r.width + 'px';
+    line.style.transform = 'translate(' + (r.left - p.left + bar.scrollLeft) + 'px,' + (r.bottom - p.top - 3) + 'px)';
+    if (!instant && b.scrollIntoView && bar.scrollWidth > bar.clientWidth) b.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+    if (instant) { line.offsetWidth; line.style.transition = ''; }
+  }
+  var active = bar.querySelector('[aria-pressed="true"]');
+  moveLine(active, true);
+  addEventListener('resize', function () { moveLine(bar.querySelector('[aria-pressed="true"]'), true); });
+  if (document.fonts) document.fonts.ready.then(function () { moveLine(bar.querySelector('[aria-pressed="true"]'), true); });
+
+  function show(cat) {
+    if (busy || cat === current) return;
+    busy = true; current = cat;
+    var match = function (t) { return cat === 'All' || t.dataset.cat === cat; };
+    var visible = tiles.filter(function (t) { return !t.classList.contains('is-out'); });
+    var first = new Map();
+    visible.forEach(function (t) { first.set(t, t.getBoundingClientRect()); });
+    var leaving = visible.filter(function (t) { return !match(t); });
+    var outDur = reduce ? 0 : 180;
+    var fades = leaving.map(function (t) {
+      return t.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.96)' }], { duration: outDur, easing: 'ease-in', fill: 'forwards' }).finished;
+    });
+    Promise.all(fades).then(function () {
+      tiles.forEach(function (t) {
+        t.getAnimations().forEach(function (a) { a.cancel(); });
+        t.classList.toggle('is-out', !match(t));
+        if (match(t) && !t.classList.contains('in')) {
+          t.style.transition = 'none'; t.classList.add('in'); t.offsetWidth;
+          setTimeout(function () { t.style.transition = ''; }, 50);
+        }
+      });
+      var moveDur = reduce ? 0 : 650;
+      tiles.forEach(function (t, i) {
+        if (t.classList.contains('is-out')) return;
+        var a = first.get(t), b = t.getBoundingClientRect();
+        // only glide tiles that were on screen; anything coming from off screen fades up instead of flying in
+        if (a && (a.bottom < 0 || a.top > innerHeight)) a = null;
+        if (a) {
+          var dx = a.left - b.left, dy = a.top - b.top, sx = a.width / b.width, sy = a.height / b.height;
+          if (Math.abs(dx) > 1 || Math.abs(dy) > 1 || Math.abs(sx - 1) > .01) {
+            t.style.transformOrigin = '0 0';
+            t.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')' }, { transform: 'none' }], { duration: moveDur, easing: ease });
+          }
+        } else {
+          t.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: reduce ? 0 : 520, delay: reduce ? 0 : (i % 4) * 40, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' });
+        }
+      });
+      setTimeout(function () { busy = false; }, reduce ? 0 : 420);
+      // keep the grid in view if the page got shorter
+      var top = grid.getBoundingClientRect().top;
+      if (top < 0) {
+        var y = scrollY + bar.getBoundingClientRect().top - 90;
+        if (window.lenis) window.lenis.scrollTo(y, { duration: 0.9 }); else scrollTo({ top: y, behavior: 'smooth' });
+      }
+    });
+  }
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (busy) return;
+      btns.forEach(function (q) { q.setAttribute('aria-pressed', q === b ? 'true' : 'false'); });
+      moveLine(b);
+      show(b.dataset.cat);
+    });
+  });
+})();
