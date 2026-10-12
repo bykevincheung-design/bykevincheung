@@ -259,3 +259,31 @@
     });
   });
 })();
+
+// Analytics: send named clicks (Play film, filters, CV, email, Instagram) to Google Analytics,
+// and let visitors switch counting off from the footer.
+(function () {
+  document.addEventListener('click', function (ev) {
+    var el = ev.target.closest && ev.target.closest('[data-ev]');
+    if (!el || typeof window.gtag !== 'function') return;
+    var params = {};
+    for (var k in el.dataset) if (k.indexOf('ev') === 0 && k.length > 2) params[k.slice(2).toLowerCase()] = el.dataset[k];
+    window.gtag('event', el.dataset.ev.toLowerCase().replace(/\s+/g, '_'), params);
+  }, true);
+  var note = document.querySelector('.ga-note');
+  if (!note || !/(^|\.)bykevincheung\.com$/.test(location.hostname)) return;
+  var btn = note.querySelector('.ga-toggle');
+  function off() { try { return localStorage.getItem('ga-off') === '1'; } catch (e) { return false; } }
+  function paint() {
+    note.firstChild.nodeValue = off() ? 'Visit counting is off. ' : 'Visits counted with Google Analytics, no ad tracking. ';
+    btn.textContent = off() ? 'Turn on' : 'Turn off';
+  }
+  note.hidden = false; paint();
+  btn.addEventListener('click', function () {
+    try { if (off()) localStorage.removeItem('ga-off'); else localStorage.setItem('ga-off', '1'); } catch (e) {}
+    if (window.__gaId) window['ga-disable-' + window.__gaId] = off();
+    if (off()) { document.cookie.split(';').forEach(function (c) { var n = c.split('=')[0].trim(); if (/^_ga/.test(n)) document.cookie = n + '=; Max-Age=0; path=/; domain=.bykevincheung.com'; }); }
+    paint();
+    if (!off()) location.reload();
+  });
+})();

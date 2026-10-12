@@ -29,9 +29,16 @@ def _version(path):
 
 CSS_V = _version("static/site.css")
 JS_V = _version("static/site.js")
-# Umami: cookie-free visitor stats. Only counts visits on the real domain, never previews.
-ANALYTICS = (f'<script defer src="https://cloud.umami.is/script.js" data-website-id="{S["umami_id"]}" '
-             f'data-domains="bykevincheung.com,www.bykevincheung.com"></script>') if S.get("umami_id") else ""
+# Google Analytics 4: only on the real domain, ads features off, visitors can switch it off in the footer.
+GA = S.get("ga_id", "")
+ANALYTICS = ("""<script>
+(function(){var id='%s',h=location.hostname;window.__gaId=id;
+if(!/(^|\\.)bykevincheung\\.com$/.test(h))return;
+try{if(localStorage.getItem('ga-off')==='1'){window['ga-disable-'+id]=true;return;}}catch(e){}
+var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+id;document.head.appendChild(s);
+window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};
+gtag('js',new Date());gtag('config',id,{allow_google_signals:false,allow_ad_personalization_signals:false});})();
+</script>""" % GA) if GA else ""
 FONTS = ('<link rel="preload" href="/static/fonts/archivo-wdth.woff2" as="font" type="font/woff2" crossorigin>'
          '<link rel="preload" href="/static/fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>')
 
@@ -89,7 +96,7 @@ def header(on_home):
 <nav aria-label="Main">
 <a href="{work}">Work</a>
 <a href="{credits}">Credits</a>
-<a href="{e(S['cv'])}" target="_blank" rel="noopener" data-umami-event="CV">CV ↗</a>
+<a href="{e(S['cv'])}" target="_blank" rel="noopener" data-ev="CV">CV ↗</a>
 <a href="{contact}">About</a>
 </nav>
 </div>
@@ -106,6 +113,7 @@ FOOT = """<footer class="foot">
 <div class="wrap foot-in">
 <span>© 2026 Gweilo Prod Ltd</span>
 <span>gwei.lo studios 鬼佬工作室</span>
+<span class="ga-note" hidden>Visits counted with Google Analytics, no ad tracking. <button type="button" class="ga-toggle">Turn off</button></span>
 <a href="#top">Back to top ↑</a>
 </div>
 </footer>
@@ -148,7 +156,7 @@ def film_cinema(j, src):
     vid = (f'<video class="cine-loop" src="/static/img/{jid}/{loop}" muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>'
            if loop else "")
     return (f'<div class="film film-cinema" data-play="{e(play)}">'
-            f'<button class="cine-cover" type="button" aria-label="Play film: {e(j["client"])}, {e(j["project"])}" data-umami-event="Play film" data-umami-event-job="{e(j["client"])}, {e(j["project"])}">'
+            f'<button class="cine-cover" type="button" aria-label="Play film: {e(j["client"])}, {e(j["project"])}" data-ev="Play film" data-ev-job="{e(j["client"])}, {e(j["project"])}">'
             f'{picture(jid, "hero", "(max-width: 900px) 100vw, 1280px", "", lazy=False)}{vid}'
             f'<span class="cine-play"><span class="cine-dot" aria-hidden="true"></span>Play film</span>'
             f'</button></div>')
@@ -180,7 +188,7 @@ def work_filters():
     from collections import Counter
     c = Counter("Fashion" if j["type"] == "Editorial" else j["type"] for j in JOBS)
     cats = [("All", len(JOBS))] + [(k, c[k]) for k in ("Commercial", "Fashion", "Music", "Live") if c[k]]
-    btns = "".join(f'<button type="button" class="wf" data-cat="{k}" aria-pressed="{"true" if k == "All" else "false"}" data-umami-event="Filter" data-umami-event-category="{k}">'
+    btns = "".join(f'<button type="button" class="wf" data-cat="{k}" aria-pressed="{"true" if k == "All" else "false"}" data-ev="Filter" data-ev-category="{k}">'
                    f'{k}<sup>{n}</sup></button>' for k, n in cats)
     return f'<div class="work-filters mono" role="group" aria-label="Show work by category">{btns}<span class="wf-bar" aria-hidden="true"></span></div>'
 
@@ -268,7 +276,7 @@ def build_home():
 <div class="credits-head">
 <div>
 <h2 id="credits-h" class="h2">Selected credits</h2>
-<span class="mono muted small">Full list on request, or in the <a class="u" href="{e(S['cv'])}" target="_blank" rel="noopener" data-umami-event="CV">CV</a></span>
+<span class="mono muted small">Full list on request, or in the <a class="u" href="{e(S['cv'])}" target="_blank" rel="noopener" data-ev="CV">CV</a></span>
 </div>
 <div class="pills" role="group" aria-label="Filter by category">{''.join(pills)}</div>
 </div>
@@ -294,11 +302,11 @@ def build_home():
 <div class="contact-cols">
 <div><span class="mono label">Representation</span>
 <strong>{e(agent['name'])}</strong>
-<a class="u" href="mailto:{e(agent['email'])}" data-umami-event="Email Chapters">{e(agent['email'])}</a>
-<a href="tel:{e(agent['phone'].replace(' ', ''))}" data-umami-event="Call Chapters">{e(agent['phone'])}</a></div>
+<a class="u" href="mailto:{e(agent['email'])}" data-ev="Email Chapters">{e(agent['email'])}</a>
+<a href="tel:{e(agent['phone'].replace(' ', ''))}" data-ev="Call Chapters">{e(agent['phone'])}</a></div>
 <div><span class="mono label">Direct</span>
-<a class="u" href="mailto:{e(S['email'])}" data-umami-event="Email Kevin">{e(S['email'])}</a>
-<a href="{e(S['instagram'])}" target="_blank" rel="noopener" data-umami-event="Instagram">Instagram ↗</a></div>
+<a class="u" href="mailto:{e(S['email'])}" data-ev="Email Kevin">{e(S['email'])}</a>
+<a href="{e(S['instagram'])}" target="_blank" rel="noopener" data-ev="Instagram">Instagram ↗</a></div>
 <div><span class="mono label">Studio</span>
 <span>{'<br>'.join(e(l) for l in S['studio'])}</span></div>
 </div>
