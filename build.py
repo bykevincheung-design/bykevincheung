@@ -79,6 +79,7 @@ def head(title, desc, image, path):
 {FONTS}
 <link rel="stylesheet" href="/static/site.css?v={CSS_V}">
 {ANALYTICS}
+<script type="speculationrules">{{"prerender":[{{"where":{{"or":[{{"href_matches":"/work/*"}},{{"href_matches":"/"}}]}},"eagerness":"moderate"}}]}}</script>
 </head>
 <body>
 <div class="glow" aria-hidden="true"></div>
@@ -355,10 +356,9 @@ def build_job(i):
 </section>
 <section class="wrap gallery" aria-label="Gallery">{gallery}</section>
 <section class="next" aria-label="Next project">
-<a class="wrap next-in" href="/work/{n['id']}/">
-<span class="mono muted">Next</span>
-<span class="next-t">{e(n['client'])} →</span>
-<span class="next-s">{e(n['project'])}</span>
+<a class="next-in" href="/work/{n['id']}/">
+<span class="next-media">{picture(n['id'], 'hero', '100vw', n['client'] + ', ' + n['project'])}</span>
+<span class="wrap next-cap"><span class="mono next-k">Next project</span><span class="next-t">{e(n['client'])}</span><span class="next-s">{e(n['project'])}</span></span>
 </a>
 </section>
 </main>

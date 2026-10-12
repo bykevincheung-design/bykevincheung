@@ -50,27 +50,69 @@
   if (reduce) return;
   document.documentElement.classList.add('motion');
 
-  // 1. Tile image and name morph into the campaign page (and back)
-  function nameTile(tile, on) {
-    var m = tile && tile.querySelector('.tile-media'), c = tile && tile.querySelector('.tile-client');
-    if (!m) return;
-    m.style.viewTransitionName = on ? 'job-media' : '';
-    if (c) c.style.viewTransitionName = on ? 'job-title' : '';
-  }
+  // 1. The picture you click travels into the next page (tile -> campaign, campaign -> home, Next -> next campaign)
+  function pageMedia() { return document.querySelector('.job-page .film, .job-page .first-media'); }
+  function nameEl(el, on) { if (el) el.style.viewTransitionName = on ? 'job-media' : 'none'; }
+  function nameTile(tile, on) { nameEl(tile && tile.querySelector('.tile-media'), on); }
   document.querySelectorAll('a.tile').forEach(function (t) {
     t.addEventListener('click', function () { nameTile(t, true); });
   });
+  var nextLink = document.querySelector('.next-in');
+  document.querySelectorAll('a.logo, a.wordmark').forEach(function (a) {
+    a.addEventListener('click', function () { try { sessionStorage.setItem('vt-top', '1'); } catch (x) {} });
+  });
+  if (nextLink) nextLink.addEventListener('click', function () {
+    nameEl(pageMedia(), false);                       // only one travelling picture per page
+    nameEl(nextLink.querySelector('.next-media'), true);
+  });
+  // Leaving a campaign page for anywhere else: only morph if its film is on screen
+  window.addEventListener('pageswap', function (e) {
+    var m = pageMedia();
+    if (!m || !e.viewTransition) return;
+    var r = m.getBoundingClientRect();
+    var top = false; try { top = sessionStorage.getItem('vt-top') === '1'; } catch (x) {}
+    if (top || r.bottom < 0 || r.top > innerHeight) nameEl(m, false);
+  });
+  // Arriving: show what's on screen straight away (no fade-in lag), and line up the tile we came from
+  function settleVisible() {
+    document.querySelectorAll('.reveal:not(.in)').forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.top < innerHeight && r.bottom > 0) { el.style.transition = 'none'; el.classList.add('in'); el.offsetWidth; el.style.transition = ''; }
+    });
+  }
   window.addEventListener('pagereveal', function (e) {
-    if (!e.viewTransition || !window.navigation || !navigation.activation || !navigation.activation.from) return;
-    var from = new URL(navigation.activation.from.url).pathname;
-    var tile = document.querySelector('a.tile[href="' + from + '"]');
-    if (!tile) return;
-    tile.scrollIntoView({ block: 'center' });
-    nameTile(tile, true);
-    e.viewTransition.finished.finally(function () { nameTile(tile, false); });
+    if (!e.viewTransition) return;
+    var from = window.navigation && navigation.activation && navigation.activation.from;
+    var path = from && from.url ? new URL(from.url).pathname : '';
+    var tile = path && document.querySelector('a.tile[href="' + path + '"]');
+    var toTop = false;
+    try { toTop = sessionStorage.getItem('vt-top') === '1'; sessionStorage.removeItem('vt-top'); } catch (x) {}
+    if (toTop) tile = null;   // logo goes to the top of home, no morph
+    // On a campaign page we came back to: if its film is off screen, the Next banner (if it led to where we were) takes the morph
+    var m = pageMedia();
+    if (m) {
+      var mr = m.getBoundingClientRect();
+      if (mr.bottom < 0 || mr.top > innerHeight) {
+        nameEl(m, false);
+        if (nextLink && path === nextLink.getAttribute('href')) {
+          var nm = nextLink.querySelector('.next-media');
+          nameEl(nm, true);
+          e.viewTransition.finished.finally(function () { nm.style.viewTransitionName = ''; m.style.viewTransitionName = ''; });
+        } else e.viewTransition.finished.finally(function () { m.style.viewTransitionName = ''; });
+      }
+    }
+    if (tile) {
+      var r = tile.getBoundingClientRect();
+      if (r.top < 60 || r.bottom > innerHeight) window.scrollTo({ top: scrollY + r.top - (innerHeight - r.height) / 2, behavior: 'instant' });
+      nameTile(tile, true);
+      e.viewTransition.finished.finally(function () { nameTile(tile, false); });
+    }
+    settleVisible();
   });
   window.addEventListener('pageshow', function () {
-    document.querySelectorAll('a.tile').forEach(function (t) { nameTile(t, false); });
+    document.querySelectorAll('a.tile').forEach(function (t) { t.querySelector('.tile-media') && (t.querySelector('.tile-media').style.viewTransitionName = ''); });
+    var m = pageMedia(); if (m) m.style.viewTransitionName = '';
+    var nm = document.querySelector('.next-media'); if (nm) nm.style.viewTransitionName = '';
   });
 
   // 2. Ease content in as it scrolls into view
