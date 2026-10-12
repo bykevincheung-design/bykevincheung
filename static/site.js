@@ -80,7 +80,19 @@
       if (r.top < innerHeight && r.bottom > 0) { el.style.transition = 'none'; el.classList.add('in'); el.offsetWidth; el.style.transition = ''; }
     });
   }
+  // A fresh visit to a campaign page (Next, a tile, a link) always starts at the top; Back/Forward keeps your place
+  function startAtTop() {
+    var nav = window.navigation && navigation.activation;
+    var type = nav ? nav.navigationType : (performance.getEntriesByType('navigation')[0] || {}).type;
+    if (document.body.querySelector('.job-page') && !location.hash && type !== 'traverse' && type !== 'back_forward' && type !== 'reload') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      if (window.lenis) window.lenis.scrollTo(0, { immediate: true, force: true });
+    }
+  }
+  startAtTop();
+  window.addEventListener('pageshow', function (ev) { if (!ev.persisted) startAtTop(); });
   window.addEventListener('pagereveal', function (e) {
+    startAtTop();
     if (!e.viewTransition) return;
     var from = window.navigation && navigation.activation && navigation.activation.from;
     var path = from && from.url ? new URL(from.url).pathname : '';
