@@ -16,7 +16,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 IMG = os.path.join(ROOT, "static", "img")
 S = json.load(open(os.path.join(ROOT, "content", "site.json"), encoding="utf-8"))
 
-WIDTHS = {"card": (450, 900), "feat": (800, 1600), "hero": (1000, 2000), "gallery": (800, 1600)}
+WIDTHS = {"card": (450, 600, 900), "feat": (800, 1600), "hero": (1000, 1200, 2000), "gallery": (800, 1200, 1600)}
 
 
 def stale(out, src):
