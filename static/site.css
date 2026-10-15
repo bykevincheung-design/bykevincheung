@@ -216,7 +216,9 @@ picture { display: contents; }
 .reel-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding-bottom: 36px; display: flex; flex-direction: column; gap: 6px; }
 .reel-name { font-weight: 800; font-variation-settings: 'wdth' 125; text-transform: uppercase; letter-spacing: -0.035em; line-height: .82;
   font-size: clamp(56px, 11.5vw, 190px); }
-.reel-role { font-family: var(--serif); font-style: italic; font-size: clamp(20px, 2.4vw, 34px); letter-spacing: -0.005em; padding-left: .2em; }
+/* One word per line, always: the final layout, so the caption doesn't jump when the font arrives */
+.reel-name > span { display: block; }
+.reel-role { font-family: var(--serif); font-style: italic; font-size: clamp(20px, 2.4vw, 34px); letter-spacing: -0.005em; padding-left: .2em; line-height: 1.3; }
 .reel-role em { font-style: italic; }
 .reel-down { position: absolute; right: 32px; bottom: 40px; z-index: 1; color: #F1F1EF; opacity: .8; }
 .reel-down:hover { opacity: 1; color: #F1F1EF; }

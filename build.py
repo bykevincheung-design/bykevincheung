@@ -282,7 +282,7 @@ def build_home():
 <source src="/static/reel/reel-600x750.mp4" type="video/mp4" media="(max-width: 700px)">
 <source src="/static/reel/reel-1280.mp4" type="video/mp4">
 </video>
-<div class="reel-cap wrap"><span class="reel-name">Kevin Cheung</span><span class="reel-role">Production Manager, Producer <em>&amp;</em> Fixer, London</span></div>
+<div class="reel-cap wrap"><span class="reel-name"><span>Kevin</span> <span>Cheung</span></span><span class="reel-role">Production Manager, Producer <em>&amp;</em> Fixer, London</span></div>
 <a class="reel-down mono" href="#work">Selected work ↓</a>
 </section>
 
