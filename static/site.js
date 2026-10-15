@@ -1,3 +1,22 @@
+// Opening a campaign page: start downloading its main picture as soon as a finger or mouse goes down,
+// before the page-to-page morph even begins. The new page then finds it ready.
+(function () {
+  var done = {};
+  function warm(e) {
+    var a = e.target.closest && e.target.closest('a[data-hero]');
+    if (!a || done[a.href]) return;
+    done[a.href] = 1;
+    var l = document.createElement('link');
+    l.rel = 'preload'; l.as = 'image'; l.type = 'image/avif';
+    l.setAttribute('imagesrcset', a.dataset.hero);
+    l.setAttribute('imagesizes', a.dataset.heroSizes);
+    l.setAttribute('fetchpriority', 'high');
+    document.head.appendChild(l);
+  }
+  document.addEventListener('pointerdown', warm, { capture: true, passive: true });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Enter') warm(e); }, true);
+})();
+
 // Credits is skipped until it's near the screen (see site.css). When someone heads for About,
 // lay it out first so the jump lands in the right place.
 document.addEventListener('click', function (e) {

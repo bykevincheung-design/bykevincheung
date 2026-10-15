@@ -61,6 +61,20 @@ def picture(folder, name, sizes, alt, cls="", lazy=True, fallback=None, w=None, 
     return f'<picture>{srcs}<img{c} src="/static/img/{folder}/{fb}" alt="{e(alt)}"{dims}{attrs}></picture>'
 
 
+def hero_hint(j):
+    """data-hero attribute: the AVIF srcset and sizes of the main picture on j's campaign page.
+    site.js starts downloading it the moment a finger or mouse goes down on the link."""
+    import glob
+    d = os.path.join(ROOT, "static", "img", j["id"])
+    ws = sorted({int(m.group(1)) for f in glob.glob(os.path.join(d, "hero-*.avif"))
+                 for m in [re.search(r"-(\d+)\.avif$", f)] if m})
+    if not ws:
+        return ""
+    sizes = "(max-width: 900px) 100vw, " + ("1280px" if j.get("film") else "66vw")
+    ss = ", ".join(f"/static/img/{j['id']}/hero-{w}.avif {w}w" for w in ws)
+    return f' data-hero="{e(ss)}" data-hero-sizes="{e(sizes)}"'
+
+
 def next_picture(j):
     """Next project banner. Phones show it as a tall 4:5 crop, so they get the job's 4:5 card image
     (about a fifth of the weight, and sharper); wider screens get the landscape hero."""
@@ -229,7 +243,7 @@ def build_home():
         else:
             img = picture(j["id"], "card", "(max-width: 600px) 50vw, (max-width: 900px) 50vw, 25vw", alt, lazy=n > 3, w=900, h=1125)
         cat = "Fashion" if j["type"] == "Editorial" else j["type"]
-        tiles.append(f"""<a class="tile{' feature' if feat else ''}" href="/work/{j['id']}/" data-cat="{e(cat)}">
+        tiles.append(f"""<a class="tile{' feature' if feat else ''}" href="/work/{j['id']}/" data-cat="{e(cat)}"{hero_hint(j)}>
 <span class="tile-media">{img}{video}</span>
 <span class="tile-client">{e(j['client'])}</span>
 <span class="tile-project">{e(j['project'])}</span>
@@ -378,7 +392,7 @@ def build_job(i):
 </section>
 <section class="wrap gallery" aria-label="Gallery">{gallery}</section>
 <section class="next" aria-label="Next project">
-<a class="next-in" href="/work/{n['id']}/">
+<a class="next-in" href="/work/{n['id']}/"{hero_hint(n)}>
 <span class="next-media">{next_picture(n)}</span>
 <span class="wrap next-cap"><span class="mono next-k">Next project</span><span class="next-t">{e(n['client'])}</span><span class="next-s">{e(n['project'])}</span></span>
 </a>
