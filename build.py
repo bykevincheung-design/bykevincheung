@@ -61,6 +61,27 @@ def picture(folder, name, sizes, alt, cls="", lazy=True, fallback=None, w=None, 
     return f'<picture>{srcs}<img{c} src="/static/img/{folder}/{fb}" alt="{e(alt)}"{dims}{attrs}></picture>'
 
 
+def next_picture(j):
+    """Next project banner. Phones show it as a tall 4:5 crop, so they get the job's 4:5 card image
+    (about a fifth of the weight, and sharper); wider screens get the landscape hero."""
+    import glob
+    d = os.path.join(ROOT, "static", "img", j["id"])
+
+    def widths(name):
+        return sorted({int(m.group(1)) for f in glob.glob(os.path.join(d, f"{name}-*.avif"))
+                       for m in [re.search(r"-(\d+)\.avif$", f)] if m})
+    srcs = ""
+    for name, media in (("card", ' media="(max-width: 700px)"'), ("hero", "")):
+        ws = widths(name)
+        if not ws:
+            continue
+        for ext in ("avif", "webp"):
+            ss = ", ".join(f"/static/img/{j['id']}/{name}-{w}.{ext} {w}w" for w in ws)
+            srcs += f'<source{media} type="image/{ext}" srcset="{ss}" sizes="100vw">'
+    return (f'<picture>{srcs}<img src="/static/img/{j["id"]}/hero.jpg" alt="{e(j["client"] + ", " + j["project"])}" '
+            f'loading="lazy" decoding="async"></picture>')
+
+
 def head(title, desc, image, path):
     return f"""<!doctype html>
 <html lang="en-GB">
@@ -357,7 +378,7 @@ def build_job(i):
 <section class="wrap gallery" aria-label="Gallery">{gallery}</section>
 <section class="next" aria-label="Next project">
 <a class="next-in" href="/work/{n['id']}/">
-<span class="next-media">{picture(n['id'], 'hero', '100vw', n['client'] + ', ' + n['project'])}</span>
+<span class="next-media">{next_picture(n)}</span>
 <span class="wrap next-cap"><span class="mono next-k">Next project</span><span class="next-t">{e(n['client'])}</span><span class="next-s">{e(n['project'])}</span></span>
 </a>
 </section>
