@@ -328,5 +328,9 @@ body.theatre .job-head .muted { color: inherit; }
 #about { contain-intrinsic-size: auto 800px; }
 @media (max-width: 900px) { #credits { contain-intrinsic-size: auto 3000px; } #about { contain-intrinsic-size: auto 1000px; } }
 @media (max-width: 600px) { #credits { contain-intrinsic-size: auto 3250px; } #about { contain-intrinsic-size: auto 1350px; } }
+/* Credits rows are laid out a few at a time as they scroll in, so no single frame takes the whole table */
+.table .row[data-type] { content-visibility: auto; contain-intrinsic-size: auto 53px; }
+@media (max-width: 1100px) { .table .row[data-type] { contain-intrinsic-size: auto 62px; } }
 /* Heading for About: lay out Credits first so the jump lands exactly */
-html.to-about #credits, html:has(#about:target) #credits { content-visibility: visible; }
+html.to-about #credits, html:has(#about:target) #credits,
+html.to-about .table .row, html:has(#about:target) .table .row { content-visibility: visible; }
