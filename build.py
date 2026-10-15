@@ -96,7 +96,7 @@ def next_picture(j):
             f'loading="lazy" decoding="async"></picture>')
 
 
-def head(title, desc, image, path):
+def head(title, desc, image, path, extra=""):
     return f"""<!doctype html>
 <html lang="en-GB">
 <head>
@@ -112,7 +112,7 @@ def head(title, desc, image, path):
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 {FONTS}
-<link rel="stylesheet" href="/static/site.css?v={CSS_V}">
+<link rel="stylesheet" href="/static/site.css?v={CSS_V}">{extra}
 {ANALYTICS}
 <script type="speculationrules">{{"prerender":[{{"where":{{"or":[{{"href_matches":"/work/*"}},{{"href_matches":"/"}}]}},"eagerness":"moderate"}}]}}</script>
 </head>
@@ -286,16 +286,18 @@ def build_home():
 
     html = head(f"{S['name']} · Production Manager, Producer & Fixer, London",
                 "London-based Production Manager, Producer and Fixer working across commercials, fashion, music and live.",
-                "/static/img/adidas-predator/hero.jpg", "/")
+                "/static/img/adidas-predator/hero.jpg", "/",
+                '<link rel="preload" href="/static/reel/poster-m.avif" as="image" type="image/avif" media="(max-width: 700px)" fetchpriority="high">'
+                '<link rel="preload" href="/static/reel/poster.jpg" as="image" media="(min-width: 701px)" fetchpriority="high">')
     html += header(True)
     html += f"""<main id="top">
 <h1 class="visually-hidden">{e(S['name'])}, Production Manager, Producer and Fixer, London</h1>
 <section class="reel" aria-label="Showreel">
-<picture><source media="(max-width: 700px)" type="image/avif" srcset="/static/reel/poster-m.avif"><source media="(max-width: 700px)" srcset="/static/reel/poster-m.jpg"><source type="image/avif" srcset="/static/reel/poster.avif"><img class="reel-poster" src="/static/reel/poster.jpg" alt="" fetchpriority="high"></picture>
 <video class="reel-v" autoplay muted loop playsinline preload="auto" aria-hidden="true">
 <source src="/static/reel/reel-600x750.mp4" type="video/mp4" media="(max-width: 700px)">
 <source src="/static/reel/reel-1280.mp4" type="video/mp4">
 </video>
+<script>/* poster: a small phone-shaped AVIF on phones, the landscape JPG elsewhere */(function(v){{v.poster=matchMedia('(max-width: 700px)').matches?'/static/reel/poster-m.avif':'/static/reel/poster.jpg';}})(document.currentScript.previousElementSibling);</script>
 <div class="reel-cap wrap"><span class="reel-name"><span>Kevin</span> <span>Cheung</span></span><span class="reel-role">Production Manager, Producer <em>&amp;</em> Fixer, London</span></div>
 <a class="reel-down mono" href="#work">Selected work ↓</a>
 </section>
