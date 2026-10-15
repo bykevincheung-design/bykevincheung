@@ -277,7 +277,8 @@ def build_home():
     html += f"""<main id="top">
 <h1 class="visually-hidden">{e(S['name'])}, Production Manager, Producer and Fixer, London</h1>
 <section class="reel" aria-label="Showreel">
-<video class="reel-v" autoplay muted loop playsinline preload="auto" poster="/static/reel/poster.jpg" aria-hidden="true">
+<picture><source media="(max-width: 700px)" type="image/avif" srcset="/static/reel/poster-m.avif"><source media="(max-width: 700px)" srcset="/static/reel/poster-m.jpg"><source type="image/avif" srcset="/static/reel/poster.avif"><img class="reel-poster" src="/static/reel/poster.jpg" alt="" fetchpriority="high"></picture>
+<video class="reel-v" autoplay muted loop playsinline preload="auto" aria-hidden="true">
 <source src="/static/reel/reel-600x750.mp4" type="video/mp4" media="(max-width: 700px)">
 <source src="/static/reel/reel-1280.mp4" type="video/mp4">
 </video>
