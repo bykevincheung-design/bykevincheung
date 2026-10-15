@@ -9,14 +9,19 @@ document.addEventListener('click', function (e) {
 (function () {
   var glow = document.querySelector('.glow');
   if (!glow || !window.matchMedia('(hover: hover)').matches) return;
-  var mx = -600, my = -600, x = -600, y = -600;
-  window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
-  (function tick() {
+  var mx = -600, my = -600, x = -600, y = -600, running = false;
+  // Only animates while the glow is catching up with the cursor, then sleeps until the mouse moves again
+  function tick() {
     x += (mx - x) * 0.1;
     y += (my - y) * 0.1;
+    if (Math.abs(mx - x) < 0.3 && Math.abs(my - y) < 0.3) { x = mx; y = my; running = false; }
     glow.style.transform = 'translate3d(' + (x - 210) + 'px,' + (y - 210) + 'px,0)';
-    requestAnimationFrame(tick);
-  })();
+    if (running) requestAnimationFrame(tick);
+  }
+  window.addEventListener('mousemove', function (e) {
+    mx = e.clientX; my = e.clientY;
+    if (!running) { running = true; requestAnimationFrame(tick); }
+  }, { passive: true });
 })();
 
 // Play a short clip when hovering a work tile
