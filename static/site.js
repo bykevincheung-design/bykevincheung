@@ -1,3 +1,10 @@
+// Credits is skipped until it's near the screen (see site.css). When someone heads for About,
+// lay it out first so the jump lands in the right place.
+document.addEventListener('click', function (e) {
+  var a = e.target.closest && e.target.closest('a[href$="#about"]');
+  if (a) document.documentElement.classList.add('to-about');
+}, true);
+
 // Soft glow that follows the cursor
 (function () {
   var glow = document.querySelector('.glow');

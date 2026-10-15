@@ -319,3 +319,14 @@ body.theatre .job-head .muted { color: inherit; }
 .next-cap .next-t { color: #fff; }
 .next-cap .next-s { color: rgba(255,255,255,.85); font-family: var(--serif); font-style: italic; }
 @media (max-width: 700px) { .next-media { aspect-ratio: 4 / 5; } .next-cap { padding-bottom: 28px; } }
+
+/* Speed: the browser skips laying out and painting these until they're about to scroll into view.
+   The sizes are close to their real height at each screen width, so links to #credits and #about still land in the right place;
+   once seen, the real size is remembered. */
+#credits, #about { content-visibility: auto; }
+#credits { contain-intrinsic-size: auto 2650px; }
+#about { contain-intrinsic-size: auto 800px; }
+@media (max-width: 900px) { #credits { contain-intrinsic-size: auto 3000px; } #about { contain-intrinsic-size: auto 1000px; } }
+@media (max-width: 600px) { #credits { contain-intrinsic-size: auto 3250px; } #about { contain-intrinsic-size: auto 1350px; } }
+/* Heading for About: lay out Credits first so the jump lands exactly */
+html.to-about #credits, html:has(#about:target) #credits { content-visibility: visible; }
