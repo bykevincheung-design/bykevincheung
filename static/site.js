@@ -398,11 +398,15 @@
       m.style.setProperty('--py', (-p * 3).toFixed(2) + '%');
     });
     if (!fine.matches) { rail.classList.remove('on'); return; }
-    rail.classList.add('on');
+    // keep clear of the showreel: the rail starts below it and only shows once most of it has gone
+    var reelEl = document.querySelector('.reel');
+    var reelBottom = reelEl ? reelEl.getBoundingClientRect().bottom : 0;
+    rail.classList.toggle('on', reelBottom < vh * 0.5);
+    var top = Math.max(70, reelBottom + 16), bottom = vh - 40;
+    rail.style.setProperty('--rail-top', top + 'px');
     // tick travels with the whole page; the label names the section you're in
     var max = Math.max(1, document.documentElement.scrollHeight - vh);
     var prog = Math.min(1, Math.max(0, scrollY / max));
-    var top = 70, bottom = vh - 40;
     var y = top + prog * (bottom - top);
     mark.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)';
     mark.classList.toggle('below', y < top + 260);   // near the top, the label hangs below the tick so the header never covers it
