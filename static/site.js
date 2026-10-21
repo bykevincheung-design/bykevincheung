@@ -488,66 +488,164 @@ var Decode = (function () {
   return { flip: flip, decode: decode, split: split };
 })();
 
-// 1. Homepage intro: the reel opens under a sheet of countdown numbers that drop away,
-//    leaving your roles in place, then your name flips into position. Once per visit.
+// 1. Homepage intro: the reel opens like data loading in. Rows of production readouts type in and tick over
+//    (timecode, frame rate, campaign count, London coordinates, a load percentage), then drop away,
+//    leaving your roles in place while your name flips in. Once per visit, under two seconds.
 (function () {
   var root = document.documentElement;
   var reel = document.querySelector('.reel');
   if (!reel || !root.classList.contains('intro')) return;
+  var variant = (location.search.match(/intro=([abc])/) || [])[1] || 'a';
+  if (variant !== 'a') return;
   try { sessionStorage.setItem('intro-done', '1'); } catch (e) {}
   var mobile = innerWidth < 700;
-  var cols = mobile ? 4 : 8, rows = mobile ? 22 : 18;
+  var cols = mobile ? 3 : 6, rows = mobile ? 16 : 12;
+  var wordRow = mobile ? rows - 6 : rows - 3;
   var words = mobile
-    ? [[rows - 9, 0, 'Production Manager'], [rows - 8, 0, 'Producer'], [rows - 7, 0, 'Fixer'], [rows - 6, 0, 'London']]
-    : [[rows - 6, 0, 'Production Manager'], [rows - 6, 3, 'Producer'], [rows - 6, 5, 'Fixer'], [rows - 6, 7, 'London']];
+    ? [[wordRow, 0, 'Production Manager', 3], [wordRow + 1, 0, 'Producer', 3], [wordRow + 2, 0, 'Fixer', 3], [wordRow + 3, 0, 'London', 3]]
+    : [[wordRow, 0, 'Production Manager', 2], [wordRow, 2, 'Producer', 1], [wordRow, 3, 'Fixer', 1], [wordRow, 4, 'London', 2]];
+  var fps = 25, tc0 = performance.now();
+  function p2(n) { return ('0' + n).slice(-2); }
+  function tc(off) { var f = Math.floor((performance.now() - tc0) / 40) + off; return 'TC ' + p2(Math.floor(f / 90000) % 24) + ':' + p2(Math.floor(f / 1500) % 60) + ':' + p2(Math.floor(f / 25) % 60) + ':' + p2(f % 25); }
+  var loadP = 0;
+  var feeds = [
+    function (r, c) { return tc(r * 311 + c * 97); },
+    function () { return 'LOAD ' + ('00' + Math.min(100, loadP | 0)).slice(-3) + '%'; },
+    function () { return 'CAMPAIGNS 034'; },
+    function () { return 'SINCE 2018'; },
+    function () { return '51.5072 N'; },
+    function () { return '0.1276 W'; },
+    function () { return 'FPS ' + fps + '.00'; },
+    function (r, c) { return 'REEL ' + p2((r * 7 + c * 3) % 34 + 1) + '/34'; },
+    function () { return 'ISO ' + [400, 800, 1600, 3200][Math.random() * 4 | 0]; },
+    function () { return 'T ' + (2 + Math.random() * 5).toFixed(1); }
+  ];
   var sheet = document.createElement('div');
   sheet.className = 'reel-code mono';
   sheet.setAttribute('aria-hidden', 'true');
   sheet.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
   sheet.style.gridTemplateRows = 'repeat(' + rows + ', 1fr)';
-  var cells = [], keep = [];
-  for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
-    var w = null;
-    words.forEach(function (x) { if (x[0] === r && x[1] === c) w = x[2]; });
-    var skip = false;
-    words.forEach(function (x) { if (!mobile && x[0] === r && c > x[1] && c < x[1] + (x[2].length > 10 ? 2 : 1)) skip = true; });
-    var el = document.createElement('span');
-    if (w) { el.textContent = w; el.className = 'rc-word'; keep.push(el); if (!mobile && w.length > 10) el.style.gridColumn = 'span 2'; }
-    else if (skip) continue;
-    else { var base = 199 - c * 25 - r; el.dataset.v = Math.max(0, base); el.textContent = pad3(base); cells.push(el); }
-    sheet.appendChild(el);
+  var cells = [], wordEls = [];
+  for (var r = 0; r < rows; r++) {
+    var c = 0;
+    while (c < cols) {
+      var w = null;
+      words.forEach(function (x) { if (x[0] === r && x[1] === c) w = x; });
+      var el = document.createElement('span');
+      if (w) {
+        el.textContent = w[2]; el.className = 'rc-word'; el.style.gridColumn = 'span ' + w[3];
+        wordEls.push(el); c += w[3];
+      } else {
+        var f = (r * 3 + c * 5 + (r * c) % 7) % feeds.length;
+        el.dataset.f = f; el.dataset.r = r; el.dataset.c = c; el.className = 'rc-cell';
+        el.style.visibility = 'hidden';
+        cells.push(el); c += 1;
+      }
+      el.dataset.row = r;
+      sheet.appendChild(el);
+    }
   }
-  function pad3(n) { n = Math.max(0, n); return ('00' + n).slice(-3); }
   reel.appendChild(sheet);
+  function paint(el) { el.textContent = feeds[el.dataset.f](+el.dataset.r, +el.dataset.c); }
+  cells.forEach(paint);
+  wordEls.forEach(function (el) { el.style.visibility = 'hidden'; });
 
-  var t0 = performance.now();
-  // phase 1 (0 to 0.9s): the numbers count down
-  var count = setInterval(function () {
-    cells.forEach(function (el) { if (!el.dataset.gone && Math.random() < .5) { el.dataset.v = Math.max(0, el.dataset.v - 1); el.textContent = pad3(+el.dataset.v); } });
-  }, 70);
-  // phase 2 (0.9 to 2.3s): digits drop out at random, words stay
+  // 0 to 0.45s: rows load in from the top, like a readout filling
+  var rowStep = 450 / rows;
+  for (var rr = 0; rr < rows; rr++) (function (rr) {
+    setTimeout(function () {
+      sheet.querySelectorAll('[data-row="' + rr + '"]').forEach(function (el) { el.style.visibility = ''; });
+    }, rr * rowStep);
+  })(rr);
+  // live values tick while loading
+  var live = setInterval(function () {
+    loadP = Math.min(100, loadP + 9 + Math.random() * 6);
+    cells.forEach(function (el) { if (!el.dataset.gone) paint(el); });
+  }, 50);
+  // 0.75 to 1.35s: readouts drop out at random, roles stay
   setTimeout(function () {
     var order = cells.slice().sort(function () { return Math.random() - .5; });
-    var step = 1400 / order.length;
+    var step = 600 / order.length;
     order.forEach(function (el, i) {
       setTimeout(function () {
         el.dataset.gone = '1';
-        var t = el.textContent, k = Math.random() * 3 | 0;
-        el.textContent = t.slice(0, k) + ' ' + t.slice(k + 1);
-        setTimeout(function () { el.textContent = ''; }, 120 + Math.random() * 200);
+        var t = el.textContent;
+        el.textContent = t.replace(/\S/g, function (ch) { return Math.random() < .5 ? ' ' : ch; });
+        setTimeout(function () { el.textContent = ''; }, 90 + Math.random() * 120);
       }, i * step);
     });
-  }, 900);
-  // phase 3 (2.5s): name flips in, roles appear, words fade, sheet goes
+  }, 750);
+  // 1.2s: name flips in, role line rises, roles and sheet fade
   setTimeout(function () {
-    clearInterval(count);
     root.classList.remove('intro');
     Decode.flip(document.querySelector('.reel-name'), 0);
     var role = document.querySelector('.reel-role');
-    if (role) role.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 700, delay: 450, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
-    sheet.classList.add('rc-out');
-    setTimeout(function () { sheet.remove(); }, 1200);
-  }, 2500);
+    if (role) role.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 650, delay: 350, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+  }, 1200);
+  setTimeout(function () { clearInterval(live); sheet.classList.add('rc-out'); }, 1500);
+  setTimeout(function () { sheet.remove(); }, 2600);
+})();
+
+// Intro variants B (terminal readout) and C (slate), for comparison
+(function () {
+  var root = document.documentElement, reel = document.querySelector('.reel');
+  if (!reel || !root.classList.contains('intro')) return;
+  var variant = (location.search.match(/intro=([abc])/) || [])[1] || 'a';
+  if (variant === 'a') return;
+  try { sessionStorage.setItem('intro-done', '1'); } catch (e) {}
+  function p2(n) { return ('0' + n).slice(-2); }
+  var t0 = performance.now();
+  function tc() { var f = Math.floor((performance.now() - t0) / 40); return p2(0) + ':' + p2(0) + ':' + p2(Math.floor(f / 25) % 60) + ':' + p2(f % 25); }
+  var box = document.createElement('div');
+  box.className = 'reel-code mono intro-' + variant;
+  box.setAttribute('aria-hidden', 'true');
+  reel.appendChild(box);
+  function finish(at) {
+    setTimeout(function () {
+      root.classList.remove('intro');
+      Decode.flip(document.querySelector('.reel-name'), 0);
+      var role = document.querySelector('.reel-role');
+      if (role) role.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 650, delay: 350, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+    }, at);
+    setTimeout(function () { box.classList.add('rc-out'); }, at + 300);
+    setTimeout(function () { box.remove(); }, at + 1400);
+  }
+  if (variant === 'b') {
+    // Terminal: lines type in at the bottom left, values tick, then clear to leave the roles
+    var load = 0;
+    var lines = [
+      function () { return 'Loading showreel ' + ('00' + Math.min(100, load | 0)).slice(-3) + '%'; },
+      function () { return 'TC ' + tc() + '  ·  25 fps'; },
+      function () { return '34 campaigns  ·  2018 to 2026'; },
+      function () { return 'London  ·  51.5072 N  0.1276 W'; }
+    ];
+    var els = lines.map(function () { var d = document.createElement('div'); d.className = 'tl'; box.appendChild(d); return d; });
+    var roles = document.createElement('div'); roles.className = 'rc-word tl-roles'; roles.textContent = 'Production Manager  ·  Producer  ·  Fixer'; roles.style.visibility = 'hidden'; box.appendChild(roles);
+    var shown = 0;
+    var tick = setInterval(function () { load = Math.min(100, load + 8 + Math.random() * 6); els.forEach(function (el, i) { if (i < shown && !el.dataset.gone) el.textContent = lines[i](); }); }, 45);
+    els.forEach(function (el, i) { setTimeout(function () { shown = i + 1; el.textContent = lines[i](); }, i * 160); });
+    setTimeout(function () { roles.style.visibility = ''; Decode.decode(roles, 0, 380); }, 700);
+    setTimeout(function () { els.forEach(function (el, i) { setTimeout(function () { el.dataset.gone = 1; el.classList.add('tl-gone'); }, i * 70); }); }, 1050);
+    setTimeout(function () { clearInterval(tick); }, 1500);
+    finish(1250);
+  } else {
+    // Slate: a clapperboard readout in the centre decodes, then collapses to the roles
+    var rows = [['Prod', 'Kevin Cheung'], ['Roll', '034'], ['Scene', '01'], ['Take', '01'], ['Date', '2018 to 2026'], ['TC', '']];
+    var grid = document.createElement('div'); grid.className = 'slate';
+    rows.forEach(function (r) {
+      var k = document.createElement('span'); k.className = 'sl-k'; k.textContent = r[0];
+      var v = document.createElement('span'); v.className = 'sl-v'; v.textContent = r[1] || tc();
+      grid.appendChild(k); grid.appendChild(v);
+    });
+    box.appendChild(grid);
+    var tcEl = grid.querySelectorAll('.sl-v')[5];
+    var tick2 = setInterval(function () { tcEl.textContent = tc(); }, 40);
+    [].slice.call(grid.querySelectorAll('.sl-v')).slice(0, 5).forEach(function (v, i) { Decode.decode(v, i * 70, 420); });
+    var roles2 = document.createElement('div'); roles2.className = 'rc-word sl-roles'; roles2.textContent = 'Production Manager  ·  Producer  ·  Fixer'; roles2.style.visibility = 'hidden'; box.appendChild(roles2);
+    setTimeout(function () { grid.classList.add('sl-out'); roles2.style.visibility = ''; Decode.decode(roles2, 0, 380); }, 850);
+    setTimeout(function () { clearInterval(tick2); }, 1400);
+    finish(1250);
+  }
 })();
 
 // 2. Campaign pages: the client name flips in and the details decode out of digits
