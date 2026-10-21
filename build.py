@@ -67,6 +67,7 @@ def head(title, desc, image, path):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(){{try{{var p=location.pathname;if(p.indexOf('/work/')<0&&(p.slice(-1)==='/'||p.slice(-10)==='index.html')&&!sessionStorage.getItem('intro-done')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('intro');}}catch(e){{}}}})();</script>
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
 <link rel="canonical" href="{SITE_URL}{path}">

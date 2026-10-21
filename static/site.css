@@ -337,3 +337,15 @@ body.theatre .job-head .muted { color: inherit; }
 @media (prefers-reduced-motion: reduce) { .tile-media img, .tile-media video { scale: 1; translate: none; } }
 .rail-mark.below .rail-lab { bottom: auto; top: 12px; }
 .rail-mark.below .rail-txt { top: auto; bottom: 0; }
+
+/* Decode effects */
+.ch { display: inline-block; }
+html.intro .reel-cap, html.intro .reel-down { opacity: 0; }
+.reel-cap, .reel-down { transition: opacity .4s ease; }
+.reel-code { position: absolute; inset: 0; z-index: 2; display: grid; padding: 72px 32px 24px; gap: 0 20px; align-items: center; color: #F1F1EF; font-size: 12px; letter-spacing: .06em; line-height: 1; text-transform: uppercase; background: rgba(0,0,0,.35); pointer-events: none; transition: background 1.2s ease; }
+.reel-code span { white-space: nowrap; opacity: .9; }
+.reel-code .rc-word { opacity: 1; transition: opacity .8s ease .3s; }
+.reel-code.rc-out { background: rgba(0,0,0,0); }
+.reel-code.rc-out .rc-word { opacity: 0; }
+@media (max-width: 700px) { .reel-code { padding: 64px 16px 16px; gap: 0 10px; font-size: 10px; } }
+.wd { display: inline-block; white-space: nowrap; }

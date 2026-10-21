@@ -419,3 +419,145 @@
   document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.wf')) setTimeout(req, 750); });
   update();
 })();
+
+// ---- Decode effects (inspired by data-sheet title cards) ----
+// flip(el): letters start mirrored and flicker into place. decode(el): mono text resolves out of random digits.
+var Decode = (function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function split(el) {
+    if (el.dataset.split) return [].slice.call(el.querySelectorAll('.ch'));
+    var text = el.textContent;
+    el.setAttribute('aria-label', text.trim());
+    el.textContent = '';
+    var out = [];
+    text.split(/(\s+)/).forEach(function (word) {
+      if (!word) return;
+      if (/^\s+$/.test(word)) { el.appendChild(document.createTextNode(' ')); return; }
+      var wr = document.createElement('span'); wr.className = 'wd'; wr.setAttribute('aria-hidden', 'true');
+      word.split('').forEach(function (c) { var s = document.createElement('span'); s.className = 'ch'; s.textContent = c; wr.appendChild(s); out.push(s); });
+      el.appendChild(wr);
+    });
+    el.dataset.split = '1';
+    return out;
+  }
+  function flip(el, delay) {
+    if (!el || reduce) return;
+    var chars = split(el);
+    chars.forEach(function (c, i) {
+      c.animate([
+        { transform: 'scaleX(-1)', opacity: 0 },
+        { transform: 'scaleX(-1)', opacity: 1, offset: 0.35 },
+        { transform: 'scaleX(-1)', opacity: 0.25, offset: 0.5 },
+        { transform: 'scaleX(1)', opacity: 1 }
+      ], { duration: 620, delay: (delay || 0) + i * 38 + Math.random() * 120, easing: 'steps(1, end)', fill: 'backwards' });
+      // steps keeps the flips crisp; a soft settle follows
+      c.animate([{ filter: 'blur(2px)' }, { filter: 'blur(0)' }], { duration: 380, delay: (delay || 0) + i * 38 + 420, easing: 'ease-out', fill: 'backwards' });
+    });
+  }
+  function decode(el, delay, dur) {
+    if (!el || reduce) return;
+    var nodes = [], w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    while (w.nextNode()) if (w.currentNode.nodeValue.trim()) nodes.push({ n: w.currentNode, t: w.currentNode.nodeValue });
+    if (!nodes.length) return;
+    dur = dur || 700;
+    var start = null, digits = '0123456789';
+    nodes.forEach(function (o) { o.when = o.t.split('').map(function () { return Math.random(); }); o.n.nodeValue = o.t.replace(/\S/g, function () { return digits[Math.random() * 10 | 0]; }); });
+    el.style.visibility = 'hidden';
+    setTimeout(function () {
+      el.style.visibility = '';
+      (function tick(ts) {
+        if (start === null) start = ts;
+        var p = Math.min(1, (ts - start) / dur), done = true;
+        nodes.forEach(function (o) {
+          var s = '';
+          for (var i = 0; i < o.t.length; i++) {
+            var c = o.t[i];
+            if (c === ' ' || o.when[i] * 0.8 < p - 0.2) s += c;
+            else { s += digits[Math.random() * 10 | 0]; done = false; }
+          }
+          o.n.nodeValue = s;
+        });
+        if (!done && p < 1) requestAnimationFrame(tick); else nodes.forEach(function (o) { o.n.nodeValue = o.t; });
+      })(performance.now());
+    }, delay || 0);
+  }
+  return { flip: flip, decode: decode, split: split };
+})();
+
+// 1. Homepage intro: the reel opens under a sheet of countdown numbers that drop away,
+//    leaving your roles in place, then your name flips into position. Once per visit.
+(function () {
+  var root = document.documentElement;
+  var reel = document.querySelector('.reel');
+  if (!reel || !root.classList.contains('intro')) return;
+  try { sessionStorage.setItem('intro-done', '1'); } catch (e) {}
+  var mobile = innerWidth < 700;
+  var cols = mobile ? 4 : 8, rows = mobile ? 22 : 18;
+  var words = mobile
+    ? [[rows - 9, 0, 'Production Manager'], [rows - 8, 0, 'Producer'], [rows - 7, 0, 'Fixer'], [rows - 6, 0, 'London']]
+    : [[rows - 6, 0, 'Production Manager'], [rows - 6, 3, 'Producer'], [rows - 6, 5, 'Fixer'], [rows - 6, 7, 'London']];
+  var sheet = document.createElement('div');
+  sheet.className = 'reel-code mono';
+  sheet.setAttribute('aria-hidden', 'true');
+  sheet.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+  sheet.style.gridTemplateRows = 'repeat(' + rows + ', 1fr)';
+  var cells = [], keep = [];
+  for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+    var w = null;
+    words.forEach(function (x) { if (x[0] === r && x[1] === c) w = x[2]; });
+    var skip = false;
+    words.forEach(function (x) { if (!mobile && x[0] === r && c > x[1] && c < x[1] + (x[2].length > 10 ? 2 : 1)) skip = true; });
+    var el = document.createElement('span');
+    if (w) { el.textContent = w; el.className = 'rc-word'; keep.push(el); if (!mobile && w.length > 10) el.style.gridColumn = 'span 2'; }
+    else if (skip) continue;
+    else { var base = 199 - c * 25 - r; el.dataset.v = Math.max(0, base); el.textContent = pad3(base); cells.push(el); }
+    sheet.appendChild(el);
+  }
+  function pad3(n) { n = Math.max(0, n); return ('00' + n).slice(-3); }
+  reel.appendChild(sheet);
+
+  var t0 = performance.now();
+  // phase 1 (0 to 0.9s): the numbers count down
+  var count = setInterval(function () {
+    cells.forEach(function (el) { if (!el.dataset.gone && Math.random() < .5) { el.dataset.v = Math.max(0, el.dataset.v - 1); el.textContent = pad3(+el.dataset.v); } });
+  }, 70);
+  // phase 2 (0.9 to 2.3s): digits drop out at random, words stay
+  setTimeout(function () {
+    var order = cells.slice().sort(function () { return Math.random() - .5; });
+    var step = 1400 / order.length;
+    order.forEach(function (el, i) {
+      setTimeout(function () {
+        el.dataset.gone = '1';
+        var t = el.textContent, k = Math.random() * 3 | 0;
+        el.textContent = t.slice(0, k) + ' ' + t.slice(k + 1);
+        setTimeout(function () { el.textContent = ''; }, 120 + Math.random() * 200);
+      }, i * step);
+    });
+  }, 900);
+  // phase 3 (2.5s): name flips in, roles appear, words fade, sheet goes
+  setTimeout(function () {
+    clearInterval(count);
+    root.classList.remove('intro');
+    Decode.flip(document.querySelector('.reel-name'), 0);
+    var role = document.querySelector('.reel-role');
+    if (role) role.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 700, delay: 450, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+    sheet.classList.add('rc-out');
+    setTimeout(function () { sheet.remove(); }, 1200);
+  }, 2500);
+})();
+
+// 2. Campaign pages: the client name flips in and the details decode out of digits
+(function () {
+  var page = document.querySelector('.job-page');
+  if (!page) return;
+  var head = page.querySelector('.job-head');
+  function run() {
+    Decode.flip(head.querySelector('.job-title'), 150);
+    Decode.decode(head.querySelector('.mono'), 100, 650);
+    Decode.decode(head.querySelector('.job-meta'), 350, 800);
+  }
+  var ran = false;
+  function once() { if (!ran) { ran = true; run(); } }
+  addEventListener('pagereveal', once);
+  setTimeout(once, 60);   // browsers without pagereveal
+})();
