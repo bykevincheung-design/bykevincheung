@@ -362,3 +362,4 @@ html.intro .reel-cap, html.intro .reel-down { opacity: 0; }
 .slate.sl-out { opacity: 0; transform: scaleY(.04); }
 .intro-c .sl-roles { position: absolute; top: 50%; transform: translateY(-50%); }
 @media (max-width: 700px) { .intro-b { padding-bottom: 170px; } .intro-b .tl { font-size: 10px; } .slate { font-size: 11px; gap: 8px 24px; padding: 18px 22px; } }
+.reel-code .rc-brand { opacity: .95; }

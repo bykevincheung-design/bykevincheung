@@ -504,21 +504,15 @@ var Decode = (function () {
   var words = mobile
     ? [[wordRow, 0, 'Production Manager', 3], [wordRow + 1, 0, 'Producer', 3], [wordRow + 2, 0, 'Fixer', 3], [wordRow + 3, 0, 'London', 3]]
     : [[wordRow, 0, 'Production Manager', 2], [wordRow, 2, 'Producer', 1], [wordRow, 3, 'Fixer', 1], [wordRow, 4, 'London', 2]];
-  var fps = 25, tc0 = performance.now();
-  function p2(n) { return ('0' + n).slice(-2); }
-  function tc(off) { var f = Math.floor((performance.now() - tc0) / 40) + off; return 'TC ' + p2(Math.floor(f / 90000) % 24) + ':' + p2(Math.floor(f / 1500) % 60) + ':' + p2(Math.floor(f / 25) % 60) + ':' + p2(f % 25); }
-  var loadP = 0;
+  // brands you've worked with, mixed through a sheet of countdown numbers
+  var brands = ['Nike', 'Chanel', 'adidas', 'Apple', 'Gucci', 'Jaeger-LeCoultre', 'Burberry', "Levi's", 'McLaren',
+    'Primark', 'Moncler', 'Bvlgari', 'Gentle Monster', 'Puma', 'Gap', 'Corteiz', 'New Era', 'Aston Martin',
+    'C.P. Company', 'Axel Arigato', 'Vogue', 'Camperlab', 'GlenDronach', 'Ottolinger', 'Mowalola'];
+  var bi = 0;
+  function p3(n) { return ('00' + Math.max(0, n)).slice(-3); }
   var feeds = [
-    function (r, c) { return tc(r * 311 + c * 97); },
-    function () { return 'LOAD ' + ('00' + Math.min(100, loadP | 0)).slice(-3) + '%'; },
-    function () { return 'CAMPAIGNS 034'; },
-    function () { return 'SINCE 2018'; },
-    function () { return '51.5072 N'; },
-    function () { return '0.1276 W'; },
-    function () { return 'FPS ' + fps + '.00'; },
-    function (r, c) { return 'REEL ' + p2((r * 7 + c * 3) % 34 + 1) + '/34'; },
-    function () { return 'ISO ' + [400, 800, 1600, 3200][Math.random() * 4 | 0]; },
-    function () { return 'T ' + (2 + Math.random() * 5).toFixed(1); }
+    function (r, c, el) { el.dataset.v = (el.dataset.v || (199 - c * 31 - r * 2)) - (Math.random() < .5 ? 1 : 0); return p3(+el.dataset.v); },
+    function (r, c, el) { return el.dataset.b || (el.dataset.b = brands[bi++ % brands.length]); }
   ];
   var sheet = document.createElement('div');
   sheet.className = 'reel-code mono';
@@ -536,8 +530,8 @@ var Decode = (function () {
         el.textContent = w[2]; el.className = 'rc-word'; el.style.gridColumn = 'span ' + w[3];
         wordEls.push(el); c += w[3];
       } else {
-        var f = (r * 3 + c * 5 + (r * c) % 7) % feeds.length;
-        el.dataset.f = f; el.dataset.r = r; el.dataset.c = c; el.className = 'rc-cell';
+        var f = ((r * 5 + c * 3) % 7 < 2) ? 1 : 0;   // roughly one cell in three is a brand
+        el.dataset.f = f; el.dataset.r = r; el.dataset.c = c; el.className = 'rc-cell' + (f ? ' rc-brand' : '');
         el.style.visibility = 'hidden';
         cells.push(el); c += 1;
       }
@@ -546,7 +540,7 @@ var Decode = (function () {
     }
   }
   reel.appendChild(sheet);
-  function paint(el) { el.textContent = feeds[el.dataset.f](+el.dataset.r, +el.dataset.c); }
+  function paint(el) { el.textContent = feeds[el.dataset.f](+el.dataset.r, +el.dataset.c, el); }
   cells.forEach(paint);
   wordEls.forEach(function (el) { el.style.visibility = 'hidden'; });
 
@@ -554,13 +548,15 @@ var Decode = (function () {
   var rowStep = 450 / rows;
   for (var rr = 0; rr < rows; rr++) (function (rr) {
     setTimeout(function () {
-      sheet.querySelectorAll('[data-row="' + rr + '"]').forEach(function (el) { el.style.visibility = ''; });
+      sheet.querySelectorAll('[data-row="' + rr + '"]').forEach(function (el) {
+        el.style.visibility = '';
+        if (el.classList.contains('rc-brand')) Decode.decode(el, 0, 260);   // brand names resolve out of digits
+      });
     }, rr * rowStep);
   })(rr);
   // live values tick while loading
   var live = setInterval(function () {
-    loadP = Math.min(100, loadP + 9 + Math.random() * 6);
-    cells.forEach(function (el) { if (!el.dataset.gone) paint(el); });
+    cells.forEach(function (el) { if (!el.dataset.gone && el.dataset.f === '0') paint(el); });
   }, 50);
   // 0.75 to 1.35s: readouts drop out at random, roles stay
   setTimeout(function () {
