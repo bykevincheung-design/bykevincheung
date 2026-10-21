@@ -398,37 +398,21 @@
       m.style.setProperty('--py', (-p * 3).toFixed(2) + '%');
     });
     if (!fine.matches) { rail.classList.remove('on'); return; }
-    var g = grid.getBoundingClientRect();
-    var on = g.top < vh * 0.6 && g.bottom > vh * 0.4;
-    rail.classList.toggle('on', on);
-    if (!on) return;
-    var prog = Math.min(1, Math.max(0, (vh / 2 - g.top) / g.height));
+    rail.classList.add('on');
+    // tick travels with the whole page; the label names the section you're in
+    var max = Math.max(1, document.documentElement.scrollHeight - vh);
+    var prog = Math.min(1, Math.max(0, scrollY / max));
     var top = 70, bottom = vh - 40;
-    mark.style.transform = 'translate3d(0,' + (top + prog * (bottom - top)).toFixed(1) + 'px,0)';
-    // The row in the middle of the screen: show its range, e.g. "05 to 08 of 34".
-    // Hovering a tile names that campaign instead, so the label is always right.
-    var tiles = [].slice.call(grid.querySelectorAll('.tile:not(.is-out)'));
-    if (hovered && tiles.indexOf(hovered) > -1) {
-      var hi = tiles.indexOf(hovered), hr = hovered.querySelector('.tile-media').getBoundingClientRect();
-      mark.style.transform = 'translate3d(0,' + Math.min(vh - 40, Math.max(70, hr.top + hr.height / 2)).toFixed(1) + 'px,0)';
-      setLabel('(' + pad(hi + 1) + ') ' + hovered.querySelector('.tile-client').textContent);
-      return;
-    }
-    var rows = [], best = null, bd = 1e9;
-    tiles.forEach(function (t, i) {
-      var r = t.getBoundingClientRect(), key = Math.round(r.top);
-      var row = rows.length && Math.abs(rows[rows.length - 1].top - key) < 8 ? rows[rows.length - 1] : null;
-      if (!row) { row = { top: key, mid: r.top + r.height / 2, first: i, last: i }; rows.push(row); }
-      row.last = i;
-    });
-    rows.forEach(function (row) { var d = Math.abs(row.mid - vh / 2); if (d < bd) { bd = d; best = row; } });
-    if (best) setLabel(best.first === best.last ? '(' + pad(best.first + 1) + ') of ' + tiles.length
-                                                : pad(best.first + 1) + ' to ' + pad(best.last + 1) + ' of ' + tiles.length);
+    var y = top + prog * (bottom - top);
+    mark.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)';
+    mark.classList.toggle('below', y < top + 260);   // near the top, the label hangs below the tick so the header never covers it
+    var name = sections[0].name;
+    sections.forEach(function (sec) { if (sec.el.getBoundingClientRect().top <= vh * 0.5) name = sec.name; });
+    setLabel(name);
   }
-  function pad(n) { return ('0' + n).slice(-2); }
-  var hovered = null;
-  grid.addEventListener('mouseover', function (e) { var t = e.target.closest && e.target.closest('.tile'); if (t && t !== hovered) { hovered = t; req(); } });
-  grid.addEventListener('mouseleave', function () { hovered = null; req(); });
+  var sections = [['Portfolio', '.reel, #work'], ['Credits', '#credits'], ['About', '#about']]
+    .map(function (p) { return { name: p[0], el: document.querySelector(p[1]) }; })
+    .filter(function (p) { return p.el; });
   function req() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
   addEventListener('scroll', req, { passive: true });
   addEventListener('resize', req);
