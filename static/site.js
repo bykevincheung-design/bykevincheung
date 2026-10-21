@@ -368,13 +368,23 @@
   var mark = rail.querySelector('.rail-mark'), lab = rail.querySelector('.rail-lab');
   var current = null;
 
+  // One label at a time: wait until the scroll settles on a campaign, then roll the old name out and the new one in
+  var labTimer = null, shown = '';
   function setLabel(text) {
-    var old = lab.querySelector('.rail-txt');
-    var nu = document.createElement('span');
-    nu.className = 'rail-txt in'; nu.textContent = text;
-    lab.appendChild(nu);
-    if (old) { old.classList.add('out'); setTimeout(function () { old.remove(); }, 450); }
-    requestAnimationFrame(function () { requestAnimationFrame(function () { nu.classList.remove('in'); }); });
+    clearTimeout(labTimer);
+    labTimer = setTimeout(function () {
+      if (text === shown) return;
+      shown = text;
+      [].slice.call(lab.querySelectorAll('.rail-txt')).forEach(function (o) {
+        if (o.classList.contains('out')) { o.remove(); return; }
+        o.classList.add('out');
+        setTimeout(function () { o.remove(); }, 460);
+      });
+      var nu = document.createElement('span');
+      nu.className = 'rail-txt in'; nu.textContent = text;
+      lab.appendChild(nu);
+      nu.offsetWidth; nu.classList.remove('in');
+    }, 140);
   }
 
   var ticking = false;
