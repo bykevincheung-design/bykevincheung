@@ -61,7 +61,11 @@ def picture(folder, name, sizes, alt, cls="", lazy=True, fallback=None, w=None, 
     return f'<picture>{srcs}<img{c} src="/static/img/{folder}/{fb}" alt="{e(alt)}"{dims}{attrs}></picture>'
 
 
-def head(title, desc, image, path):
+def ld(obj):
+    return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False).replace("</", "<\\/") + '</script>'
+
+
+def head(title, desc, image, path, kind="website", schema=""):
     return f"""<!doctype html>
 <html lang="en-GB">
 <head>
@@ -71,11 +75,21 @@ def head(title, desc, image, path):
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
 <link rel="canonical" href="{SITE_URL}{path}">
+<meta property="og:site_name" content="Kevin Cheung">
+<meta property="og:locale" content="en_GB">
+<meta property="og:type" content="{kind}">
+<meta property="og:url" content="{SITE_URL}{path}">
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:image" content="{SITE_URL}{image}">
-<meta property="og:type" content="website">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{e(title)}">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(title)}">
+<meta name="twitter:description" content="{e(desc)}">
+<meta name="twitter:image" content="{SITE_URL}{image}">
+{schema}
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 {FONTS}
 <link rel="stylesheet" href="/static/site.css?v={CSS_V}">
@@ -252,9 +266,16 @@ def build_home():
     agent = S["agent"]
     clients = "".join(f"<span>{e(c)}</span>" for c in S["clients"])
 
+    person = {"@context": "https://schema.org", "@type": "Person", "name": S["name"], "url": SITE_URL + "/",
+              "image": SITE_URL + "/static/share.jpg", "jobTitle": ["Production Manager", "Producer", "Fixer"],
+              "description": "London-based Production Manager, Producer and Fixer working across commercials, fashion, music and live events.",
+              "address": {"@type": "PostalAddress", "addressLocality": "London", "addressCountry": "GB"},
+              "email": "mailto:" + S["email"], "sameAs": [S["instagram"]],
+              "knowsAbout": ["Commercial production", "Fashion campaigns", "Music videos", "Live events"],
+              "worksFor": {"@type": "Organization", "name": "Gweilo Prod Ltd"}}
     html = head(f"{S['name']} · Production Manager, Producer & Fixer, London",
-                "London-based Production Manager, Producer and Fixer working across commercials, fashion, music and live.",
-                "/static/img/adidas-predator/hero.jpg", "/")
+                "London-based Production Manager, Producer and Fixer working across commercials, fashion, music and live events, for Nike, Chanel, adidas, Apple and Jaeger-LeCoultre.",
+                "/static/share.jpg", "/", schema=ld(person))
     html += header(True)
     html += f"""<main id="top">
 <h1 class="visually-hidden">{e(S['name'])}, Production Manager, Producer and Fixer, London</h1>
@@ -334,9 +355,13 @@ def build_job(i):
         for g in j["gallery"])
     about = f'<p class="note">{e(j["about"])}</p>' if j.get("about") else ""
     director_row = (f'<div class="dl-row"><dt>{e(j.get("director_label", "Director"))}</dt><dd>{e(j["director"])}</dd></div>' if j["director"] else "")
-    html = head(f"{j['client']}, {j['project']} · {S['name']}",
-                f"{note} {S['name']}: {j['role']}.",
-                f"/static/img/{j['id']}/hero.jpg", f"/work/{j['id']}/")
+    work = {"@context": "https://schema.org", "@type": "CreativeWork", "name": f"{j['client']}, {j['project']}",
+            "description": j.get("about") or note, "image": f"{SITE_URL}/static/img/{j['id']}/share.jpg",
+            "url": f"{SITE_URL}/work/{j['id']}/", "dateCreated": j["year"], "genre": j["type"],
+            "contributor": {"@type": "Person", "name": S["name"], "url": SITE_URL + "/", "jobTitle": j["role"]}}
+    html = head(f"{j['client']}, {j['project']} · {S['name']}, {j['role']}",
+                f"{note} {S['name']}, {j['role']}.",
+                f"/static/img/{j['id']}/share.jpg", f"/work/{j['id']}/", kind="article", schema=ld(work))
     html += header(False)
     html += f"""<main id="top" class="job-page">
 <section class="wrap job-head">
@@ -359,10 +384,19 @@ def build_job(i):
 </div>
 </section>
 <section class="wrap gallery" aria-label="Gallery">{gallery}</section>
+<section class="wrap job-contact" aria-label="Contact">
+<span class="mono jc-k">Work together</span>
+<div class="jc-row">
+<span class="jc-item"><span class="mono muted">Represented by</span> {e(S['agent']['name'])}</span>
+<a class="jc-item u" href="mailto:{e(S['agent']['email'])}" data-ev="Email Chapters">{e(S['agent']['email'])}</a>
+<a class="jc-item" href="tel:{e(S['agent']['phone'].replace(' ', ''))}" data-ev="Call Chapters">{e(S['agent']['phone'])}</a>
+<span class="jc-item"><span class="mono muted">Direct</span> <a class="u" href="mailto:{e(S['email'])}" data-ev="Email Kevin">{e(S['email'])}</a></span>
+</div>
+</section>
 <section class="next" aria-label="Next project">
 <a class="next-in" href="/work/{n['id']}/">
 <span class="next-media">{picture(n['id'], 'hero', '100vw', n['client'] + ', ' + n['project'])}</span>
-<span class="wrap next-cap"><span class="mono next-k">Next project</span><span class="next-t">{e(n['client'])}</span><span class="next-s">{e(n['project'])}</span></span>
+<span class="wrap next-cap"><span class="mono next-k">Next project</span><span class="next-t">{e(n['client']).replace('\u2011', '-')}</span><span class="next-s">{e(n['project'])}</span></span>
 </a>
 </section>
 </main>
@@ -384,9 +418,16 @@ def main():
         with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
             f.write(build_job(i))
     with open(os.path.join(DIST, "404.html"), "w", encoding="utf-8") as f:
-        f.write(head("Page not found · " + S["name"], "Page not found", "/static/img/adidas-predator/hero.jpg", "/404")
+        f.write(head("Page not found · " + S["name"], "Page not found", "/static/share.jpg", "/404")
                 + header(False)
-                + '<main id="top" class="wrap section"><h1 class="h2">Page not found</h1><p><a class="u" href="/">Back to the work →</a></p></main>'
+                + '<main id="top" class="lost">'
+                '<video class="lost-v" autoplay muted loop playsinline poster="/static/reel/poster.jpg" aria-hidden="true">'
+                '<source src="/static/reel/reel-600x750.mp4" type="video/mp4" media="(max-width: 700px)">'
+                '<source src="/static/reel/reel-1280.mp4" type="video/mp4"></video>'
+                '<div class="wrap lost-in"><span class="mono lost-k">Error 404 · Scene missing</span>'
+                '<h1 class="lost-t">Cut.</h1>'
+                '<p class="lost-s">This page has moved, or it was never in the edit.</p>'
+                '<p class="lost-l mono"><a href="/#work">Back to the work →</a><a href="/#about">About</a></p></div></main>'
                 + footer())
     with open(os.path.join(DIST, "sitemap.xml"), "w", encoding="utf-8") as f:
         urls = [SITE_URL + "/"] + [f"{SITE_URL}/work/{j['id']}/" for j in JOBS]
