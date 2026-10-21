@@ -138,7 +138,7 @@ def meta_line(j):
 def credit_pairs(j):
     pairs = []
     if j["director"]:
-        pairs.append(("Director", j["director"]))
+        pairs.append((j.get("director_label", "Director"), j["director"]))
     pairs.append(("Role", j["role"]))
     return '<span class="tile-credits">' + "".join(
         f'<span class="tc"><span class="tc-l">{e(l)}</span><span class="tc-v">{short_role(v) if l == "Role" else e(v)}</span></span>' for l, v in pairs) + "</span>"
@@ -325,13 +325,13 @@ def build_job(i):
     j = JOBS[i]
     n = JOBS[(i + 1) % len(JOBS)]
     note = f"{j['client']}, {j['project']}. " + (
-        f"Directed by {j['director']} with {j['production']}." if j["director"] else f"With {j['production']}.")
+        f"{'Shot by' if j.get('director_label') == 'Photographer' else 'Directed by'} {j['director']} with {j['production']}." if j["director"] else f"With {j['production']}.")
     gallery = "".join(
         picture(j["id"], os.path.splitext(g["src"])[0], "(max-width: 900px) 100vw, " + ("66vw" if g["shape"] == "landscape" else "33vw"),
                 f"{j['client']}, {j['project']}", cls=f"g-{g['shape']}", fallback=g["src"])
         for g in j["gallery"])
     about = f'<p class="note">{e(j["about"])}</p>' if j.get("about") else ""
-    director_row = (f'<div class="dl-row"><dt>Director</dt><dd>{e(j["director"])}</dd></div>' if j["director"] else "")
+    director_row = (f'<div class="dl-row"><dt>{e(j.get("director_label", "Director"))}</dt><dd>{e(j["director"])}</dd></div>' if j["director"] else "")
     html = head(f"{j['client']}, {j['project']} · {S['name']}",
                 f"{note} {S['name']}: {j['role']}.",
                 f"/static/img/{j['id']}/hero.jpg", f"/work/{j['id']}/")
