@@ -378,13 +378,13 @@
       [].slice.call(lab.querySelectorAll('.rail-txt')).forEach(function (o) {
         if (o.classList.contains('out')) { o.remove(); return; }
         o.classList.add('out');
-        setTimeout(function () { o.remove(); }, 460);
+        setTimeout(function () { o.remove(); }, 340);
       });
       var nu = document.createElement('span');
       nu.className = 'rail-txt in'; nu.textContent = text;
       lab.appendChild(nu);
       nu.offsetWidth; nu.classList.remove('in');
-    }, 140);
+    }, 30);
   }
 
   var ticking = false;
@@ -407,7 +407,7 @@
     mark.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)';
     mark.classList.toggle('below', y < top + 260);   // near the top, the label hangs below the tick so the header never covers it
     var name = sections[0].name;
-    sections.forEach(function (sec) { if (sec.el.getBoundingClientRect().top <= vh * 0.5) name = sec.name; });
+    sections.forEach(function (sec) { if (sec.el.getBoundingClientRect().top <= vh * 0.88) name = sec.name; });   // switch as soon as the section comes into view
     setLabel(name);
   }
   var sections = [['Portfolio', '.reel, #work'], ['Credits', '#credits'], ['About', '#about']]
