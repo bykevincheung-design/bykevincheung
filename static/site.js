@@ -163,7 +163,7 @@
 (function () {
   if (!window.Lenis) return;
   if (!matchMedia('(pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1, smoothWheel: true, anchors: { offset: -72 } });
+  var lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 1.15, smoothWheel: true, anchors: { offset: -72 } });
   window.lenis = lenis;
   function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
   requestAnimationFrame(raf);
@@ -340,4 +340,78 @@
     paint();
     if (!off()) location.reload();
   });
+})();
+
+
+// Scroll rail: a fine line down the right edge with a marker that travels as you move through the work,
+// naming the campaign in view. Plus a gentle depth effect on the tile pictures.
+(function () {
+  var grid = document.querySelector('.grid');
+  if (!grid) return;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = matchMedia('(pointer: fine) and (min-width: 1000px)');
+
+  // depth: pictures drift slightly against the scroll
+  var media = [].slice.call(grid.querySelectorAll('.tile-media'));
+  var seen = new Set();
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { e.isIntersecting ? seen.add(e.target) : seen.delete(e.target); }); }, { rootMargin: '100px 0px' });
+    media.forEach(function (m) { io.observe(m); });
+  }
+
+  // rail
+  var rail = document.createElement('div');
+  rail.className = 'rail mono';
+  rail.setAttribute('aria-hidden', 'true');
+  rail.innerHTML = '<span class="rail-line"></span><span class="rail-mark"><span class="rail-tick"></span><span class="rail-lab"><span class="rail-txt"></span></span></span>';
+  document.body.appendChild(rail);
+  var mark = rail.querySelector('.rail-mark'), lab = rail.querySelector('.rail-lab');
+  var current = null;
+
+  function setLabel(text) {
+    var old = lab.querySelector('.rail-txt');
+    var nu = document.createElement('span');
+    nu.className = 'rail-txt in'; nu.textContent = text;
+    lab.appendChild(nu);
+    if (old) { old.classList.add('out'); setTimeout(function () { old.remove(); }, 450); }
+    requestAnimationFrame(function () { requestAnimationFrame(function () { nu.classList.remove('in'); }); });
+  }
+
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var vh = innerHeight;
+    // depth
+    seen.forEach(function (m) {
+      var r = m.getBoundingClientRect();
+      var p = (r.top + r.height / 2 - vh / 2) / vh;
+      m.style.setProperty('--py', (-p * 3).toFixed(2) + '%');
+    });
+    if (!fine.matches) { rail.classList.remove('on'); return; }
+    var g = grid.getBoundingClientRect();
+    var on = g.top < vh * 0.6 && g.bottom > vh * 0.4;
+    rail.classList.toggle('on', on);
+    if (!on) return;
+    var prog = Math.min(1, Math.max(0, (vh / 2 - g.top) / g.height));
+    var top = 70, bottom = vh - 40;
+    mark.style.transform = 'translate3d(0,' + (top + prog * (bottom - top)).toFixed(1) + 'px,0)';
+    // campaign nearest the middle of the screen
+    var tiles = [].slice.call(grid.querySelectorAll('.tile:not(.is-out)'));
+    var best = null, bd = 1e9, idx = 0;
+    tiles.forEach(function (t, i) {
+      var r = t.getBoundingClientRect();
+      var d = Math.abs(r.top + r.height / 2 - vh / 2) + Math.abs(r.left + r.width / 2 - innerWidth / 2) * 0.15;
+      if (d < bd) { bd = d; best = t; idx = i; }
+    });
+    if (best && best !== current) {
+      current = best;
+      var n = ('0' + (idx + 1)).slice(-2);
+      setLabel('(' + n + ') ' + best.querySelector('.tile-client').textContent);
+    }
+  }
+  function req() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  addEventListener('scroll', req, { passive: true });
+  addEventListener('resize', req);
+  document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.wf')) setTimeout(function () { current = null; req(); }, 700); });
+  update();
 })();

@@ -319,3 +319,19 @@ body.theatre .job-head .muted { color: inherit; }
 .next-cap .next-t { color: #fff; }
 .next-cap .next-s { color: rgba(255,255,255,.85); font-family: var(--serif); font-style: italic; }
 @media (max-width: 700px) { .next-media { aspect-ratio: 4 / 5; } .next-cap { padding-bottom: 28px; } }
+
+/* Scroll rail on the right edge (desktop) */
+.rail { position: fixed; top: 0; right: 0; bottom: 0; width: 220px; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .6s ease; mix-blend-mode: difference; color: #fff; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.rail.on { opacity: 1; }
+.rail-line { position: absolute; right: 14px; top: 70px; bottom: 40px; width: 1px; background: rgba(255,255,255,.28); }
+.rail-mark { position: absolute; right: 14px; top: 0; display: flex; align-items: center; gap: 8px; transform: translate3d(0,70px,0); transition: transform .5s cubic-bezier(.16,1,.3,1); will-change: transform; }
+.rail-tick { order: 2; width: 13px; height: 1px; margin-right: -6px; background: #fff; }
+.rail-lab { order: 1; position: relative; display: block; height: 1.3em; overflow: hidden; min-width: 160px; text-align: right; }
+.rail-txt { position: absolute; right: 0; top: 0; white-space: nowrap; transition: transform .45s cubic-bezier(.16,1,.3,1), opacity .45s; }
+.rail-txt.in { transform: translateY(110%); opacity: 0; }
+.rail-txt.out { transform: translateY(-110%); opacity: 0; }
+@media (max-width: 999px), (pointer: coarse) { .rail { display: none; } }
+
+/* Depth: tile pictures drift a touch against the scroll */
+.tile-media img, .tile-media video { scale: 1.06; translate: 0 var(--py, 0); }
+@media (prefers-reduced-motion: reduce) { .tile-media img, .tile-media video { scale: 1; translate: none; } }
