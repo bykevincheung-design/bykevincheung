@@ -668,53 +668,6 @@ var Decode = (function () {
   function p2(n) { return ('0' + Math.floor(n)).slice(-2); }
   function tcOf(sec) { var f = Math.floor(sec * 25); return p2(f / 90000) + ':' + p2((f / 1500) % 60) + ':' + p2((f / 25) % 60) + ':' + p2(f % 25); }
 
-  // 1. A running timecode on hover clips, like a monitor feed
-  if (hover) document.querySelectorAll('.tile').forEach(function (tile) {
-    var v = tile.querySelector('video'), m = tile.querySelector('.tile-media');
-    if (!v || !m) return;
-    var tc = document.createElement('span'); tc.className = 'tile-tc mono'; tc.setAttribute('aria-hidden', 'true');
-    tc.innerHTML = '<i></i><b>00:00:00:00</b>'; m.appendChild(tc);
-    var out = tc.querySelector('b'), raf = 0;
-    function run() { out.textContent = tcOf(v.currentTime || 0); raf = requestAnimationFrame(run); }
-    tile.addEventListener('mouseenter', function () { cancelAnimationFrame(raf); run(); });
-    tile.addEventListener('mouseleave', function () { cancelAnimationFrame(raf); out.textContent = '00:00:00:00'; });
-  });
-
-  // 2. Client names flip on hover
-  if (hover && !reduce && window.Decode) document.querySelectorAll('.tile').forEach(function (tile) {
-    var name = tile.querySelector('.tile-client'), busy = false;
-    if (!name) return;
-    tile.addEventListener('mouseenter', function () {
-      if (busy) return; busy = true;
-      Decode.split(name).forEach(function (c, i) {
-        c.animate([{ transform: 'scaleX(-1)', opacity: .35 }, { transform: 'scaleX(1)', opacity: 1 }],
-          { duration: 260, delay: i * 22, easing: 'steps(2, end)', fill: 'backwards' });
-      });
-      setTimeout(function () { busy = false; }, 500);
-    });
-  });
-
-  // 4. Viewfinder in theatre mode: frame corners, REC dot and the film's own timecode
-  var film = document.querySelector('.film-cinema');
-  if (film) {
-    var vf = document.createElement('div'); vf.className = 'viewfinder mono'; vf.setAttribute('aria-hidden', 'true');
-    vf.innerHTML = '<span class="vf-c tl"></span><span class="vf-c tr"></span><span class="vf-c bl"></span><span class="vf-c br"></span>' +
-      '<span class="vf-rec"><i></i>REC</span><span class="vf-tc">00:00:00:00</span>';
-    film.appendChild(vf);
-    var vtc = vf.querySelector('.vf-tc'), started = 0, last = 0, fromPlayer = false, raf2 = 0;
-    addEventListener('message', function (ev) {
-      try { var d = typeof ev.data === 'string' ? JSON.parse(ev.data) : ev.data; } catch (x) { return; }
-      if (d && d.event === 'timeupdate' && d.data) { fromPlayer = true; last = d.data.seconds; vtc.textContent = tcOf(last); }
-      if (d && d.event === 'ready') { var f = film.querySelector('iframe'); if (f) f.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'timeupdate' }), '*'); }
-    });
-    var obs = new MutationObserver(function () {
-      var on = document.body.classList.contains('theatre');
-      if (on && !started) { started = performance.now(); (function t() { if (!fromPlayer) vtc.textContent = tcOf((performance.now() - started) / 1000); raf2 = requestAnimationFrame(t); })(); }
-      if (!on) { cancelAnimationFrame(raf2); started = 0; }
-    });
-    obs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-  }
-
   // 6. Live London clock in the footer
   var clock = document.querySelector('.clock-t');
   if (clock) {

@@ -365,21 +365,7 @@ html.intro .reel-cap, html.intro .reel-down { opacity: 0; }
 .reel-code .rc-brand { opacity: .95; }
 
 /* On-set details */
-.tile-tc { position: absolute; left: 10px; top: 10px; z-index: 2; display: flex; align-items: center; gap: 6px; padding: 3px 6px; background: rgba(0,0,0,.45); color: #fff; font-size: 10px; letter-spacing: .06em; opacity: 0; transition: opacity .25s ease; pointer-events: none; }
-.tile-tc i { width: 6px; height: 6px; border-radius: 50%; background: #FF3B30; }
-.tile-tc b { font-weight: 400; font-variant-numeric: tabular-nums; }
-.tile.playing .tile-tc { opacity: 1; }
-.viewfinder { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity .6s ease .5s; color: #fff; font-size: 11px; letter-spacing: .08em; }
-body.theatre .film-cinema.playing .viewfinder { opacity: 1; }
-.vf-c { position: absolute; width: 22px; height: 22px; border: 0 solid rgba(255,255,255,.85); }
-.vf-c.tl { left: 14px; top: 14px; border-left-width: 1px; border-top-width: 1px; }
-.vf-c.tr { right: 14px; top: 14px; border-right-width: 1px; border-top-width: 1px; }
-.vf-c.bl { left: 14px; bottom: 14px; border-left-width: 1px; border-bottom-width: 1px; }
-.vf-c.br { right: 14px; bottom: 14px; border-right-width: 1px; border-bottom-width: 1px; }
-.vf-rec { position: absolute; left: 46px; top: 18px; display: flex; align-items: center; gap: 7px; }
-.vf-rec i { width: 7px; height: 7px; border-radius: 50%; background: #FF3B30; animation: rec 1.2s steps(1) infinite; }
-@keyframes rec { 50% { opacity: 0; } }
-.vf-tc { position: absolute; right: 46px; top: 18px; font-variant-numeric: tabular-nums; }
 .clock-t { font-variant-numeric: tabular-nums; }
+@keyframes rec { 50% { opacity: 0; } }
 .clock-colon { animation: rec 2s steps(1) infinite; }
-@media (prefers-reduced-motion: reduce) { .vf-rec i, .clock-colon { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .clock-colon { animation: none; } }
