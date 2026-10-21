@@ -405,23 +405,33 @@
     var prog = Math.min(1, Math.max(0, (vh / 2 - g.top) / g.height));
     var top = 70, bottom = vh - 40;
     mark.style.transform = 'translate3d(0,' + (top + prog * (bottom - top)).toFixed(1) + 'px,0)';
-    // campaign nearest the middle of the screen
+    // The row in the middle of the screen: show its range, e.g. "05 to 08 of 34".
+    // Hovering a tile names that campaign instead, so the label is always right.
     var tiles = [].slice.call(grid.querySelectorAll('.tile:not(.is-out)'));
-    var best = null, bd = 1e9, idx = 0;
-    tiles.forEach(function (t, i) {
-      var r = t.getBoundingClientRect();
-      var d = Math.abs(r.top + r.height / 2 - vh / 2) + Math.abs(r.left + r.width / 2 - innerWidth / 2) * 0.15;
-      if (d < bd) { bd = d; best = t; idx = i; }
-    });
-    if (best && best !== current) {
-      current = best;
-      var n = ('0' + (idx + 1)).slice(-2);
-      setLabel('(' + n + ') ' + best.querySelector('.tile-client').textContent);
+    if (hovered && tiles.indexOf(hovered) > -1) {
+      var hi = tiles.indexOf(hovered), hr = hovered.querySelector('.tile-media').getBoundingClientRect();
+      mark.style.transform = 'translate3d(0,' + Math.min(vh - 40, Math.max(70, hr.top + hr.height / 2)).toFixed(1) + 'px,0)';
+      setLabel('(' + pad(hi + 1) + ') ' + hovered.querySelector('.tile-client').textContent);
+      return;
     }
+    var rows = [], best = null, bd = 1e9;
+    tiles.forEach(function (t, i) {
+      var r = t.getBoundingClientRect(), key = Math.round(r.top);
+      var row = rows.length && Math.abs(rows[rows.length - 1].top - key) < 8 ? rows[rows.length - 1] : null;
+      if (!row) { row = { top: key, mid: r.top + r.height / 2, first: i, last: i }; rows.push(row); }
+      row.last = i;
+    });
+    rows.forEach(function (row) { var d = Math.abs(row.mid - vh / 2); if (d < bd) { bd = d; best = row; } });
+    if (best) setLabel(best.first === best.last ? '(' + pad(best.first + 1) + ') of ' + tiles.length
+                                                : pad(best.first + 1) + ' to ' + pad(best.last + 1) + ' of ' + tiles.length);
   }
+  function pad(n) { return ('0' + n).slice(-2); }
+  var hovered = null;
+  grid.addEventListener('mouseover', function (e) { var t = e.target.closest && e.target.closest('.tile'); if (t && t !== hovered) { hovered = t; req(); } });
+  grid.addEventListener('mouseleave', function () { hovered = null; req(); });
   function req() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
   addEventListener('scroll', req, { passive: true });
   addEventListener('resize', req);
-  document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.wf')) setTimeout(function () { current = null; req(); }, 700); });
+  document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.wf')) setTimeout(req, 750); });
   update();
 })();
