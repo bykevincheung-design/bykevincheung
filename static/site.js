@@ -65,6 +65,22 @@
     nameEl(pageMedia(), false);                       // only one travelling picture per page
     nameEl(nextLink.querySelector('.next-media'), true);
   });
+  // Direction: going deeper (home to campaign, campaign to next) moves up; going back or home moves down.
+  function direction(act) {
+    if (!act) return 'forward';
+    var to = act.entry && act.entry.url ? new URL(act.entry.url).pathname : '';
+    var from = act.from && act.from.url ? new URL(act.from.url).pathname : location.pathname;
+    var isHome = function (p) { return p.indexOf('/work/') < 0; };
+    if (act.navigationType === 'traverse' && act.entry && act.from && act.entry.index < act.from.index) return 'back';
+    if (isHome(to) && !isHome(from)) return 'back';
+    return 'forward';
+  }
+  window.addEventListener('pageswap', function (e) {
+    if (e.viewTransition && e.activation) e.viewTransition.types.add(direction(e.activation));
+  });
+  window.addEventListener('pagereveal', function (e) {
+    if (e.viewTransition && window.navigation && navigation.activation) e.viewTransition.types.add(direction(navigation.activation));
+  });
   // Leaving a campaign page for anywhere else: only morph if its film is on screen
   window.addEventListener('pageswap', function (e) {
     var m = pageMedia();

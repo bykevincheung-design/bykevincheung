@@ -369,3 +369,9 @@ html.intro .reel-cap, html.intro .reel-down { opacity: 0; }
 @keyframes rec { 50% { opacity: 0; } }
 .clock-colon { animation: rec 2s steps(1) infinite; }
 @media (prefers-reduced-motion: reduce) { .clock-colon { animation: none; } }
+
+/* Going back or home reverses the motion: the campaign drops away, home settles in from above */
+html:active-view-transition-type(back)::view-transition-old(root) { animation: vt-out-back .5s cubic-bezier(.5,0,.75,0) both; }
+html:active-view-transition-type(back)::view-transition-new(root) { animation: vt-in-back .8s cubic-bezier(.16,1,.3,1) .1s both; }
+@keyframes vt-out-back { to { opacity: 0; transform: translate3d(0, 4vh, 0); } }
+@keyframes vt-in-back { from { opacity: 0; transform: translate3d(0, -5vh, 0); } }
