@@ -115,6 +115,7 @@ FOOT = """<footer class="foot">
 <div class="wrap foot-in">
 <span>© 2026 Gweilo Prod Ltd</span>
 <span>gwei.lo studios 鬼佬工作室</span>
+<span class="clock" aria-label="Time in London">London <span class="clock-t">--:--</span></span>
 <span class="ga-note" hidden>Visits counted with Google Analytics, no ad tracking. <button type="button" class="ga-toggle">Turn off</button></span>
 <a href="#top">Back to top ↑</a>
 </div>
