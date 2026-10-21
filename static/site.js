@@ -505,9 +505,10 @@ var Decode = (function () {
     ? [[wordRow, 0, 'Production Manager', 3], [wordRow + 1, 0, 'Producer', 3], [wordRow + 2, 0, 'Fixer', 3], [wordRow + 3, 0, 'London', 3]]
     : [[wordRow, 0, 'Production Manager', 2], [wordRow, 2, 'Producer', 1], [wordRow, 3, 'Fixer', 1], [wordRow, 4, 'London', 2]];
   // brands you've worked with, mixed through a sheet of countdown numbers
-  var brands = ['Nike', 'Chanel', 'adidas', 'Apple', 'Gucci', 'Jaeger-LeCoultre', 'Burberry', "Levi's", 'McLaren',
-    'Primark', 'Moncler', 'Bvlgari', 'Gentle Monster', 'Puma', 'Gap', 'Corteiz', 'New Era', 'Aston Martin',
-    'C.P. Company', 'Axel Arigato', 'Vogue', 'Camperlab', 'GlenDronach', 'Ottolinger', 'Mowalola'];
+  var brands = ['Nike', 'Chanel', 'adidas', 'Apple', 'Jaeger-LeCoultre', 'Burberry', "Levi's", 'McLaren',
+    'Primark', 'Moncler', 'Bvlgari', 'Arsenal', 'Gentle Monster', 'Williams F1', 'Puma', 'Lucozade', 'Gap',
+    'Corteiz', 'Atlassian', 'New Era', 'Aston Martin', 'Ocado', 'C.P. Company', 'OUAI', 'Axel Arigato', 'Vogue',
+    'Interview', 'Camperlab', 'GlenDronach', 'Ottolinger', 'Mowalola', 'Coldplay'];
   var bi = 0;
   function p3(n) { return ('00' + Math.max(0, n)).slice(-3); }
   var feeds = [
@@ -530,7 +531,7 @@ var Decode = (function () {
         el.textContent = w[2]; el.className = 'rc-word'; el.style.gridColumn = 'span ' + w[3];
         wordEls.push(el); c += w[3];
       } else {
-        var f = ((r * 5 + c * 3) % 7 < 2) ? 1 : 0;   // roughly one cell in three is a brand
+        var f = ((r * 5 + c * 3) % 7 < 3) ? 1 : 0;   // a little under half the cells are brands
         el.dataset.f = f; el.dataset.r = r; el.dataset.c = c; el.className = 'rc-cell' + (f ? ' rc-brand' : '');
         el.style.visibility = 'hidden';
         cells.push(el); c += 1;
