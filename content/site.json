@@ -481,6 +481,45 @@
       "preview": true
     },
     {
+      "id": "house-of-errors",
+      "year": "2026",
+      "client": "House of Errors",
+      "project": "Orange Carpet",
+      "director": "",
+      "production": "gwei.lo studios",
+      "role": "Producer",
+      "type": "Fashion",
+      "about": "Lookbook for House of Errors. Each look shot full length and close up on a timber plinth, against an orange carpet and ochre backdrop.",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "4.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "5.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "6.jpg",
+          "shape": "portrait"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "narma",
       "year": "2024",
       "client": "Narma",
@@ -699,6 +738,33 @@
       "preview": true
     },
     {
+      "id": "fred-again",
+      "year": "2023",
+      "client": "Fred again..",
+      "project": "Rooftop Live, London",
+      "director": "Loose",
+      "production": "Concoct",
+      "role": "Producer",
+      "type": "Live",
+      "about": "A sunset set for friends on the roof of Arun, who helps put Fred's shows together, full of unreleased IDs.",
+      "film": "https://vimeo.com/995342534",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "loyle-carner",
       "year": "2022",
       "client": "Loyle Carner",
@@ -755,60 +821,6 @@
       "feature_y": 0.5
     },
     {
-      "id": "moncler-alicia-keys",
-      "year": "2023",
-      "client": "Moncler x Alicia Keys",
-      "project": "The Art of Genius",
-      "director": "",
-      "production": "Lafour Studios",
-      "role": "Production Manager",
-      "type": "Fashion",
-      "about": "Moncler Genius took over Olympia London on the last night of Fashion Week, with 10,000 guests. Alicia Keys on piano with Cleo Sol and Little Simz, all three wearing the collaboration.",
-      "film": "",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
-        }
-      ],
-      "preview": true
-    },
-    {
-      "id": "fred-again",
-      "year": "2023",
-      "client": "Fred again..",
-      "project": "Rooftop Live, London",
-      "director": "Loose",
-      "production": "Concoct",
-      "role": "Producer",
-      "type": "Live",
-      "about": "A sunset set for friends on the roof of Arun, who helps put Fred's shows together, full of unreleased IDs.",
-      "film": "https://vimeo.com/995342534",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
-        }
-      ],
-      "preview": true
-    },
-    {
       "id": "cp-company-kano",
       "year": "2023",
       "client": "C.P. Company x Kano",
@@ -836,6 +848,33 @@
       "preview": true
     },
     {
+      "id": "moncler-alicia-keys",
+      "year": "2023",
+      "client": "Moncler x Alicia Keys",
+      "project": "The Art of Genius",
+      "director": "",
+      "production": "Lafour Studios",
+      "role": "Production Manager",
+      "type": "Fashion",
+      "about": "Moncler Genius took over Olympia London on the last night of Fashion Week, with 10,000 guests. Alicia Keys on piano with Cleo Sol and Little Simz, all three wearing the collaboration.",
+      "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "aston-martin",
       "year": "2022",
       "client": "Aston Martin",
@@ -846,6 +885,33 @@
       "type": "Commercial",
       "about": "",
       "film": "",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
+      "id": "dave-stormzy",
+      "year": "2021",
+      "client": "Dave ft. Stormzy",
+      "project": "Clash",
+      "director": "Edem Wornoo",
+      "production": "Lowkey Films",
+      "role": "Producer",
+      "type": "Music",
+      "about": "Shot at Aston Martin's factory and Silverstone Circuit, for a track that reached No. 2 in the UK.",
+      "film": "https://www.youtube.com/watch?v=oFqVvjq6BGM",
       "gallery": [
         {
           "src": "1.jpg",
@@ -885,33 +951,6 @@
         {
           "src": "3.jpg",
           "shape": "portrait"
-        }
-      ],
-      "preview": true
-    },
-    {
-      "id": "dave-stormzy",
-      "year": "2021",
-      "client": "Dave ft. Stormzy",
-      "project": "Clash",
-      "director": "Edem Wornoo",
-      "production": "Lowkey Films",
-      "role": "Producer",
-      "type": "Music",
-      "about": "Shot at Aston Martin's factory and Silverstone Circuit, for a track that reached No. 2 in the UK.",
-      "film": "https://www.youtube.com/watch?v=oFqVvjq6BGM",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "landscape"
-        },
-        {
-          "src": "3.jpg",
-          "shape": "landscape"
         }
       ],
       "preview": true
