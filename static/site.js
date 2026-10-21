@@ -277,7 +277,7 @@
   function show(cat) {
     if (busy || cat === current) return;
     busy = true; current = cat;
-    var match = function (t) { return cat === 'All' || t.dataset.cat === cat; };
+    var match = function (t) { return cat === 'All' ? !t.dataset.only : t.dataset.cat === cat; };   // some jobs only show under their category
     var visible = tiles.filter(function (t) { return !t.classList.contains('is-out'); });
     var first = new Map();
     visible.forEach(function (t) { first.set(t, t.getBoundingClientRect()); });

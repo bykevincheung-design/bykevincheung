@@ -548,6 +548,34 @@
       "preview": true
     },
     {
+      "id": "ouai",
+      "year": "2026",
+      "client": "OUAI",
+      "project": "Battersea Power Station",
+      "director": "",
+      "production": "gwei.lo studios",
+      "role": "Producer",
+      "type": "Live",
+      "about": "A five day OUAI brand activation at Battersea Power Station, 15 to 19 July 2026. Rebuilt from scratch at a new venue after the original King's Cross site fell through.",
+      "film": "/static/img/ouai/film.mp4",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true,
+      "filter_only": true
+    },
+    {
       "id": "crystal-murray",
       "year": "2024",
       "client": "Crystal Murray",
@@ -1020,15 +1048,6 @@
       "production": "Sticker Studios",
       "role": "Production Manager",
       "type": "Commercial"
-    },
-    {
-      "year": "2026",
-      "client": "OUAI",
-      "project": "Battersea Power Station Pop‑Up",
-      "director": "",
-      "production": "gwei.lo studios",
-      "role": "Executive Producer",
-      "type": "Live"
     },
     {
       "year": "2025",

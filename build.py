@@ -190,7 +190,7 @@ def film_embed(url, j=None):
 def work_filters():
     from collections import Counter
     c = Counter("Fashion" if j["type"] == "Editorial" else j["type"] for j in JOBS)
-    cats = [("All", len(JOBS))] + [(k, c[k]) for k in ("Commercial", "Fashion", "Music", "Live") if c[k]]
+    cats = [("All", sum(1 for j in JOBS if not j.get("filter_only")))] + [(k, c[k]) for k in ("Commercial", "Fashion", "Music", "Live") if c[k]]
     btns = "".join(f'<button type="button" class="wf" data-cat="{k}" aria-pressed="{"true" if k == "All" else "false"}" data-ev="Filter" data-ev-category="{k}">'
                    f'{k}<sup>{n}</sup></button>' for k, n in cats)
     return f'<div class="work-filters mono" role="group" aria-label="Show work by category">{btns}<span class="wf-bar" aria-hidden="true"></span></div>'
@@ -210,7 +210,8 @@ def build_home():
         else:
             img = picture(j["id"], "card", "(max-width: 600px) 50vw, (max-width: 900px) 50vw, 25vw", alt, lazy=n > 3, w=900, h=1125)
         cat = "Fashion" if j["type"] == "Editorial" else j["type"]
-        tiles.append(f"""<a class="tile{' feature' if feat else ''}" href="/work/{j['id']}/" data-cat="{e(cat)}">
+        only = ' data-only="1"' if j.get("filter_only") else ''
+        tiles.append(f"""<a class="tile{' feature' if feat else ''}{' is-out' if only else ''}" href="/work/{j['id']}/" data-cat="{e(cat)}"{only}>
 <span class="tile-media">{img}{video}</span>
 <span class="tile-client">{e(j['client'])}</span>
 <span class="tile-project">{e(j['project'])}</span>
@@ -323,7 +324,8 @@ def build_home():
 
 def build_job(i):
     j = JOBS[i]
-    n = JOBS[(i + 1) % len(JOBS)]
+    chain = [x for x in JOBS if not x.get("filter_only")] if not j.get("filter_only") else JOBS
+    n = chain[(chain.index(j) + 1) % len(chain)]
     note = f"{j['client']}, {j['project']}. " + (
         f"{'Shot by' if j.get('director_label') == 'Photographer' else 'Directed by'} {j['director']} with {j['production']}." if j["director"] else f"With {j['production']}.")
     gallery = "".join(
