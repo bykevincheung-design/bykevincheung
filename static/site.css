@@ -16,7 +16,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+html { background: var(--ground); scroll-behavior: smooth; scroll-padding-top: 72px; }
 body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 a:hover { color: #5A5A5A; }
@@ -449,3 +449,21 @@ html:active-view-transition-type(back)::view-transition-new(job-media) { animati
   html:active-view-transition-type(back)::view-transition-old(job-media),
   html:active-view-transition-type(back)::view-transition-new(job-media) { animation-duration: .55s; }
 }
+
+/* No flash: the page you're leaving stays fully solid underneath while the new one slides in over it,
+   so the bare background never shows through mid-transition. */
+::view-transition-old(root),
+html:active-view-transition-type(back)::view-transition-old(root) { animation: vt-hold .95s linear both; }
+::view-transition-new(root) { animation: vt-in .8s cubic-bezier(.16,1,.3,1) .04s both; }
+html:active-view-transition-type(back)::view-transition-new(root) { animation: vt-in-back .8s cubic-bezier(.16,1,.3,1) .04s both; }
+@keyframes vt-hold { from, to { opacity: 1; } }
+@media (pointer: coarse), (max-width: 700px) {
+  ::view-transition-old(root),
+  html:active-view-transition-type(back)::view-transition-old(root) { animation-duration: .55s; }
+  ::view-transition-new(root),
+  html:active-view-transition-type(back)::view-transition-new(root) { animation-duration: .45s; animation-delay: .02s; }
+}
+/* the film's loop fades in over the still once it's actually playing, after the page has landed,
+   so the picture never jump-cuts in the middle of a transition */
+.cine-cover video.cine-loop { opacity: 0; }
+.cine-cover video.cine-loop.live { opacity: 1; }

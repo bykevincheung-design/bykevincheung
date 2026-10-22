@@ -733,3 +733,20 @@ var Decode = (function () {
     });
   });
 })();
+
+// Film loops: wait until the arrival transition has finished and the video is really playing, then fade it in
+(function () {
+  var landed = new Promise(function (res) {
+    var done = false; function go() { if (!done) { done = true; res(); } }
+    window.addEventListener('pagereveal', function (e) {
+      if (e.viewTransition) e.viewTransition.finished.then(go, go); else go();
+    }, { once: true });
+    setTimeout(go, 1200);   // browsers without pagereveal, or no transition
+  });
+  document.querySelectorAll('video.cine-loop').forEach(function (v) {
+    var playing = new Promise(function (res) {
+      if (!v.paused && v.readyState > 2) res(); else v.addEventListener('playing', res, { once: true });
+    });
+    Promise.all([landed, playing]).then(function () { v.classList.add('live'); });
+  });
+})();
