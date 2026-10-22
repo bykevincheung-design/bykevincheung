@@ -2,14 +2,14 @@
 (function () {
   var glow = document.querySelector('.glow');
   if (!glow || !window.matchMedia('(hover: hover)').matches) return;
-  var mx = -600, my = -600, x = -600, y = -600;
-  window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
-  (function tick() {
+  var mx = -600, my = -600, x = -600, y = -600, run = false;
+  function tick() {
     x += (mx - x) * 0.1;
     y += (my - y) * 0.1;
     glow.style.transform = 'translate3d(' + (x - 210) + 'px,' + (y - 210) + 'px,0)';
-    requestAnimationFrame(tick);
-  })();
+    if (Math.abs(mx - x) > 0.5 || Math.abs(my - y) > 0.5) requestAnimationFrame(tick); else run = false;   // rest when the cursor does
+  }
+  window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; if (!run) { run = true; requestAnimationFrame(tick); } }, { passive: true });
 })();
 
 // Play a short clip when hovering a work tile
@@ -192,7 +192,7 @@
 (function () {
   if (!window.Lenis) return;
   if (!matchMedia('(pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 1.15, smoothWheel: true, anchors: { offset: -72 } });
+  var lenis = new Lenis({ lerp: 0.15, wheelMultiplier: 1, smoothWheel: true, anchors: { offset: -72 } });
   window.lenis = lenis;
   function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
   requestAnimationFrame(raf);
@@ -421,27 +421,28 @@
     ticking = false;
     var vh = innerHeight;
     // depth
-    seen.forEach(function (m) {
-      var r = m.getBoundingClientRect();
-      var p = (r.top + r.height / 2 - vh / 2) / vh;
-      m.style.setProperty('--py', (-p * 3).toFixed(2) + '%');
-    });
-    if (!fine.matches) { rail.classList.remove('on'); return; }
-    // keep clear of the showreel: the rail starts below it and only shows once most of it has gone
+    var moves = [];
+    seen.forEach(function (m) { var r = m.getBoundingClientRect(); moves.push([m, (r.top + r.height / 2 - vh / 2) / vh]); });
     var reelEl = document.querySelector('.reel');
     var reelBottom = reelEl ? reelEl.getBoundingClientRect().bottom : 0;
+    var aboutEl = document.getElementById('about');
+    var aboutTop = aboutEl ? aboutEl.getBoundingClientRect().top : 1e9;
+    var name = sections[0].name;
+    sections.forEach(function (sec) { if (sec.el.getBoundingClientRect().top <= vh * 0.88) name = sec.name; });
+    var max = Math.max(1, document.documentElement.scrollHeight - vh), sy = scrollY;   // all reads done before any writes
+    moves.forEach(function (mv) { mv[0].style.setProperty('--py', (-mv[1] * 3).toFixed(2) + '%'); });
+    if (!fine.matches) { rail.classList.remove('on'); return; }
+    // keep clear of the showreel: the rail starts below it and only shows once most of it has gone
     rail.classList.toggle('on', reelBottom < vh * 0.5);
+    rail.classList.toggle('inv', aboutTop < vh * 0.5);   // light rail over the dark About section
     var top = Math.max(70, reelBottom + 16), bottom = vh - 40;
     rail.style.setProperty('--rail-top', top + 'px');
     // tick travels with the whole page; the label names the section you're in
-    var max = Math.max(1, document.documentElement.scrollHeight - vh);
-    var prog = Math.min(1, Math.max(0, scrollY / max));
+    var prog = Math.min(1, Math.max(0, sy / max));
     var y = top + prog * (bottom - top);
     mark.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)';
     mark.classList.toggle('below', y < top + 260);   // near the top, the label hangs below the tick so the header never covers it
-    var name = sections[0].name;
-    sections.forEach(function (sec) { if (sec.el.getBoundingClientRect().top <= vh * 0.88) name = sec.name; });   // switch as soon as the section comes into view
-    setLabel(name);
+    setLabel(name);   // switches as soon as the section comes into view
   }
   var sections = [['Portfolio', '.reel, #work'], ['Credits', '#credits'], ['About', '#about']]
     .map(function (p) { return { name: p[0], el: document.querySelector(p[1]) }; })
@@ -749,4 +750,13 @@ var Decode = (function () {
     });
     Promise.all([landed, playing]).then(function () { v.classList.add('live'); });
   });
+})();
+
+// The showreel only plays while you can see it, so scrolling the grid isn't also decoding video
+(function () {
+  var v = document.querySelector('.reel-v');
+  if (!v || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); });
+  }).observe(v);
 })();
