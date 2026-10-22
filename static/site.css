@@ -415,3 +415,18 @@ a.jc-item, .jc-item a { min-height: 44px; display: inline-flex; align-items: cen
   .foot-in a, .contact-cols a { display: inline-flex; align-items: center; min-height: 40px; }
   .reel-cap { padding-bottom: 28px; }
 }
+
+/* Phones: lighter, quicker page transitions so they feel crisp, not heavy */
+@media (pointer: coarse), (max-width: 700px) {
+  ::view-transition-old(root) { animation-duration: .28s; }
+  ::view-transition-new(root) { animation-duration: .45s; animation-delay: .06s; }
+  @keyframes vt-out { to { opacity: 0; transform: translate3d(0, -2vh, 0); } }
+  @keyframes vt-in { from { opacity: 0; transform: translate3d(0, 3vh, 0); } }
+  @keyframes vt-out-back { to { opacity: 0; transform: translate3d(0, 2vh, 0); } }
+  @keyframes vt-in-back { from { opacity: 0; transform: translate3d(0, -3vh, 0); } }
+  html:active-view-transition-type(back)::view-transition-old(root) { animation-duration: .28s; }
+  html:active-view-transition-type(back)::view-transition-new(root) { animation-duration: .45s; animation-delay: .06s; }
+  ::view-transition-group(job-media), ::view-transition-old(job-media), ::view-transition-new(job-media) { animation-duration: .55s; }
+  /* the film's scroll scale-up is a desktop touch; on phones it sits still so arrivals don't wobble */
+  .job-page .film, .job-page .first-media { transform: none !important; border-radius: 0 !important; }
+}

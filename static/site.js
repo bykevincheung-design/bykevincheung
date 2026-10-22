@@ -78,8 +78,13 @@
   window.addEventListener('pageswap', function (e) {
     if (e.viewTransition && e.activation) e.viewTransition.types.add(direction(e.activation));
   });
+  var coarse = matchMedia('(pointer: coarse)').matches;
   window.addEventListener('pagereveal', function (e) {
-    if (e.viewTransition && window.navigation && navigation.activation) e.viewTransition.types.add(direction(navigation.activation));
+    if (!e.viewTransition || !window.navigation || !navigation.activation) return;
+    // Phones: back and forward are usually a swipe, which the browser already animates. Running our own
+    // transition on top is what makes it feel doubled and jumpy, so swipes get a clean cut instead.
+    if (coarse && navigation.activation.navigationType === 'traverse') { e.viewTransition.skipTransition(); return; }
+    e.viewTransition.types.add(direction(navigation.activation));
   });
   // Leaving a campaign page for anywhere else: only morph if its film is on screen
   window.addEventListener('pageswap', function (e) {
@@ -671,10 +676,15 @@ var Decode = (function () {
     Decode.decode(head.querySelector('.mono'), 100, 650);
     Decode.decode(head.querySelector('.job-meta'), 350, 800);
   }
-  var ran = false;
+  var ran = false, touch = matchMedia('(pointer: coarse)').matches;
   function once() { if (!ran) { ran = true; run(); } }
-  addEventListener('pagereveal', once);
-  setTimeout(once, 60);   // browsers without pagereveal
+  addEventListener('pagereveal', function (e) {
+    // on phones, let the page transition land first, then decode the title, so the two don't compete
+    // phones: the page transition carries the motion; titles arrive solid rather than flickering in afterwards
+    if (touch) { ran = true; return; }
+    once();
+  });
+  setTimeout(function () { if (!touch) once(); }, 60);   // browsers without pagereveal
 })();
 
 // ---- On-set details ----
