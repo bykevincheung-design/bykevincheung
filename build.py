@@ -95,7 +95,7 @@ def head(title, desc, image, path, kind="website", schema=""):
 {FONTS}
 <link rel="stylesheet" href="/static/site.css?v={CSS_V}">
 {ANALYTICS}
-<script type="speculationrules">{{"prerender":[{{"where":{{"or":[{{"href_matches":"/work/*"}},{{"href_matches":"/"}}]}},"eagerness":"moderate"}}]}}</script>
+<script type="speculationrules">{{"prefetch":[{{"where":{{"or":[{{"href_matches":"/work/*"}},{{"href_matches":"/"}}]}},"eagerness":"moderate"}}]}}</script>
 </head>
 <body>
 <div class="glow" aria-hidden="true"></div>
