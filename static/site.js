@@ -92,7 +92,7 @@
     if (!m || !e.viewTransition) return;
     var r = m.getBoundingClientRect();
     var top = false; try { top = sessionStorage.getItem('vt-top') === '1'; } catch (x) {}
-    if (top || r.bottom < 0 || r.top > innerHeight) nameEl(m, false);
+    if (r.bottom < 0 || r.top > innerHeight) nameEl(m, false);   // logo: keep it named so the film can grow into the showreel
   });
   // Arriving: show what's on screen straight away (no fade-in lag), and line up the tile we came from
   function settleVisible() {
@@ -120,7 +120,15 @@
     var tile = path && document.querySelector('a.tile[href="' + path + '"]');
     var toTop = false;
     try { toTop = sessionStorage.getItem('vt-top') === '1'; sessionStorage.removeItem('vt-top'); } catch (x) {}
-    if (toTop) tile = null;   // logo goes to the top of home, no morph
+    if (toTop) {
+      // logo: the campaign's film opens out into the showreel at the top of home
+      tile = null;
+      var reelEl = document.querySelector('.reel');
+      if (reelEl && scrollY < innerHeight) {
+        nameEl(reelEl, true);
+        e.viewTransition.finished.finally(function () { reelEl.style.viewTransitionName = ''; });
+      }
+    }
     // On a campaign page we came back to: if its film is off screen, the Next banner (if it led to where we were) takes the morph
     var m = pageMedia();
     if (m) {
