@@ -31,7 +31,7 @@ img { display: block; max-width: 100%; }
 @media (hover: hover) and (pointer: fine) {
   body, body * { cursor: url(/static/cursors/dot.svg) 8 8, auto; }
   a, a *, button, button * { cursor: url(/static/cursors/ring.svg) 14 14, pointer; }
-  .tile, .tile *, .next-in, .next-in * { cursor: url(/static/cursors/view.svg) 30 30, pointer; }
+  .tile, .tile *, .next-in, .next-in * { cursor: url(/static/cursors/dot.svg) 8 8, pointer; }
 }
 .glow { position: fixed; left: 0; top: 0; width: 420px; height: 420px; border-radius: 50%; pointer-events: none; z-index: 20;
   transform: translate3d(-600px, -600px, 0); will-change: transform;
