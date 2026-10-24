@@ -99,7 +99,7 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
 .bd-row.in{opacity:1;transform:none}
 .bd-row .bd-label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);width:92px;flex:none}
 .bd-row .bd-track{flex:1;height:7px;background:var(--tint);position:relative;overflow:hidden;min-width:40px}
-.bd-row .bd-fill{display:block;height:100%;width:0;background:var(--accent);transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.bd-row .bd-fill{display:block;height:100%;width:0;background:var(--accent);transition:width .12s linear}
 .bd-row .bd-val{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--soft);flex:none;width:84px;text-align:right}
 .bd-row.bd-total{border-top:1px solid var(--ink);margin-top:4px;padding-top:13px}
 .bd-row.bd-total .bd-label{color:var(--ink);font-weight:700}
@@ -465,25 +465,40 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
   var reveals = document.querySelectorAll('.reveal');
   var staggerSel = '.layer, .feature, .crow:not(.head), .dl-row, .step, .diagram-row, .tl>div, .bd-row';
 
-  /* ---- breakdown bars + count-up, specific to the brief stat ---- */
-  function runBreakdown(){
-    var rows = document.querySelectorAll('#breakdown .bd-row[data-hi]');
-    var scale = 25; /* widest bar = 25% */
-    rows.forEach(function(r, i){
-      var fill = r.querySelector('.bd-fill');
-      setTimeout(function(){ fill.style.width = (Math.min(100, (+r.dataset.hi / scale) * 100)) + '%'; }, 260 + i*260);
+  /* ---- breakdown bars + number tied directly to scroll position ---- */
+  var bdEl = document.getElementById('breakdown');
+  var bdRows = bdEl ? Array.prototype.slice.call(bdEl.querySelectorAll('.bd-row[data-hi]')) : [];
+  var bdStatNum = document.getElementById('statNum');
+  var bdScale = 25; /* widest bar = 25% */
+  var bdTicking = false;
+  function updateBreakdown(){
+    bdTicking = false;
+    if(!bdEl) return;
+    if(reduce){
+      bdRows.forEach(function(r){ r.querySelector('.bd-fill').style.width = (Math.min(100,(+r.dataset.hi/bdScale)*100))+'%'; });
+      if(bdStatNum) bdStatNum.textContent = '£41k';
+      return;
+    }
+    var rect = bdEl.getBoundingClientRect();
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var startY = vh*0.88, endY = vh*0.3;
+    var p = (startY - rect.top) / (startY - endY);
+    p = Math.max(0, Math.min(1, p));
+    bdRows.forEach(function(r, i){
+      var local = Math.max(0, Math.min(1, (p - i*0.18) * 1.5));
+      var pct = local * (+r.dataset.hi / bdScale) * 100;
+      r.querySelector('.bd-fill').style.width = pct + '%';
     });
-    var statNum = document.getElementById('statNum');
-    if(!statNum) return;
-    if(reduce){ statNum.textContent = '£41k'; return; }
-    var from=0, to=41, start=null, dur=1500;
-    requestAnimationFrame(function tick(ts){
-      if(start===null) start=ts;
-      var p = Math.min(1, (ts-start)/dur);
-      var eased = 1 - Math.pow(1-p, 3);
-      statNum.textContent = '£' + Math.round(from + (to-from)*eased) + 'k';
-      if(p<1) requestAnimationFrame(tick);
-    });
+    if(bdStatNum) bdStatNum.textContent = '£' + Math.round(p*41) + 'k';
+  }
+  function onBdScroll(){
+    if(bdTicking) return; bdTicking = true;
+    requestAnimationFrame(updateBreakdown);
+  }
+  if(bdEl){
+    window.addEventListener('scroll', onBdScroll, {passive:true});
+    window.addEventListener('resize', onBdScroll);
+    updateBreakdown();
   }
   if('IntersectionObserver' in window){
     var ro = new IntersectionObserver(function(entries){
@@ -497,7 +512,6 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
           });
           var heads = e.target.querySelectorAll('[data-decode]');
           heads.forEach(function(h,i){ Decode.decode(h, i*60, 600); });
-          if(e.target.id === 'brief') runBreakdown();
           ro.unobserve(e.target);
         }
       });
@@ -505,9 +519,6 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
     reveals.forEach(function(el){ ro.observe(el); });
   } else {
     reveals.forEach(function(el){ el.classList.add('in'); });
-    document.querySelectorAll('.bd-row').forEach(function(r){ r.classList.add('in'); });
-    document.querySelectorAll('#breakdown .bd-fill').forEach(function(f){ f.style.width = f.parentNode.parentNode.dataset.hi ? (Math.min(100,(+f.parentNode.parentNode.dataset.hi/25)*100)+'%') : ''; });
-    var sn = document.getElementById('statNum'); if(sn) sn.textContent = '£41k';
   }
 
   /* ---- scroll progress bar ---- */
