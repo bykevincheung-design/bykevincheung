@@ -66,8 +66,12 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
 
 /* ---- hero ---- */
 .hero{background:var(--ink);color:var(--ground);padding:64px 4px 56px;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(640px 420px at 82% 8%, rgba(255,74,28,.16), transparent 70%);pointer-events:none}
-.hero .wrap{position:relative}
+.hero-bg{position:absolute;inset:0;background-image:url('https://www.houseoferrors.org/cdn/shop/files/20260720_HOUSEOFERRORS_1318_8802820d-e2bf-4d0e-bd67-1c6f1657dfe4.jpg?v=1790345821&width=1600');background-size:cover;background-position:center 20%;filter:grayscale(1) contrast(1.15) brightness(.4);opacity:.55}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(14,14,14,.35) 0%, rgba(14,14,14,.75) 55%, var(--ink) 100%), radial-gradient(640px 420px at 82% 8%, rgba(255,74,28,.22), transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1}
+.partner-chip{display:inline-flex;align-items:center;background:var(--ground);padding:7px 12px;height:26px;vertical-align:middle}
+.partner-chip img{height:100%;width:auto;display:block}
+.hero-meta .v.with-chip{display:flex;align-items:center;gap:10px}
 .hero h1{font-size:clamp(48px,10vw,122px);font-stretch:125%}
 .hero h1 .ln{display:block;opacity:0;transform:translateY(.5em)}
 .eyebrow{display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--ink-muted);margin-bottom:18px}
@@ -225,12 +229,13 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
 </header>
 
 <section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"></div>
   <div class="wrap">
     <div class="eyebrow"><span class="dot"></span>Proposal</div>
     <h1><span class="ln">Bringing</span><span class="ln">production</span><span class="ln">in&#8209;house</span></h1>
     <div class="hero-meta">
       <div><div class="k">Prepared by</div><div class="v">Kevin Cheung, Gweilo Prod Ltd</div></div>
-      <div><div class="k">Prepared for</div><div class="v">House of Errors</div></div>
+      <div><div class="k">Prepared for</div><div class="v with-chip"><span class="partner-chip"><img src="https://www.houseoferrors.org/cdn/shop/files/logo.svg?v=1700042447&amp;width=160" alt="House of Errors" onerror="this.parentElement.outerHTML='House of Errors'"></span></div></div>
       <div><div class="k">Date</div><div class="v">October 2026</div></div>
     </div>
   </div>
@@ -244,6 +249,7 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
   <div class="cols">
     <div>
       <p>You want to put out a lot more content than you have been, and production hasn&rsquo;t really kept up with that.</p>
+      <p class="soft" style="margin-top:20px">I&rsquo;ve also noticed the shift in what you&rsquo;re making, from the big flagship campaigns into sharper, short-form stuff built to travel, the Medell&iacute;n video, the football content. That mix is only going to grow, and it needs a different kind of production behind it to keep up, one that can turn around quickly without losing the quality. That&rsquo;s something we can properly supercharge.</p>
       <p class="soft" style="margin-top:20px">Last year you spent around &pound;200k, about &pound;120k of it on the big shoots, before Tom&rsquo;s fee. There&rsquo;s no shared calendar, so budgets tend to shift once things are signed off, I&rsquo;ve seen a &pound;40k submission come back at &pound;70k. And every job still goes out to an external production company or a freelance producer, each one adding their own markup on top of mine.</p>
     </div>
     <div class="stat-box">
@@ -327,14 +333,14 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
     <div class="feature"><h3>You plan further ahead</h3><p>One team that can see the whole calendar plans a campaign months out, instead of scrambling once a producer gets briefed in at the last minute.</p></div>
     <div class="feature"><h3>You see where every pound goes</h3><p>One set of books, one tracker, nothing sitting between the budget and what it was actually spent on.</p></div>
     <div class="feature"><h3>Nothing walks out the door</h3><p>Rates, contacts and what&rsquo;s worked before stay with the business, instead of leaving with whichever freelance producer wrapped the job.</p></div>
-    <div class="feature"><h3>It scales either way</h3><p>The same team runs a flagship campaign or a quick social job, no re-tendering whatever the size.</p></div>
+    <div class="feature"><h3>It scales either way</h3><p>The same team runs a flagship campaign or a quick, sharp social piece, like the Medell&iacute;n video or the football content, no re-tendering whatever the size.</p></div>
   </div>
 </section>
 
 <section class="section reveal" id="budget">
   <div class="kicker"><span class="dot"></span>Budget</div>
   <h2 data-decode>Where the budget would go</h2>
-  <p class="soft" style="max-width:680px">This is illustrative, based on last year&rsquo;s &pound;200k. We&rsquo;d work out the real split together once the quarterly calendar exists, but the direction is the same: fewer, bigger moments, and a lot more everyday content in between. Hover a segment for the figure.</p>
+  <p class="soft" style="max-width:680px">This is illustrative, based on last year&rsquo;s &pound;200k. We&rsquo;d work out the real split together once the quarterly calendar exists, but the direction is the same: fewer, bigger moments, and a lot more of the sharp, short-form stuff in between, in the spirit of the Medell&iacute;n video or the football content. Hover a segment for the figure.</p>
   <div class="bar-label">Last year</div>
   <div class="bar" id="bar-last">
     <div data-w="60" title="Flagship campaigns, £120k" style="background:var(--plate);color:var(--ink)">Flagship £120k</div>
