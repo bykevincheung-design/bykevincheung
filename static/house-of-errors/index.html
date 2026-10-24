@@ -94,6 +94,16 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
 /* ---- brief / stat ---- */
 .stat-box{border-left:1px solid var(--rule);padding-left:48px}
 .stat-num{font-size:clamp(64px,9vw,120px);font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--accent)}
+.breakdown{margin-top:30px;display:flex;flex-direction:column;gap:0}
+.bd-row{display:flex;align-items:center;gap:14px;padding:9px 0;border-top:1px solid var(--rule);opacity:0;transform:translateX(-10px);transition:opacity .4s ease,transform .4s ease}
+.bd-row.in{opacity:1;transform:none}
+.bd-row .bd-label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);width:92px;flex:none}
+.bd-row .bd-track{flex:1;height:7px;background:var(--tint);position:relative;overflow:hidden;min-width:40px}
+.bd-row .bd-fill{display:block;height:100%;width:0;background:var(--accent);transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.bd-row .bd-val{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--soft);flex:none;width:84px;text-align:right}
+.bd-row.bd-total{border-top:1px solid var(--ink);margin-top:4px;padding-top:13px}
+.bd-row.bd-total .bd-label{color:var(--ink);font-weight:700}
+.bd-row.bd-total .bd-val{color:var(--ink);font-weight:700}
 
 /* ---- model / diagram ---- */
 .toggle{display:inline-flex;border:1px solid var(--ink);margin-bottom:28px}
@@ -237,8 +247,14 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
       <p class="soft" style="margin-top:20px">Last year you spent around &pound;200k, about &pound;120k of it on the big shoots, before Tom&rsquo;s fee. There&rsquo;s no shared calendar, so budgets tend to shift once things are signed off, I&rsquo;ve seen a &pound;40k submission come back at &pound;70k. And every job still goes out to an external production company or a freelance producer, each one adding their own markup on top of mine.</p>
     </div>
     <div class="stat-box">
-      <div class="stat-num" data-decode>&pound;41k</div>
-      <p class="soft" style="margin-top:14px">Markup, insurance and producer fees combined, on &pound;200k of spend last year, about 18 to 23%, &pound;36k to &pound;46k. Not exact, but it&rsquo;s money leaving the business on every single shoot.</p>
+      <div class="stat-num" id="statNum">&pound;0k</div>
+      <div class="breakdown" id="breakdown">
+        <div class="bd-row" data-lo="5" data-hi="10"><span class="bd-label">Markup</span><span class="bd-track"><span class="bd-fill"></span></span><span class="bd-val">5 to 10%</span></div>
+        <div class="bd-row" data-lo="3" data-hi="5"><span class="bd-label">Insurance</span><span class="bd-track"><span class="bd-fill"></span></span><span class="bd-val">3 to 5%</span></div>
+        <div class="bd-row" data-lo="5" data-hi="10"><span class="bd-label">Producer fee</span><span class="bd-track"><span class="bd-fill"></span></span><span class="bd-val">5 to 10%</span></div>
+        <div class="bd-row bd-total"><span class="bd-label">Total</span><span class="bd-track"></span><span class="bd-val">18 to 23%</span></div>
+      </div>
+      <p class="soft" style="margin-top:14px">On &pound;200k of spend last year, that&rsquo;s &pound;36k to &pound;46k. Not exact, but it&rsquo;s money leaving the business on every single shoot.</p>
     </div>
   </div>
 </section>
@@ -447,7 +463,28 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
 
   /* ---- scroll reveal (sections + staggered children + decode headings) ---- */
   var reveals = document.querySelectorAll('.reveal');
-  var staggerSel = '.layer, .feature, .crow:not(.head), .dl-row, .step, .diagram-row, .tl>div';
+  var staggerSel = '.layer, .feature, .crow:not(.head), .dl-row, .step, .diagram-row, .tl>div, .bd-row';
+
+  /* ---- breakdown bars + count-up, specific to the brief stat ---- */
+  function runBreakdown(){
+    var rows = document.querySelectorAll('#breakdown .bd-row[data-hi]');
+    var scale = 25; /* widest bar = 25% */
+    rows.forEach(function(r, i){
+      var fill = r.querySelector('.bd-fill');
+      setTimeout(function(){ fill.style.width = (Math.min(100, (+r.dataset.hi / scale) * 100)) + '%'; }, 260 + i*260);
+    });
+    var statNum = document.getElementById('statNum');
+    if(!statNum) return;
+    if(reduce){ statNum.textContent = '£41k'; return; }
+    var from=0, to=41, start=null, dur=1500;
+    requestAnimationFrame(function tick(ts){
+      if(start===null) start=ts;
+      var p = Math.min(1, (ts-start)/dur);
+      var eased = 1 - Math.pow(1-p, 3);
+      statNum.textContent = '£' + Math.round(from + (to-from)*eased) + 'k';
+      if(p<1) requestAnimationFrame(tick);
+    });
+  }
   if('IntersectionObserver' in window){
     var ro = new IntersectionObserver(function(entries){
       entries.forEach(function(e){
@@ -460,6 +497,7 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
           });
           var heads = e.target.querySelectorAll('[data-decode]');
           heads.forEach(function(h,i){ Decode.decode(h, i*60, 600); });
+          if(e.target.id === 'brief') runBreakdown();
           ro.unobserve(e.target);
         }
       });
@@ -467,6 +505,9 @@ p{line-height:1.55;font-size:clamp(16px,1.6vw,19px)}
     reveals.forEach(function(el){ ro.observe(el); });
   } else {
     reveals.forEach(function(el){ el.classList.add('in'); });
+    document.querySelectorAll('.bd-row').forEach(function(r){ r.classList.add('in'); });
+    document.querySelectorAll('#breakdown .bd-fill').forEach(function(f){ f.style.width = f.parentNode.parentNode.dataset.hi ? (Math.min(100,(+f.parentNode.parentNode.dataset.hi/25)*100)+'%') : ''; });
+    var sn = document.getElementById('statNum'); if(sn) sn.textContent = '£41k';
   }
 
   /* ---- scroll progress bar ---- */
