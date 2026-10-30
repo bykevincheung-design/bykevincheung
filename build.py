@@ -107,9 +107,31 @@ def header(on_home):
     credits = "#credits" if on_home else "/#credits"
     about = "#about" if on_home else "/#about"
     contact = "#about" if on_home else "/#about"
-    return f"""<header class="top">
+    ag = S["agent"]
+    links = [(work, "Work", ""), (credits, "Credits", ""), (e(S['cv']), "CV ↗", ' target="_blank" rel="noopener" data-ev="CV"'), (contact, "About", "")]
+    items = "".join(f'<li style="--i:{i}"><a href="{h}"{x}><span class="mm-dash" aria-hidden="true">–</span><span class="mm-t">{t}</span></a></li>' for i, (h, t, x) in enumerate(links))
+    menu = f"""<div class="mmenu" id="mmenu" aria-hidden="true">
+<button class="mm-btn mm-x mono" type="button" aria-controls="mmenu" aria-label="Close menu"><span class="mm-dot" aria-hidden="true"></span><span>Close</span></button>
+<div class="mm-in">
+<span class="mono mm-k">Navigation</span>
+<ul class="mm-list">{items}</ul>
+<div class="mm-foot mono">
+<span class="mm-k">Represented by</span>
+<span>{e(ag['name'])}</span>
+<a href="mailto:{e(ag['email'])}" data-ev="Email Chapters">{e(ag['email'])}</a>
+<a href="tel:{e(ag['phone'].replace(' ', ''))}" data-ev="Call Chapters">{e(ag['phone'])}</a>
+<span class="mm-k mm-gap">Direct</span>
+<a href="mailto:{e(S['email'])}" data-ev="Email Kevin">{e(S['email'])}</a>
+<a href="{e(S['instagram'])}" target="_blank" rel="noopener" data-ev="Instagram">Instagram ↗</a>
+</div>
+</div>
+</div>
+"""
+    return menu + f"""<div class="page">
+<header class="top">
 <div class="wrap top-in">
 <a class="logo" href="/">{e(S['name'])}<span class="logo-role"> | Production Manager · Producer · Fixer</span></a>
+<button class="mm-btn mono" type="button" aria-controls="mmenu" aria-expanded="false"><span class="mm-dot" aria-hidden="true"></span><span class="mm-lab">Menu</span></button>
 <nav aria-label="Main">
 <a href="{work}">Work</a>
 <a href="{credits}">Credits</a>
@@ -135,6 +157,7 @@ FOOT = """<footer class="foot">
 <a href="#top">Back to top ↑</a>
 </div>
 </footer>
+</div>
 <script src="/static/vendor/lenis.min.js?v=1.1.20"></script>
 <script src="/static/site.js?v=JSV"></script>
 <div id="vt-ready" hidden></div>

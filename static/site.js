@@ -760,3 +760,43 @@ var Decode = (function () {
     es.forEach(function (e) { if (e.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); });
   }).observe(v);
 })();
+
+// Phone menu: tap Menu, the page slides aside and the menu rolls in; tap the page, a link or Esc to close
+(function () {
+  var btn = document.querySelector('.top .mm-btn'), menu = document.getElementById('mmenu'), page = document.querySelector('.page');
+  if (!btn || !menu || !page) return;
+  var root = document.documentElement, lab = btn.querySelector('.mm-lab');
+  // mark the section you're on
+  menu.querySelectorAll('.mm-list a').forEach(function (a) {
+    var h = a.getAttribute('href') || '';
+    if (h.indexOf('/#') === 0 && location.pathname === '/' ) return;
+    if (h === '#work' || h === '/#work') { if (document.querySelector('.job-page')) a.classList.add('is-here'); }
+  });
+  function open() {
+    page.style.setProperty('--mm-oy', (scrollY + innerHeight / 2) + 'px');   // shrink around what you're looking at
+    root.classList.add('mm-open'); root.classList.remove('mm-closing');
+    btn.setAttribute('aria-expanded', 'true'); menu.setAttribute('aria-hidden', 'false'); lab.textContent = 'Close';
+  }
+  function close(instant) {
+    if (!root.classList.contains('mm-open')) return;
+    if (instant) { page.style.transition = 'none'; }
+    root.classList.remove('mm-open'); root.classList.add('mm-closing');
+    btn.setAttribute('aria-expanded', 'false'); menu.setAttribute('aria-hidden', 'true'); lab.textContent = 'Menu';
+    if (instant) { page.offsetWidth; page.style.transition = ''; root.classList.remove('mm-closing'); }
+    else setTimeout(function () { if (!root.classList.contains('mm-open')) root.classList.remove('mm-closing'); }, 800);
+  }
+  btn.addEventListener('click', function () { root.classList.contains('mm-open') ? close() : open(); });
+  menu.querySelector('.mm-x').addEventListener('click', function () { close(); });
+  page.addEventListener('click', function (e) { if (root.classList.contains('mm-open') && !btn.contains(e.target)) { e.preventDefault(); e.stopPropagation(); close(); } }, true);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  menu.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var h = a.getAttribute('href') || '';
+      if (h.charAt(0) === '#') {   // same page: let the page slide back, then glide to the section
+        e.preventDefault(); close();
+        setTimeout(function () { var t = document.querySelector(h); if (t) t.scrollIntoView({ behavior: 'smooth' }); }, 650);
+      } else if (a.target !== '_blank' && h.indexOf('mailto:') && h.indexOf('tel:')) close(true);   // leaving: snap back so the page transition starts clean
+    });
+  });
+  window.addEventListener('pageshow', function () { close(true); });
+})();
