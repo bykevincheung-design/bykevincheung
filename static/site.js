@@ -283,7 +283,7 @@
     if (instant) { line.offsetWidth; line.style.transition = ''; }
   }
   var active = bar.querySelector('[aria-pressed="true"]');
-  moveLine(active, true);
+  requestAnimationFrame(function () { moveLine(active, true); });   // after first paint, so it doesn't force an early layout
   addEventListener('resize', function () { moveLine(bar.querySelector('[aria-pressed="true"]'), true); });
   if (document.fonts) document.fonts.ready.then(function () { moveLine(bar.querySelector('[aria-pressed="true"]'), true); });
 

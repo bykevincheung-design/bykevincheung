@@ -305,10 +305,13 @@ def build_home():
     html += f"""<main id="top">
 <h1 class="visually-hidden">{e(S['name'])}, Production Manager, Producer and Fixer, London</h1>
 <section class="reel" aria-label="Showreel">
-<video class="reel-v" autoplay muted loop playsinline preload="auto" poster="/static/reel/poster.jpg" aria-hidden="true">
+<link rel="preload" as="image" href="/static/reel/poster-m.jpg" media="(max-width: 700px)" fetchpriority="high">
+<link rel="preload" as="image" href="/static/reel/poster.jpg" media="(min-width: 701px)" fetchpriority="high">
+<video class="reel-v" autoplay muted loop playsinline preload="auto" aria-hidden="true">
 <source src="/static/reel/reel-600x750.mp4" type="video/mp4" media="(max-width: 700px)">
 <source src="/static/reel/reel-1280.mp4" type="video/mp4">
 </video>
+<script>(function(v){{v.poster=matchMedia('(max-width: 700px)').matches?'/static/reel/poster-m.jpg':'/static/reel/poster.jpg';}})(document.currentScript.previousElementSibling);</script>
 <div class="reel-cap wrap"><span class="reel-name">Kevin Cheung</span><span class="reel-role">Production Manager, Producer <em>&amp;</em> Fixer, London</span></div>
 <a class="reel-down mono" href="#work">Selected work ↓</a>
 </section>

@@ -343,8 +343,8 @@ body.theatre .job-head .muted { color: inherit; }
 .ch { display: inline-block; }
 html.intro .reel-cap, html.intro .reel-down { opacity: 0; }
 .reel-cap, .reel-down { transition: opacity .4s ease; }
-.reel-code { position: absolute; inset: 0; z-index: 2; display: grid; padding: 76px 32px 28px; gap: 0 24px; align-items: center; color: #F1F1EF; font-size: 11px; letter-spacing: .08em; line-height: 1; text-transform: uppercase; background: rgba(0,0,0,.18); pointer-events: none; transition: background .9s ease; }
-.reel-code span { white-space: nowrap; overflow: hidden; }
+.reel-code { position: absolute; inset: 0; z-index: 2; contain: strict; display: grid; padding: 76px 32px 28px; gap: 0 24px; align-items: center; color: #F1F1EF; font-size: 11px; letter-spacing: .08em; line-height: 1; text-transform: uppercase; background: rgba(0,0,0,.18); pointer-events: none; transition: background .9s ease; }
+.reel-code span { white-space: nowrap; overflow: hidden; contain: layout paint; }
 .reel-code .rc-cell { opacity: .75; }
 .reel-code .rc-word { font-size: 20px; font-weight: 500; letter-spacing: .04em; opacity: 1; transition: opacity .7s ease .5s; }
 .reel-code.rc-out { background: rgba(0,0,0,0); }
