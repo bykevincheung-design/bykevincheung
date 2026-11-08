@@ -379,6 +379,7 @@ def build_job(i):
                 f"{j['client']}, {j['project']}", cls=f"g-{g['shape']}", fallback=g["src"])
         for g in j["gallery"])
     about = f'<p class="note">{e(j["about"])}</p>' if j.get("about") else ""
+    producer_row = (f'<div class="dl-row"><dt>Producer</dt><dd>{e(j["producer"])}</dd></div>' if j.get("producer") else "")
     director_row = (f'<div class="dl-row"><dt>{e(j.get("director_label", "Director"))}</dt><dd>{e(j["director"])}</dd></div>' if j["director"] else "")
     work = {"@context": "https://schema.org", "@type": "CreativeWork", "name": f"{j['client']}, {j['project']}",
             "description": j.get("about") or note, "image": f"{SITE_URL}/static/img/{j['id']}/share.jpg",
@@ -393,7 +394,7 @@ def build_job(i):
 <div class="mono muted">{e(j['type'])} · {e(j['year'])}</div>
 <h1 class="job-title">{e(j['client'])}</h1>
 <p class="job-sub">{e(j['project'])}</p>
-<div class="job-meta mono"><span><span class="muted">Production company </span>{e(j['production'])}</span><span><span class="muted">Role </span>{e(j['role'])}</span></div>
+<div class="job-meta mono"><span><span class="muted">Production company </span>{e(j['production'])}</span>{f'<span><span class="muted">Producer </span>{e(j["producer"])}</span>' if j.get('producer') else ''}<span><span class="muted">Role </span>{e(j['role'])}</span></div>
 </section>
 {('<section class="wrap">' + film_embed(j.get('film'), j) + '</section>') if j.get('film') else ''}
 <section class="wrap job-main">
@@ -402,6 +403,7 @@ def build_job(i):
 <dl>
 <div class="dl-row first"><dt>Role</dt><dd class="b">{e(j['role'])}</dd></div>
 <div class="dl-row"><dt>Production company</dt><dd class="b">{e(j['production'])}</dd></div>
+{producer_row}
 {director_row}
 <div class="dl-row last"><dt>Year</dt><dd>{e(j['year'])}</dd></div>
 </dl>

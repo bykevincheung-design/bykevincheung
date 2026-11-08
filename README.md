@@ -14,7 +14,7 @@ Open `content/site.json` and change the text. The order of `jobs` is the order o
 
 Each job has:
 
-- `client`, `project`, `director`, `production`, `role`, `year`, `type` (Commercial, Fashion, Music or Live)
+- `client`, `project`, `director`, `production`, `producer` (the production company's producer, leave empty to hide), `role`, `year`, `type` (Commercial, Fashion, Music or Live)
 - `about`: a few lines about the job, shown on its page (leave empty to hide)
 - `film`: a Vimeo or YouTube link, shown as a player at the top of its page (leave empty to hide)
 - `gallery`: the gallery images and whether each is `landscape` or `portrait`
