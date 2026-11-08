@@ -70,6 +70,33 @@
       "feature_y": 0.4
     },
     {
+      "id": "skepta-pandoras-box",
+      "year": "2026",
+      "client": "Skepta",
+      "project": "Pandora's Box",
+      "director": "Hugh Mulhern",
+      "production": "Object & Animal",
+      "role": "Production Manager",
+      "type": "Music",
+      "about": "Skepta's mirror monologue, a nod to La Haine, shot in a single day at Peckham Liberal Club with a B unit and a cast of more than 20.",
+      "film": "https://vimeo.com/1244851636",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "landscape"
+        },
+        {
+          "src": "3.jpg",
+          "shape": "landscape"
+        }
+      ],
+      "preview": true
+    },
+    {
       "id": "jaeger-lecoultre",
       "year": "2026",
       "client": "Jaeger‑LeCoultre",
