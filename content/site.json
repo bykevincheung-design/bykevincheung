@@ -127,30 +127,6 @@
       "preview": true
     },
     {
-      "id": "adidas-originals-sport",
-      "year": "2026",
-      "client": "adidas Originals",
-      "project": "Work It ft. Tate McRae",
-      "director": "Alana O’Herlihy",
-      "production": "GentleForces",
-      "producer": "",
-      "role": "Producer",
-      "type": "Fashion",
-      "about": "Work It, the global launch campaign for Originals Sport, adidas Originals’ women’s training line built around the Futurestar, the next chapter of the Superstar. Fronted by Tate McRae, Emilia Mernes and volleyball star Harper Murray, under the line “Strong. Sass. Style.”",
-      "film": "https://vimeo.com/1215514075",
-      "gallery": [
-        {
-          "src": "1.jpg",
-          "shape": "portrait"
-        },
-        {
-          "src": "2.jpg",
-          "shape": "portrait"
-        }
-      ],
-      "preview": true
-    },
-    {
       "id": "chanel-vogue",
       "year": "2024",
       "client": "Chanel x Vogue",
@@ -205,6 +181,32 @@
       ],
       "preview": true,
       "film": ""
+    },
+    {
+      "id": "adidas-originals-sport",
+      "year": "2026",
+      "client": "adidas Originals",
+      "project": "Work It ft. Tate McRae",
+      "director": "Alana O’Herlihy",
+      "production": "GentleForces",
+      "producer": "",
+      "role": "Producer",
+      "type": "Fashion",
+      "about": "Work It, the global launch campaign for Originals Sport, adidas Originals’ women’s training line built around the Futurestar, the next chapter of the Superstar. Fronted by Tate McRae, Emilia Mernes and volleyball star Harper Murray, under the line “Strong. Sass. Style.”",
+      "film": "https://vimeo.com/1215514075",
+      "gallery": [
+        {
+          "src": "1.jpg",
+          "shape": "portrait"
+        },
+        {
+          "src": "2.jpg",
+          "shape": "portrait"
+        }
+      ],
+      "preview": true,
+      "feature": true,
+      "feature_y": 0.5
     },
     {
       "id": "levis-mclaren-film",
