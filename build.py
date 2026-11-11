@@ -250,7 +250,15 @@ def build_home():
             img = picture(j["id"], "card", "(max-width: 600px) 50vw, (max-width: 900px) 50vw, 25vw", alt, lazy=n > 3, w=900, h=1125)
         cat = "Fashion" if j["type"] == "Editorial" else j["type"]
         only = ' data-only="1"' if j.get("filter_only") else ''
-        tiles.append(f"""<a class="tile{' feature' if feat else ''}{' is-out' if only else ''}" href="/work/{j['id']}/" data-cat="{e(cat)}"{only}>
+        # "feature_in": small tile normally, big tile once one of these categories is picked
+        grow = ""
+        if not feat and j.get("feature_in"):
+            grow = f' data-feat-in="{e(" ".join(j["feature_in"]))}"'
+            wide = picture(j["id"], "feat", "(max-width: 900px) 100vw, 50vw", alt, fallback="feat-800.jpg", w=1600, h=1000)
+            img = img.replace("<picture>", '<picture class="pic-card">', 1) + wide.replace("<picture>", '<picture class="pic-feat">', 1)
+            if has_clip and os.path.exists(os.path.join(ROOT, "static", "img", j["id"], "preview-wide.mp4")):
+                video = video.replace("<video ", f'<video data-wide="/static/img/{j["id"]}/preview-wide.mp4" data-narrow="/static/img/{j["id"]}/preview.mp4" ', 1)
+        tiles.append(f"""<a class="tile{' feature' if feat else ''}{' is-out' if only else ''}" href="/work/{j['id']}/" data-cat="{e(cat)}"{only}{grow}>
 <span class="tile-media">{img}{video}</span>
 <span class="tile-client">{e(j['client'])}</span>
 <span class="tile-project">{e(j['project'])}</span>

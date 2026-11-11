@@ -3,7 +3,7 @@
 
 For each job folder it writes AVIF and WebP copies at a couple of sizes
 (e.g. card-450.avif, card-900.webp, hero-2000.avif), plus a landscape
-feature crop for jobs marked "feature": true in content/site.json.
+feature crop for jobs marked "feature": true (or "feature_in") in content/site.json.
 Only files that are missing or older than their source are rebuilt.
 Run locally after adding images:  python3 optimise.py
 (Netlify does not need to run this; the outputs are committed.)
@@ -60,7 +60,7 @@ for j in S["jobs"]:
     if os.path.exists(hero):
         im = Image.open(hero).convert("RGB")
         save_set(im, d, "hero", WIDTHS["hero"], hero)
-        if j.get("feature"):
+        if j.get("feature") or j.get("feature_in"):
             fsrc = os.path.join(d, "feat-src.jpg")  # optional landscape source just for the big tile
             src = fsrc if os.path.exists(fsrc) else hero
             save_set(feature_crop(Image.open(src).convert("RGB"), j.get("feature_y", 0.45)), d, "feat", WIDTHS["feat"], src, jpg=True)

@@ -511,3 +511,8 @@ html:active-view-transition-type(back)::view-transition-new(root) { animation: v
 @media (max-width: 700px) and (prefers-reduced-motion: reduce) {
   .page, .mm-list a, .mm-foot { transition-duration: .01s !important; transition-delay: 0s !important; }
 }
+
+/* Tiles that grow under one category: swap the 4:5 card for the wide crop */
+.tile .pic-feat { display: none; }
+.tile.feature .pic-feat { display: block; }
+.tile.feature .pic-card { display: none; }

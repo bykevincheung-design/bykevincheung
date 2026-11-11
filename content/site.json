@@ -96,7 +96,10 @@
           "shape": "landscape"
         }
       ],
-      "preview": true
+      "preview": true,
+      "feature_in": [
+        "Music"
+      ]
     },
     {
       "id": "jaeger-lecoultre",
@@ -1019,7 +1022,11 @@
           "shape": "portrait"
         }
       ],
-      "preview": true
+      "preview": true,
+      "feature_in": [
+        "Music"
+      ],
+      "feature_y": 0.5
     },
     {
       "id": "fred-again-tour",

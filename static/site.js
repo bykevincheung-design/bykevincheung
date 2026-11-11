@@ -303,6 +303,15 @@
       tiles.forEach(function (t) {
         t.getAnimations().forEach(function (a) { a.cancel(); });
         t.classList.toggle('is-out', !match(t));
+        // some tiles open up big under one category (e.g. Music)
+        if (t.dataset.featIn) {
+          var big = t.dataset.featIn.split(' ').indexOf(cat) > -1;
+          if (big !== t.classList.contains('feature')) {
+            t.classList.toggle('feature', big);
+            var v = t.querySelector('video[data-wide]');
+            if (v) { v.pause(); t.classList.remove('playing'); v.src = big ? v.dataset.wide : v.dataset.narrow; }
+          }
+        }
         if (match(t) && !t.classList.contains('in')) {
           t.style.transition = 'none'; t.classList.add('in'); t.offsetWidth;
           setTimeout(function () { t.style.transition = ''; }, 50);
