@@ -322,7 +322,8 @@ def build_home():
 
     services = "".join(f"""<div class="service"><span class="service-t">{e(s['title'])}</span>
 <span class="service-d">{e(s['text'])}</span></div>""" for s in S["services"])
-    photo = (f'<img class="about-photo" src="{e(S["about_photo"])}" alt="Kevin Cheung" loading="lazy">'
+    photo = (picture("about", "kevin", "(max-width: 900px) 100vw, 420px", "Kevin Cheung on set, on a rooftop in east London",
+                     cls="about-photo", fallback="kevin.jpg", w=836, h=836)
              if S.get("about_photo") else "")
     about_lead, *about_rest = S["about"]
     agent = S["agent"]
@@ -382,11 +383,10 @@ def build_home():
 <div class="wrap about-in">
 <div class="about-text">
 <h2 id="about-h" class="mono about-label">About &amp; contact</h2>
-{photo}
 <p class="about-lead">{e(about_lead)}</p>
 {''.join(f'<p class="about-body">{e(p)}</p>' for p in about_rest)}
 </div>
-<div class="services">{services}</div>
+<div class="about-side">{photo}<div class="services">{services}</div></div>
 </div>
 <div class="wrap">
 <div class="contact-cols">
