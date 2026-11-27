@@ -20,6 +20,31 @@ with open(os.path.join(ROOT, "content", "site.json"), encoding="utf-8") as f:
 
 JOBS = S["jobs"]
 
+# Where each hover clip should start so it picks up from the exact frame the tile still was taken from.
+# Only jobs whose still came from the film are listed; photo stills just fade into the clip.
+try:
+    with open(os.path.join(ROOT, "content", "clip_starts.json"), encoding="utf-8") as f:
+        CLIP_STARTS = json.load(f)
+except FileNotFoundError:
+    CLIP_STARTS = {}
+
+
+def agent_mail():
+    """Agent email link with the subject already filled in, so booking is one tap."""
+    from urllib.parse import quote
+    return f"mailto:{S['agent']['email']}?subject=" + quote(f"{S['name']}, availability")
+
+
+def agent_name():
+    ag = S["agent"]
+    return (f'<a href="{e(ag["url"])}" target="_blank" rel="noopener" data-ev="Chapters site">{e(ag["name"])} ↗</a>'
+            if ag.get("url") else e(ag["name"]))
+
+
+def clip_start(jid, clip):
+    t = CLIP_STARTS.get(jid, {}).get(clip)
+    return None if t is None else f"{t:g}"
+
 
 def _version(path):
     import hashlib
@@ -117,8 +142,8 @@ def header(on_home):
 <ul class="mm-list">{items}</ul>
 <div class="mm-foot mono">
 <span class="mm-k">Represented by</span>
-<span>{e(ag['name'])}</span>
-<a href="mailto:{e(ag['email'])}" data-ev="Email Chapters">{e(ag['email'])}</a>
+<span>{agent_name()}</span>
+<a href="{e(agent_mail())}" data-ev="Email Chapters">{e(ag['email'])}</a>
 <a href="tel:{e(ag['phone'].replace(' ', ''))}" data-ev="Call Chapters">{e(ag['phone'])}</a>
 <span class="mm-k mm-gap">Direct</span>
 <a href="mailto:{e(S['email'])}" data-ev="Email Kevin">{e(S['email'])}</a>
@@ -241,7 +266,9 @@ def build_home():
         feat = bool(j.get("feature"))
         clip = "preview-wide.mp4" if feat else "preview.mp4"
         has_clip = os.path.exists(os.path.join(ROOT, "static", "img", j["id"], clip))
-        video = (f'<video src="/static/img/{j["id"]}/{clip}" muted loop playsinline preload="none" aria-hidden="true"></video>'
+        st = clip_start(j["id"], clip)
+        start_attr = f' data-s="{st}"' if st is not None else ""
+        video = (f'<video src="/static/img/{j["id"]}/{clip}"{start_attr} muted loop playsinline preload="none" aria-hidden="true"></video>'
                  if has_clip else "")
         alt = f"{j['client']}, {j['project']}"
         if feat:
@@ -257,7 +284,9 @@ def build_home():
             wide = picture(j["id"], "feat", "(max-width: 900px) 100vw, 50vw", alt, fallback="feat-800.jpg", w=1600, h=1000)
             img = img.replace("<picture>", '<picture class="pic-card">', 1) + wide.replace("<picture>", '<picture class="pic-feat">', 1)
             if has_clip and os.path.exists(os.path.join(ROOT, "static", "img", j["id"], "preview-wide.mp4")):
-                video = video.replace("<video ", f'<video data-wide="/static/img/{j["id"]}/preview-wide.mp4" data-narrow="/static/img/{j["id"]}/preview.mp4" ', 1)
+                sw, sn = clip_start(j["id"], "preview-wide.mp4"), clip_start(j["id"], "preview.mp4")
+                extra = (f'data-s-wide="{sw}" ' if sw is not None else "") + (f'data-s-narrow="{sn}" ' if sn is not None else "")
+                video = video.replace("<video ", f'<video data-wide="/static/img/{j["id"]}/preview-wide.mp4" data-narrow="/static/img/{j["id"]}/preview.mp4" {extra}', 1)
         tiles.append(f"""<a class="tile{' feature' if feat else ''}{' is-out' if only else ''}" href="/work/{j['id']}/" data-cat="{e(cat)}"{only}{grow}>
 <span class="tile-media">{img}{video}</span>
 <span class="tile-client">{e(j['client'])}</span>
@@ -362,8 +391,8 @@ def build_home():
 <div class="wrap">
 <div class="contact-cols">
 <div><span class="mono label">Representation</span>
-<strong>{e(agent['name'])}</strong>
-<a class="u" href="mailto:{e(agent['email'])}" data-ev="Email Chapters">{e(agent['email'])}</a>
+<strong>{agent_name()}</strong>
+<a class="u" href="{e(agent_mail())}" data-ev="Email Chapters">{e(agent['email'])}</a>
 <a href="tel:{e(agent['phone'].replace(' ', ''))}" data-ev="Call Chapters">{e(agent['phone'])}</a></div>
 <div><span class="mono label">Direct</span>
 <a class="u" href="mailto:{e(S['email'])}" data-ev="Email Kevin">{e(S['email'])}</a>
@@ -425,8 +454,8 @@ def build_job(i):
 <section class="wrap job-contact" aria-label="Contact">
 <span class="mono jc-k">Work together</span>
 <div class="jc-row">
-<span class="jc-item"><span class="mono muted">Represented by</span> {e(S['agent']['name'])}</span>
-<a class="jc-item u" href="mailto:{e(S['agent']['email'])}" data-ev="Email Chapters">{e(S['agent']['email'])}</a>
+<span class="jc-item"><span class="mono muted">Represented by</span> {agent_name()}</span>
+<a class="jc-item u" href="{e(agent_mail())}" data-ev="Email Chapters">{e(S['agent']['email'])}</a>
 <a class="jc-item" href="tel:{e(S['agent']['phone'].replace(' ', ''))}" data-ev="Call Chapters">{e(S['agent']['phone'])}</a>
 <span class="jc-item"><span class="mono muted">Direct</span> <a class="u" href="mailto:{e(S['email'])}" data-ev="Email Kevin">{e(S['email'])}</a></span>
 </div>

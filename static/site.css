@@ -75,6 +75,8 @@ img { display: block; max-width: 100%; }
 .tile-media img, .tile-media video { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
 .tile-media video { position: absolute; inset: 0; height: 100%; opacity: 0; transition: opacity .25s; }
 .tile.playing .tile-media video { opacity: 1; }
+/* clip picks up from the still's own frame: no fade needed */
+.tile.playing.matched .tile-media video { transition-duration: .08s; }
 .tile:hover { color: var(--ink); }
 .tile-client { font-size: 17px; font-weight: 700; }
 .tile-project { font-size: 14px; color: var(--soft); }
@@ -516,3 +518,7 @@ html:active-view-transition-type(back)::view-transition-new(root) { animation: v
 .tile .pic-feat { display: none; }
 .tile.feature .pic-feat { display: block; }
 .tile.feature .pic-card { display: none; }
+
+/* the tile you came back to marks itself briefly */
+.tile.was-here .tile-media { animation: was-here 1.8s ease forwards; }
+@keyframes was-here { 0%, 40% { outline: 1px solid var(--ink); outline-offset: 6px; } 100% { outline: 1px solid transparent; outline-offset: 6px; } }

@@ -12,21 +12,38 @@
   window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; if (!run) { run = true; requestAnimationFrame(tick); } }, { passive: true });
 })();
 
-// Play a short clip when hovering a work tile
+// Play a short clip when hovering a work tile.
+// If the tile's still was taken from the film (data-s), the clip starts on that exact frame and appears at once,
+// so the picture simply starts moving. Photo stills fade softly into the clip instead.
 (function () {
   if (!window.matchMedia('(hover: hover)').matches) return;
   document.querySelectorAll('.tile').forEach(function (tile) {
     var v = tile.querySelector('video');
     if (!v) return;
-    tile.addEventListener('mouseenter', function () {
+    var over = false;
+    function start() { var s = parseFloat(v.dataset.s); return isNaN(s) ? 0 : s; }
+    function reveal() {
+      if (!over) return;
       var p = v.play();
-      if (p && p.then) p.then(function () { tile.classList.add('playing'); }).catch(function () {});
-      else tile.classList.add('playing');
+      var on = function () { if (over) { tile.classList.toggle('matched', v.dataset.s !== undefined); tile.classList.add('playing'); } };
+      if (p && p.then) p.then(on).catch(function () {}); else on();
+    }
+    tile.addEventListener('mouseenter', function () {
+      over = true;
+      var s = start();
+      if (s && Math.abs(v.currentTime - s) > 0.05) {
+        // wait for the frame to be ready before showing the clip, so the still never jumps
+        var done = false, go = function () { if (done) return; done = true; v.removeEventListener('seeked', go); reveal(); };
+        v.addEventListener('seeked', go);
+        if (v.readyState < 1) { v.preload = 'auto'; v.addEventListener('loadedmetadata', function lm() { v.removeEventListener('loadedmetadata', lm); try { v.currentTime = s; } catch (e) { go(); } }); v.load(); }
+        else { try { v.currentTime = s; } catch (e) { go(); } }
+      } else reveal();
     });
     tile.addEventListener('mouseleave', function () {
+      over = false;
       tile.classList.remove('playing');
       v.pause();
-      try { v.currentTime = 0; } catch (e) {}
+      try { v.currentTime = start(); } catch (e) {}
     });
   });
 })();
@@ -309,7 +326,11 @@
           if (big !== t.classList.contains('feature')) {
             t.classList.toggle('feature', big);
             var v = t.querySelector('video[data-wide]');
-            if (v) { v.pause(); t.classList.remove('playing'); v.src = big ? v.dataset.wide : v.dataset.narrow; }
+            if (v) {
+              v.pause(); t.classList.remove('playing'); v.src = big ? v.dataset.wide : v.dataset.narrow;
+              var ns = big ? v.dataset.sWide : v.dataset.sNarrow;
+              if (ns === undefined) delete v.dataset.s; else v.dataset.s = ns;
+            }
           }
         }
         if (match(t) && !t.classList.contains('in')) {
@@ -808,4 +829,51 @@ var Decode = (function () {
     });
   });
   window.addEventListener('pageshow', function () { close(true); });
+})();
+
+// Coming back to the work from a campaign page (the Work link, or Back to the work) lands on the tile you opened,
+// not the top of the grid.
+(function () {
+  document.querySelectorAll('a.tile').forEach(function (t) {
+    t.addEventListener('click', function () { try { sessionStorage.setItem('last-tile', t.getAttribute('href')); } catch (e) {} });
+  });
+  if (document.querySelector('.job-page')) {
+    try { sessionStorage.setItem('last-tile', location.pathname); } catch (e) {}   // also covers arriving by Next project
+    return;
+  }
+  var grid = document.querySelector('.grid');
+  if (!grid || location.hash !== '#work') return;
+  var from = document.referrer ? new URL(document.referrer, location.href) : null;
+  if (!from || from.origin !== location.origin || from.pathname.indexOf('/work/') !== 0) return;
+  var href = null; try { href = sessionStorage.getItem('last-tile'); } catch (e) {}
+  var tile = href && grid.querySelector('a.tile[href="' + href + '"]:not(.is-out)');
+  if (!tile) return;
+  function land() {
+    var r = tile.getBoundingClientRect();
+    var y = scrollY + r.top - Math.max(90, (innerHeight - r.height) / 2);
+    if (window.lenis) window.lenis.scrollTo(y, { immediate: true, force: true }); else scrollTo({ top: y, behavior: 'instant' });
+    tile.classList.add('in', 'was-here');
+    setTimeout(function () { tile.classList.remove('was-here'); }, 1800);
+  }
+  if (document.readyState === 'complete') requestAnimationFrame(land);
+  else addEventListener('load', function () { requestAnimationFrame(land); });
+})();
+
+// Films: warm up the connection to Vimeo or YouTube as soon as someone heads for the play button,
+// so the film starts faster when they click.
+(function () {
+  var box = document.querySelector('.film-cinema');
+  if (!box) return;
+  var hosts = /vimeo/.test(box.dataset.play)
+    ? ['https://player.vimeo.com', 'https://i.vimeocdn.com', 'https://f.vimeocdn.com', 'https://vod-adaptive-ak.vimeocdn.com']
+    : ['https://www.youtube-nocookie.com', 'https://www.youtube.com', 'https://i.ytimg.com'];
+  var warmed = false;
+  function warm() {
+    if (warmed) return; warmed = true;
+    hosts.forEach(function (h) { var l = document.createElement('link'); l.rel = 'preconnect'; l.href = h; l.crossOrigin = ''; document.head.appendChild(l); });
+  }
+  var cover = box.querySelector('.cine-cover');
+  ['pointerenter', 'focus', 'touchstart'].forEach(function (ev) { cover.addEventListener(ev, warm, { passive: true, once: true }); });
+  // most people play the film: warm up shortly after the page settles anyway
+  addEventListener('load', function () { setTimeout(warm, 1500); });
 })();
